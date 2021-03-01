@@ -1,0 +1,296 @@
+﻿
+<script>
+    $(document).ready(function () {
+        $("#from").datepicker({
+            autoClose: true,
+            format: "yyyy/mm/dd"
+        })
+        $("#to").datepicker({
+            autoClose: true,
+            format: "yyyy/mm/dd"
+        })
+    })
+</script>
+
+@{
+    ViewBag.Title = "Payment Vouchers";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    SameSoftWeb.Models.SameSoftwareWebEntities db = new SameSoftWeb.Models.SameSoftwareWebEntities();
+
+    DateTime d = DateTime.UtcNow.AddHours(3).Date;
+
+
+
+    var users = db.tblUsers.Where(a => a.Status == "Active").Select(a => new
+    {
+        id = a.UserID,
+        name = a.FullName
+
+    }).ToList();
+
+    //var dropstatus = db.tblCashier_Transactions.Select(a => new
+    //{
+    //    id = a.Status,
+    //    name = a.Status
+
+    //}).Distinct().ToList();
+
+
+    DateTime from = DateTime.UtcNow.AddHours(3).Date;
+    DateTime to = DateTime.UtcNow.AddHours(3).Date;
+
+    int userid = 0;
+    string status = "";
+    string username = "";
+
+    if (ViewBag.user != null)
+    {
+        userid = (int)ViewBag.user;
+        username = db.tblUsers.Where(a => a.UserID == userid).Select(a => a.FullName).FirstOrDefault();
+    }
+
+    if (ViewBag.status != null)
+    {
+        status = ViewBag.status;
+
+    }
+
+    if (ViewBag.from != null)
+    {
+        from = DateTime.Parse(Convert.ToString(ViewBag.from));
+        to = DateTime.Parse(Convert.ToString(ViewBag.to));
+    }
+
+    var list = db.tblPayment_Voucher.Where(a => System.Data.Entity.DbFunctions.TruncateTime(a.Payment_Date) >= from && System.Data.Entity.DbFunctions.TruncateTime(a.Payment_Date) <= to).Select(a => new
+    {
+        a.Voucher_ID,
+        a.Amount,
+        a.In_Word,
+        a.Description,
+        a.Tran_Nbr,
+        a.Payee,
+        a.UserID,
+        a.Payment_Date
+
+
+
+    }).Where(a => a.UserID == userid || userid == 0).ToList();
+
+
+
+    if (ViewBag.vdate != null)
+    {
+    }
+
+
+
+
+}
+
+<div class="content-body">
+    <!-- Basic Tables start -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title"><b>Payment Vouchers </b></h3>
+                    <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                    <div class="heading-elements">
+                        <ul class="list-inline mb-0">
+                            <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                            <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
+                            <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                            <li><a data-action="close"><i class="ft-x"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card-content collapse show">
+                    <div class="card-body">
+
+                        <form method="post" action="/Report/PaymentVouchers">
+                            <div class="row">
+
+                             
+
+                                <div class="col-md-2">    <input type="text" name="from" id="from" class="form-control" style="display:inline;" value="@from.ToString("yyyy/MM/dd")" /></div>
+                                <div class="col-md-2">     <input type="text" name="to" id="to" required="" class="form-control" style="display:inline;" value="@to.ToString("yyyy/MM/dd")" /> </div>
+
+
+                                <div class="col-md-2">
+                                    @Html.DropDownList("user", new SelectList(users, "id", "name"), "Filter by User", new { @class = "form-control" })
+                                </div>
+
+
+                                <div class="col-md-1">
+                                    <input type="submit" value="View" class="btn btn-primary" />
+                                </div>
+                                <div class="col-md-1">
+                                    <button class="btn btn-primary" onclick="PrintElem();">  <i class="fa fa-print"></i> Print    </button>
+                                </div>
+                            </div>
+                        </form>
+
+
+
+
+                        @{
+                            if (list.Count < 1)
+                            {
+                                @Html.Raw(ViewBag.msg)
+                                return;
+                            }
+
+                        }
+
+                        <br /><br />
+                        <div id="print">
+
+                            <center>
+                                <img src="~/img/logo.png" height="100" width="200" />
+                                <br />
+
+                                <br />
+                                <h3>Payment Vouchers</h3>
+                                From @from.Date.ToString("dd/MM/yyyy")   to  @to.Date.ToString("dd/MM/yyyy")
+
+                                <b>
+
+                                    @if (ViewBag.user != null)
+            {
+                                        <br /> <ob> User: </ob>                <b>@username </b>
+
+                                    }
+
+                                    @if (ViewBag.status != null)
+            {<br />
+                                    <object>status:</object>
+                                    <b> @ViewBag.status </b>
+                                    }
+
+                                </b>
+
+                            </center>
+
+                            <table class="table table-bordered">
+
+                                <tr class="">
+                                    <th> Voucher No.</th>
+                                    <th> Payment Date</th>
+                                    <th> Description</th>
+                                    <th> Payee</th>
+                                    <th> Amount</th>
+                                    <th> In Words</th>
+                                    <th>User</th>
+
+                                    <th>Print</th>
+                                </tr>
+
+
+                                @{
+
+
+                                }
+                                @foreach (var x in list)
+                                {
+
+
+
+
+
+                                    <tr>
+                                        <td>
+                                            @x.Voucher_ID
+                                        </td>
+
+                                        <td>
+                                            @{ Write(DateTime.Parse(x.Payment_Date.ToString()).ToString("dd/MMM/yyyy"));
+                                            }
+                                        </td>
+
+                                        <td>
+                                            @x.Description
+                                        </td>
+
+                                        <td>
+                                            @x.Payee
+                                        </td>
+
+                                        <td>
+                                            @x.Amount
+                                        </td>
+
+                                        <td>
+                                            @x.In_Word
+                                        </td>
+
+
+                                        <td>
+                                            @{Write(db.tblUsers.Where(a => a.UserID == x.UserID).Select(a => a.FullName).FirstOrDefault());}
+                                        </td>
+                                        <td>
+                                            <a href="/Accounting/PaymentVoucher/@x.Voucher_ID" class="btn btn-success"> <i class="fa fa-print"></i> Print</a>
+                                        </td>
+                                    </tr>
+                                                }
+
+
+
+                            </table>
+
+                            <br />
+                            Total Record <b> @list.Count </b>
+
+
+
+
+
+
+
+
+
+
+
+
+
+                            <script>
+                                function PrintElem() {
+
+
+
+                                    var mywindow = window.open('', 'PRINT', 'height=600,width=900');
+
+
+                                    var st = '<style type="text/css">table{width:100%;}' +
+                                    ' th, td {' +
+                                    'border:1px solid #ccc;padding:3px;border-collapse:collapse;text-align:center;font-size:9pt;' +
+                                    'padding;0.5em;' +
+                                    '}   table{border-collapse:collapse;}' +
+                                    '</style>'
+
+                                    mywindow.document.write('<html><head>' + st + '<link ref="stylesheet" href="~\Content\bootstrap.min.css">  <title>' + '' + '</title>');
+                                    mywindow.document.write('</head><body >');
+
+                                    mywindow.document.write(document.getElementById("print").innerHTML);
+                                    mywindow.document.write('</body></html>');
+
+                                    mywindow.document.close(); // necessary for IE >= 10
+                                    mywindow.focus(); // necessary for IE >= 10*/
+
+                                    mywindow.print();
+                                    mywindow.close();
+
+                                    return true;
+                                }
+
+
+
+
+                            </script>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Basic Tables end -->
+    </div>

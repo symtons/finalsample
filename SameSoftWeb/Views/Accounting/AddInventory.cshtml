@@ -1,0 +1,301 @@
+﻿
+
+@{
+    ViewBag.Title = "Add Inventory";
+}
+
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+    SameSoftWeb.Models.SameSoftwareWebEntities db = new SameSoftWeb.Models.SameSoftwareWebEntities();
+    int divid = 1;
+    var items = db.Items.Where(a => a.Business_Division_Id == divid).Select(x => new
+    {
+        Item_id = x.Item_Id,
+        Name = x.Name,
+    }).ToList();
+
+
+    ViewBag.Item_id = new SelectList(items, "Item_id", "Name", "");
+
+
+    var ven = db.tblVendors.ToList();
+    ViewBag.creditvendor_id = new SelectList(ven, "Vendor_id", "Vendor_Name");
+
+
+    var ven2 = db.tblVendors.ToList();
+    ViewBag.cashvendor_id = new SelectList(ven2, "Vendor_id", "Vendor_Name");
+
+
+
+
+
+
+    var cashacc = db.tblChart_Of_Accounts.Where(a => a.Cash_Or_Bank == "C").ToList();
+    ViewBag.cashacc = new SelectList(cashacc, "Account_Number", "Account_Name");
+
+    var invacc = db.tblChart_Of_Accounts.Where(a => a.Account_Class_Id == 1 && a.Sort_Rank == 7).ToList();
+
+    ViewBag.cashinvacc = new SelectList(cashacc, "Account_Number", "Account_Name");
+    ViewBag.creditinvacc = new SelectList(invacc, "Account_Number", "Account_Name");
+    ViewBag.assetinvacc = new SelectList(cashacc, "Account_Number", "Account_Name");
+
+    var payableacc = db.tblChart_Of_Accounts.Where(a => a.Account_Class_Id == 2).ToList();
+    ViewBag.payableacc = new SelectList(cashacc, "Account_Number", "Account_Name");
+    ViewBag.creditpayableacc = new SelectList(cashacc, "Account_Number", "Account_Name");
+
+    var asset = db.tblChart_Of_Accounts.Where(a => a.Account_Class_Id != 1000).ToList();
+    ViewBag.asset = new SelectList(cashacc, "Account_Number", "Account_Name");
+
+
+}
+<div class="content-body">
+    <!-- Basic Tables start -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title"><b>Add New Inventory</b></h3>
+                    <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                    <div class="heading-elements">
+                        <ul class="list-inline mb-0">
+                            <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                            <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
+                            <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                            <li><a data-action="close"><i class="ft-x"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card-content collapse show">
+                    <div class="card-body">
+                        <style>
+                            input[type=radio] {
+                                font-weight: bold;
+                                font-size: 20px;
+                                height: 20px;
+                                width: 20px;
+                                background-color: antiquewhite;
+                            }
+                        </style>
+
+                        <div id="itemsaple" style="display:none;">
+                            @Html.DropDownList("Item_id", null, "Select Item", new { @class = "form-control", onchange = "", @style = "width:250px;display:inline;", @id = "DepositTo" })
+                        </div>
+
+
+                        <form method="get" action="/Accounting/AddManualInventory">
+
+
+                            <ul class="nav nav-tabs">
+                                <li class="active">
+                                    <a href="#home" data-toggle="tab"> <h4 style="font-size:14pt;font-weight:bold;"> <i class="fa fa-info"></i>  (1) Add Inventory Items </h4></a>
+                                </li>
+                                <li class="">
+                                    <a href="#profile" data-toggle="tab"> <h4 style="font-size:14pt;font-weight:bold;"><i class="fa fa-dollar"></i> (2) Payment Information </h4> </a>
+                                </li>
+
+                            </ul>
+                            <div class="tab-content">
+                                <div class="tab-pane fade active in" id="home">
+
+                                    <br /><br />
+
+
+                                    <div class="field_wrapper">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <a href="javascript:void(0);" onclick="add()" class="btn btn-success"><i class="fa fa-plus"></i> Add New Item</a>
+                                            </div>
+                                            <div class="col-md-6">
+                                                Note <input type="text" class="form-control" name="note" value="Note here" />
+                                            </div>
+                                        </div>
+
+
+                                        <hr />
+                                        <table class="table table-bordered" style="width:auto;">
+
+
+                                            <thead>
+                                            <th style="padding:4px;width:255px">Item</th>
+                                            <th style="padding:4px; width:100px;">Quantity</th>
+                                            <th style="padding:4px; width:100px;">Cost</th>
+                                            <th style="padding:4px; width:100px;">Price</th>
+                                            <th style="padding:4px; width:100px;">Lot No.</th>
+                                            <th style="padding:4px; width:100px;">Barcode.</th>
+                                            <th style="padding:4px; width:160px;">ProductionDate</th>
+                                            <th style="padding:4px; width:160px;">Expire Date</th>
+
+
+                                            </thead>
+
+
+
+                                        </table>
+                                    </div>
+
+
+
+
+
+
+
+                                </div>
+
+
+
+
+                                <div class="tab-pane fade" id="profile">
+
+
+
+                                    <h4> Inventory Payment</h4>
+
+
+                                    <div class="row">
+
+
+                                        <div class="col-md-4">
+
+                                            <input type="radio" id="One" name="paymenttype" value="1" /><label for="One">Credit Payment</label><hr />
+
+                                            Vendor @Html.DropDownList("creditVendor_id", null, "Select Vendor", new { @class = "form-control" })
+                                            Payable Account
+                                            @Html.DropDownList("creditpayableacc", null, "Select Payable Acc", new { @class = "form-control" })
+                                            Inventory Account
+                                            @Html.DropDownList("creditinvacc", null, "Select Inventory Acc", new { @class = "form-control" })
+                                        </div>
+
+
+
+
+
+
+                                        <div class="col-md-4">
+
+                                            <input type="radio" id="Two" name="paymenttype" value="2" />
+                                            <label for="Two">Cash Payment</label>
+                                            <hr />
+
+                                            Vendor @Html.DropDownList("cashVendor_id", null, "Select Vendor", new { @class = "form-control" })
+                                            Cash Account
+                                            @Html.DropDownList("cashacc", null, "Select Cash Account", new { @class = "form-control" })
+                                            Inventory Account
+                                            @Html.DropDownList("cashinvacc", null, "Select Inventory Acc", new { @class = "form-control" })
+                                        </div>
+
+
+
+                                        <div class="col-md-4">
+
+                                            <input type="radio" id="Three" paymenttype" value="3" />
+                                            <label for="Three">Initial Inventory</label>
+                                            <hr />
+
+                                            Asset Account
+                                            @Html.DropDownList("asset", null, "Select Asset Account", new { @class = "form-control" })
+                                            Inventory Account
+                                            @Html.DropDownList("assetinvacc", null, "Select Inventory Acc", new { @class = "form-control" })
+                                        </div>
+
+
+                                    </div>
+
+                                    <hr />
+                                    <div class="col-md-6">
+                                        <button href="javascript:void(0);" type="submit" onclick="return comp()" class="btn btn-primary"><i class="fa fa-check"></i> Complete</button>
+                                    </div>
+                                </div>
+
+
+
+
+
+
+
+
+
+                            </div>
+                    </div>
+
+
+                    </form>
+
+
+
+
+
+
+
+
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<!-- Basic Tables end -->
+</div>
+
+
+
+
+
+
+
+
+<script type="text/javascript">
+
+
+    $(document).ready(function () {
+
+    });
+
+
+    function add() {
+        var addButton = $('.add_button');
+        var wrapper = $('.field_wrapper');
+        var fieldHTML = '<tr><td style="padding:4px;">' + $("#itemsaple").html() + '</td>';
+
+        fieldHTML = fieldHTML + '<td style="padding:4px;" ><input type="text"  style="width:90px;"  name="qty" required="" class="form-control" value=""/></td>';
+        fieldHTML = fieldHTML + '<td style="padding:4px;"><input type="text"  style="width:90px;" name="unit_cost"   required="" class="form-control" value=""/></td>';
+        fieldHTML = fieldHTML + '<td style="padding:4px;"><input type="text"  style="width:90px;" name="price"  required=""  class="form-control" value=""/></td>';
+        fieldHTML = fieldHTML + '<td style="padding:4px;"><input type="text"  style="width:90px;" name="lot" class="form-control" value=""/></td>';
+        fieldHTML = fieldHTML + '<td style="padding:4px;"><input type="text"  style="width:90px;" name="barcode" class="form-control" value=""/></td>';
+
+        fieldHTML = fieldHTML + '<td style="padding:4px;"><input type="Date"  style="width:150px;" name="productdate" class="form-control" value=""/></td>';
+        fieldHTML = fieldHTML + '<td style="padding:4px;"><input type="Date"  style="width:150px;" name="expiredate" class="form-control" value=""/></td>';
+
+
+        //fieldHTML = fieldHTML + '<td><a href="javascript:void(0);"  onclick="add()" class="btn btn-success">Add</a></td>';
+        fieldHTML = fieldHTML + '<td style="padding:4px;"><a href="javascript:void(0);"  id="remove_button" class="btn btn-danger"> X </a></td></tr>';
+        $(wrapper).append(fieldHTML);
+    }
+
+
+    function comp() {
+        return confirm("Sure to Submit Purchase Request?");
+    }
+
+
+    function remove($obj) {
+        this.style.color = '#ff0000';
+
+        //e.preventDefault();
+        //alert(element);
+        //  $(element).remove();
+        //$(element).parent('div').remove();
+
+    }
+
+    $(function () {
+
+        $(".field_wrapper").on('click', '#remove_button', function (e) {
+
+            e.preventDefault();
+            $(this).closest('tr').remove();
+        });
+    });
+</script>

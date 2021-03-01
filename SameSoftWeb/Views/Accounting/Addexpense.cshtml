@@ -1,0 +1,98 @@
+﻿
+@{
+    ViewBag.Title = "Addexpense";
+    Layout = "~/Views/Shared/_Layout2.cshtml";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+    SameSoftWeb.Models.SameSoftwareWebEntities db = new SameSoftWeb.Models.SameSoftwareWebEntities();
+    int Purchise_id = 0;
+    if (ViewBag.id != null)
+    {
+        Purchise_id = ViewBag.id;
+    }
+
+    var types = db.tblExpenseTypes.Select(a => new
+    {
+        id = a.Expense_Type_ID,
+        name = a.Expense_Type
+    }).ToList();
+
+}
+
+    <div class="content-body">
+        <!-- Basic Tables start -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title"><b>Add expense</b></h3>
+                        <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                        <div class="heading-elements">
+                            <ul class="list-inline mb-0">
+                                <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                                <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
+                                <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                                <li><a data-action="close"><i class="ft-x"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="card-content collapse show">
+                        <div class="card-body">
+                              <form method="post" action="/Accounting/AddExpense">
+
+
+                                <div class="col-md-6">
+
+                                    Expense Type ( <a href="/Accounting/ExpenseTypes/">Add Expense Type</a> )
+                                    @Html.DropDownList("type", new SelectList(types, "id", "name"), "Select Expense Type", new { @class = "form-control" })
+
+
+                                    Amount
+                                    <input type="text" class="form-control" name="amount" />
+
+                                    Note
+
+                                    <input type="text" class="form-control" name="note" />
+
+                                </div>
+                                <div class="col-md-6">
+
+                                    Expense date
+
+                                    <input type="text" class="form-control" id="from" name="trandate" value="@DateTime.UtcNow.AddHours(3).ToString("yyyy/MM/dd")" />
+
+
+                                    <br />
+                                    <input type="submit" value="Add Expense" class="btn btn-primary" />
+
+
+                                </div>
+
+
+                            </form>
+   
+
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <!-- Basic Tables end -->
+    </div>
+
+
+
+
+
+<script>
+    $(document).ready(function () {
+        $("#from").datepicker({
+            autoClose: true,
+            format: "yyyy/mm/dd"
+        })
+        $("#to").datepicker({
+            autoClose: true,
+            format: "yyyy/mm/dd"
+        })
+    })
+</script>

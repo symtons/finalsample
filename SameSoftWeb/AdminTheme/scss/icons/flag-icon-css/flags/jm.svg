@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" height="480" width="640">
+  <g fill-rule="evenodd">
+    <path d="M0 0l320 240L0 480zM640 0L320 240l320 240z"/>
+    <path d="M0 0l320 240L640 0zM0 480l320-240 320 240z" fill="#090"/>
+    <path d="M640 0h-69.626L0 436.281V480h69.629L640.004 44.719z" fill="#fc0"/>
+    <path d="M0 0v44.722l680.376 436.28h69.629v-44.72L69.629 0z" fill="#fc0"/>
+  </g>
+</svg>

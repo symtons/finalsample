@@ -1,0 +1,26 @@
+﻿@model SameSoftWeb.Models.tblCustomerTranactionType
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+<div>
+    <h4> Customer Tranaction Type</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Transaction_type)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Transaction_type)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Transaction_type_id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

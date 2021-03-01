@@ -1,0 +1,255 @@
+
+
+
+@{    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "Sales Receipt";
+
+
+
+    SameSoftWeb.Models.SameSoftwareWebEntities db = new SameSoftWeb.Models.SameSoftwareWebEntities();
+
+    if (ViewBag.id == null)
+    {
+        Response.Redirect("~/Admin/Index");
+
+    }
+
+    int id = (int)ViewBag.id;
+
+
+
+    var items = db.sp_Get_Purchase_request_letter_by_ID(id).Select(x => new
+    {
+        Item_id = x.Item_Id,
+        item_name = x.Item_Name,
+
+        total = x.Total1,
+        qty = x.Qty_Out,
+
+
+        id = x.Purchase_ID,
+        customer = x.Customer_Name,
+        cust_phone = x.Customer_Phone,
+        tran_Date = x.Tran_Date,
+
+        divname = x.DivName,
+
+        Mobile = x.DivMobile,
+        landline = x.LandLine,
+        email = x.Email,
+        address = x.Address,
+        pict = x.ProfilePic,
+        User = x.FullName,
+
+        x.Unit_Cost
+
+
+
+    }).ToList();
+
+
+
+    var com = db.GetCompanyInfo().Select(a => new
+    {
+        a.Company_Name,
+        a.Company_Phone,
+        a.Country,
+        a.EMAAL
+    ,
+        a.Email,
+        a.Evc,
+        a.City
+    }
+
+    ).ToList();
+
+}
+
+<style>
+    td {
+        padding: 4px;
+        text-align: center;
+    }
+
+    th {
+        padding: 4px;
+        text-align: center;
+    }
+</style>
+<div class="content-body">
+    <!-- Basic Tables start -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title"><b>Sales Receipt</b></h3>
+                    <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                    <div class="heading-elements">
+                        <ul class="list-inline mb-0">
+                            <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                            <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
+                            <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                            <li><a data-action="close"><i class="ft-x"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card-content collapse show">
+                    <div class="card-body">
+                        <div style="width:90%;padding:7px;border:1px #f6ecec;margin:auto;">
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <button class="btn btn-primary" onclick="PrintElem();">  <i class="fa fa-print"></i> Print Receipt    </button>
+                                </div>
+
+                                <div class="col-md-6">
+
+                                    @*<div class="input-group" style="width:265px;">
+                                            <input type="email" class="form-control" placeholder="Send@email.com">
+                                            <span class="input-group-btn">
+                                                <button class="btn btn-primary" type="button">Send!</button>
+                                            </span>
+                                        </div>*@
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div style="padding:7px;border:1px #f6ecec;margin:auto;background-color:#fff;border:1px solid grey;background-image:url('/img/Letterhead.png'); background-size:100% 100%;height:100%;min-height:700px;  width: 90%;" id="invoice">
+
+                            <center>
+                                <img src="~/img/logo.png" style="height:80px;width:150px" />
+                                <br />@com[0].Company_Name
+                                <br />@com[0].City
+                                <br />@com[0].Email
+                                <br />@com[0].Company_Phone
+                                <h3> Purchase Request Letter</h3>
+
+                            </center>
+
+                            <div style="width:99%;padding:3px;border:1px solid grey;border-radius:4px;">
+
+
+                                <table style="width:100%;background-color:white;">
+
+                                    <tr><td>Receipt No.  </td> <td> <b>P00<text></text>@items[0].id</b> </td>    <td> <span style="border:1px solid orange;padding:2px"> <b>--</b></span></td></tr>
+
+                                    <tr><td>Receipt Date.</td> <td><b>@items[0].tran_Date.ToShortDateString()</b></td>  <td>Vendor.</td>      <td>@{var str = (items[0].customer != null) ? items[0].customer : "N/A"; Write(str);}</td>    </tr>
+                                    <tr> <td>Purchase  User</td> <td><b>@items[0].User</b></td></tr>
+
+
+
+                                </table>
+                            </div>
+
+
+                            <table class="tb table-bordered" style="width:100%;padding:3px; background-color:">
+                                <thead>
+                                <th> Item Description</th>
+                                <th> Reference No. </th>
+                                <th> Quantity </th>
+
+
+                                <th>Initial Cost </th>
+
+                                <th>Total Cost </th>
+
+                                </thead>
+
+                                @foreach (var x in items)
+                                {
+                                    <text>
+                                        <tr>
+                                            <td>@x.item_name</td>
+                                            <td>
+
+                                                @{
+                                                    var iid = x.Item_id;
+                                                    Write(db.Items.Where(a => a.Item_Id == iid).Select(a => a.ReferenceNo).FirstOrDefault());
+                                                }
+
+
+                                            </td>
+                                            <td>@x.qty</td>
+
+
+
+                                            <td>@x.Unit_Cost</td>
+                                            <td>@{Write(x.Unit_Cost * x.qty);  }</td>
+
+                                        </tr>
+                                    </text>
+                                                }
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+
+
+                                    <td style="color:#1e076f"> Total </td>
+                                    <td style="color:#1e076f">
+                                        <b>
+                                            <b>$@items[0].total </b>
+
+                                        </b>
+                                    </td>
+
+                                </tr>
+                                @*<tr> <td></td>  <td></td><td></td> <td></td><td></td> <td></td><td></td> <td></td><td style="color:#1e076f">Discount </td>  <td style="color:#1e076f"><b>$@items[0].discount  </b></td></tr>
+                                    <tr> <td></td>  <td></td><td></td><td></td><td></td><td></td><td></td><td></td>  <td style="color:#1e076f"> Net </td> <td style="color:#1e076f"><b style="border-bottom:1px double blue;">$@items[0].net  </b></td></tr>*@
+                            </table>
+
+
+                            <br />
+
+                            <div class="row">
+
+
+                                <div class="col-md-6" style="float:right;">
+                                    Entered by ____________________________
+                                </div>
+                            </div>
+
+
+                        </div>
+
+
+                        <br /><br />
+
+
+                        <script>
+                            function PrintElem() {
+
+
+
+                                var mywindow = window.open('', 'PRINT', 'height=600,width=1600');
+
+
+                                var st = '<style type="text/css">' +
+                                '.tb th, .tb td {' +
+                                'border:1px solid #ccc;padding:3px;border-collapse:collapse;text-align:center;' +
+                                'padding;0.5em;' +
+                                '}  .tb th{border-bottom:3px solid #ccc;} table{border-collapse:collapse;}' +
+                                '</style>'
+
+                                mywindow.document.write('<html><head>' + st + '<link ref="stylesheet" href="~\Content\bootstrap.min.css">  <title>' + '' + '</title>');
+                                mywindow.document.write('</head><body style="background-image:url(/img/Letterhead.png); background-size:100% 100%;">');
+
+                                mywindow.document.write(document.getElementById("invoice").innerHTML);
+                                mywindow.document.write('</body></html>');
+
+                                mywindow.document.close(); // necessary for IE >= 10
+                                mywindow.focus(); // necessary for IE >= 10*/
+
+                                mywindow.print();
+                                mywindow.close();
+
+                                return true;
+                            }
+                        </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Basic Tables end -->
+</div>

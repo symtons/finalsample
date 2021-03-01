@@ -1,0 +1,116 @@
+@{
+    ViewBag.Title = "Post Purchase Order";
+}
+
+@{
+    int id = ViewBag.id;
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+    SameSoftWeb.Models.SameSoftwareWebEntities db = new SameSoftWeb.Models.SameSoftwareWebEntities();
+
+    var list = db.tblInventory_Transactions.Where(a => a.Inventory_Tran_ID == id).Select(a => new
+    {
+        id = a.Inventory_Tran_ID,
+        date = a.Tran_Date,
+        total = a.Total,
+        status = a.Status,
+        userid = a.UserID,
+        oldvendor = a.Vendor_ID
+    }).ToList();
+    int divid = 1;
+
+
+    var cashacc = db.tblChart_Of_Accounts.Where(a => a.Cash_Or_Bank == "C" || a.Cash_Or_Bank == "B").ToList();
+    ViewBag.cashacc = new SelectList(cashacc, "Account_Number", "Account_Name");
+
+    var invacc = db.tblChart_Of_Accounts.Where(a => a.Account_Class_Id == 1).ToList();
+    ViewBag.invacc = new SelectList(invacc, "Account_Number", "Account_Name", 1170);
+
+    var payableacc = db.tblChart_Of_Accounts.Where(a => a.Account_Class_Id == 2).ToList();
+    ViewBag.payableacc = new SelectList(payableacc, "Account_Number", "Account_Name", 2110);
+
+
+    var ven = db.tblVendors.ToList();
+    ViewBag.vendorid = new SelectList(ven, "Vendor_ID", "Vendor_Name");
+
+
+
+}
+
+<div class="content-body">
+    <!-- Basic Tables start -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title"><b>Post Purchase Order #@ViewBag.id</b></h3>
+                    <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                    <div class="heading-elements">
+                        <ul class="list-inline mb-0">
+                            <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                            <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
+                            <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                            <li><a data-action="close"><i class="ft-x"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card-content collapse show">
+                    <div class="card-body">
+                        <form method="get" action="\Accounting\PostPurchaseNow">
+                            <table class="table table-bordered" style="background-color:white">
+                                <thead>
+                                <th> ID </th>
+                                <th>Date </th>
+                                <th>Total</th>
+                                <th>Status</th>
+                                <th>User</th>
+
+                                </thead>
+                                @foreach (var x in list)
+                                {
+                                    <tr>
+                                        <td>  <input type="hidden" name="purchase_id" value="@x.id" />        @x.id</td>
+
+                                        <td>  @x.date </td>
+                                        <td>  @x.total </td>
+                                        <td>@x.status</td>
+                                        <td>@x.userid</td>
+
+                                    </tr>
+
+                                    <tr>
+                                        <td> Payment Type </td>
+                                        <td>
+                                            <input id="type1" name="ptype" type="radio" value="1" />
+                                            <label for="type1">On Account</label>  <br />
+
+                                            @Html.DropDownList("vendorid", new SelectList(ven, "Vendor_ID", "Vendor_Name", @x.oldvendor), "Select Vendor", new { @class = "form-control", @required = "" })
+                                            <br /><br />
+                                            @Html.DropDownList("payableacc", null, "Select Payable Acc", new { @class = "form-control" })
+
+
+                                        </td>
+
+                                        <td><input id="type2" name="ptype" type="radio" value="2" /> <label for="type2">Cash</label>    @Html.DropDownList("cashacc", null, "Select Cash Account", new { @class = "form-control" })</td>
+
+                                        <td colspan="2">
+                                            Payment Description <br />  <input type="text" class="form-control" name="desc" placeholder="Description..." />
+                                            <br /><br />
+                                            @Html.DropDownList("invacc", null, "Select Inventory Acc", new { @class = "form-control", @required = "" })
+                                        </td>
+                                    </tr>
+                                }
+                            </table>
+
+                            <input type="submit" value="Complate Payment" class="btn btn-success" />
+                        </form>
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Basic Tables end -->
+</div>

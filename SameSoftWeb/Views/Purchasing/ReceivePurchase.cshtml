@@ -1,0 +1,98 @@
+
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "ReceivePurchase";
+
+}
+
+
+
+@{
+
+
+    SameSoftWeb.Models.SameSoftwareWebEntities db = new SameSoftWeb.Models.SameSoftwareWebEntities();
+    var list = db.tblPurchase_Order.Where(a => a.Status == "Open").Select(a => new
+    {
+
+        id = a.Purchase_ID,
+        tran_date = a.Tran_Date,
+
+        vendor = a.Vendor_Id,
+        div = a.Business_Division_Id,
+        note = a.Note,
+        user = a.UserID
+    }).ToList();
+
+}
+<div class="content-body">
+    <!-- Basic Tables start -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title"><b>List of Purchase Requests</b></h3>
+                    <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                    <div class="heading-elements">
+                        <ul class="list-inline mb-0">
+                            <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                            <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
+                            <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                            <li><a data-action="close"><i class="ft-x"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card-content collapse show">
+                    <div class="card-body">
+                        <table class="table table-bordered" style="background-color:white;">
+                            <thead>
+                            <th> ID </th>
+                            <th>Date </th>
+                            <th>Vendor</th>
+                            <th>Note</th>
+                            <th>User</th>
+
+
+                            <th>Receive</th>
+                            <th>Delete</th>
+
+                            <th>View Receipt</th>
+                            </thead>
+
+
+                            @foreach (var x in list)
+                            {
+
+                                <tr>
+                                    <td>@x.id</td>
+                                    <td>@x.tran_date.Date.ToShortDateString()</td>
+                                    <td>
+                                        @{
+                                        var vid = x.vendor;
+                                        Write(db.tblVendors.Where(a => a.Vendor_ID == vid).Select(a => a.Vendor_Name).FirstOrDefault());
+                                    }
+                                </td>
+
+                                <td>@x.note</td>
+                                <td>
+                                    @{
+                                        var uid = x.user;
+                                        Write(db.tblUsers.Where(a => a.UserID == uid).Select(a => a.FullName).FirstOrDefault());
+                                    }
+                                </td>
+
+                                <td><a href="Receive_Purchase?id=@x.id" class="btn btn-primary"><i class="fa fa-check"></i> Receive  </a></td>
+                                <td><a href="Delete_Request?id=@x.id" class="btn btn-danger"><i class="fa fa-times"></i> Delete  </a></td>
+
+                                <td><a href="RequestLetter?id=@x.id" class="btn btn-success"><i class="fa fa-print"></i> View Receipt  </a></td>
+
+                            </tr>
+
+                                        }
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Basic Tables end -->
+</div>

@@ -1,0 +1,258 @@
+﻿
+<script>
+    try{
+        $(document).ready(function () {
+            $("#from").datepicker({
+                autoClose: true,
+                format: "yyyy/mm/dd"
+            })
+            $("#to").datepicker({
+                autoClose: true,
+                format: "yyyy/mm/dd"
+            })
+        })
+    }
+    catch(e)
+    {
+        alert(e);
+    }
+</script>
+
+@{
+    ViewBag.Title = "Cashflow Statement";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    SameSoftWeb.Models.SameSoftwareWebEntities db = new SameSoftWeb.Models.SameSoftwareWebEntities();
+    DateTime from = DateTime.Now.Date;
+    DateTime to = DateTime.Now.Date;
+
+    int user_id = (int)Session["UserID"];
+    string role = Session["Role"].ToString();
+
+    if (ViewBag.from != null)
+    {
+        from = DateTime.Parse(Convert.ToString(ViewBag.from));
+        to = DateTime.Parse(Convert.ToString(ViewBag.to));
+    }
+
+    string type = "-";
+
+    if (ViewBag.type != null)
+    {
+        type = ViewBag.type;
+    }
+
+    var list = db.tblCashFlows.Where(a => a.Tran_Date!=null &&
+System.Data.Entity.DbFunctions.TruncateTime(a.Tran_Date) >=from
+&& System.Data.Entity.DbFunctions.TruncateTime(a.Tran_Date) <= to
+&&( a.Type==type || type=="-")
+
+&& (a.UserID == user_id || role == "Admin")
+
+
+).Select(a => new
+{   a.Tran_Date,
+    a.Description,
+    a.Debit,
+    a.Credit,
+    a.Type
+}).ToList();
+
+    if (ViewBag.vdate != null)
+    {
+    }
+}
+
+
+
+
+<div class="panel" style="width:100%;">
+    <form method="get" action="/Home/CashFlow">
+        <div class="col-md-4">
+            <b>CashFlow Statement </b>
+        </div>
+
+           <input type="date" name="from" id="from" class="btn btn-default" style="display:inline;" value="@from.ToString("yyyy/MM/dd")" />
+           <input type="date" name="to" id="to" required="" class="btn btn-default" style="display:inline;" value="@to.ToString("yyyy/MM/dd")" /> 
+
+
+        <select name="type" class="btn btn-default">
+            <option></option>
+             <option>Cash In</option>
+            <option>Expense</option>
+        </select> 
+           
+
+
+            <input type="submit" value="View" class="btn btn-primary" />
+            <button class="btn btn-primary" onclick="PrintElem();">  <i class="fa fa-print"></i> Print    </button>
+
+         
+       
+    </form>
+
+
+</div>
+
+
+@{
+   
+
+    if (list.Count < 1)
+    {
+        @Html.Raw(ViewBag.msg)
+        return;
+    }
+
+}
+
+<br /><br />
+<div style="width:80%;border:;border-radius:2px;margin:auto; padding:16px;background-color:#fff;box-shadow:inset;-webkit-box-shadow: 1px 0px 6px 3px rgba(246,242,246,1);
+-moz-box-shadow: 1px 0px 6px 3px rgba(246,242,246,1);
+box-shadow: 1px 0px 6px 3px rgb(239, 239, 239);" id="print">
+
+    <center>
+        <img src="~/img/logo.png" height="100" width="200" />
+        <br />
+
+        <br />
+        <h3>CashFlow Statement</h3>
+        From @from.Date.ToString("dd/MM/yyyy")   to  @to.Date.ToString("dd/MM/yyyy")
+
+        <b>
+
+
+
+            @if (ViewBag.type != null)
+            {<br />
+            <object>Type :</object>
+            <b> @ViewBag.type </b>
+            }
+
+        </b>
+
+    </center>
+
+    <table class="table table-bordered">
+
+        <tr class="">
+            <th> Trans. Date</th>
+            <th> Transaction Type.</th>
+            <th> Description</th>
+            <th> Debit</th>
+            <th> Credit</th>
+      
+
+        </tr>
+
+
+        @{
+
+            float totaldebit = 0;
+
+            float totalCredit = 0;
+            float balance = 0;
+        }
+        @foreach (var x in list)
+        {
+
+
+
+            totaldebit += (float)x.Debit;
+            totalCredit += (float)x.Credit;
+
+
+
+
+            <tr>
+
+
+                <td>
+                    @{ Write(DateTime.Parse(x.Tran_Date.ToString()).ToString("dd/MMM/yyyy"));
+                    }
+                </td>
+
+                <td>
+                    @x.Type
+                </td>
+
+                <td>
+                    @x.Description
+                </td>
+
+                <td>
+                    @x.Debit
+                </td>
+
+                <td>
+                    @x.Credit
+                </td>
+            </tr>
+                        }
+
+        <tr style="font-weight:bold;">
+
+            <td></td>
+            <td></td>
+            <td></td>
+            @{
+                balance = totaldebit - totalCredit;
+            }
+
+            <td>@totaldebit</td>
+            <td>@totalCredit</td>
+            <td>@balance</td>
+
+
+        </tr>
+
+    </table>
+
+    <br />
+    Total Record <b> @list.Count </b>
+
+
+
+    </div>
+
+
+
+
+
+
+
+
+
+    <script>
+        function PrintElem() {
+
+
+
+            var mywindow = window.open('', 'PRINT', 'height=600,width=900');
+
+
+            var st = '<style type="text/css">table{width:100%;}' +
+            ' th, td {' +
+            'border:1px solid #ccc;padding:3px;border-collapse:collapse;text-align:center;font-size:9pt;' +
+            'padding;0.6em;' +
+            '}   table{border-collapse:collapse;}' +
+            '</style>'
+
+            mywindow.document.write('<html><head>' + st + '<link ref="stylesheet" href="~\Content\bootstrap.min.css">  <title>' + '' + '</title>');
+            mywindow.document.write('</head><body >');
+
+            mywindow.document.write(document.getElementById("print").innerHTML);
+            mywindow.document.write('</body></html>');
+
+            mywindow.document.close(); // necessary for IE >= 10
+            mywindow.focus(); // necessary for IE >= 10*/
+
+            mywindow.print();
+            mywindow.close();
+
+            return true;
+        }
+
+
+
+
+    </script>

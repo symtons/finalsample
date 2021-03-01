@@ -1,0 +1,304 @@
+﻿
+<script>
+    $(document).ready(function () {
+        $("#from").datepicker({
+            autoClose: true,
+            format: "yyyy/mm/dd"
+        })
+        $("#to").datepicker({
+            autoClose: true,
+            format: "yyyy/mm/dd"
+        })
+    })
+</script>
+
+@{
+    ViewBag.Title = "Transaction Log";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    SameSoftWeb.Models.SameSoftwareWebEntities db = new SameSoftWeb.Models.SameSoftwareWebEntities();
+    DateTime d = DateTime.UtcNow.AddHours(3).Date;
+
+
+    var users = db.tblUsers.Where(a => a.Status == "Active").Select(a => new
+    {
+        id = a.UserID,
+        name = a.FullName
+
+    }).ToList();
+
+
+
+
+
+
+    var types = db.TblLogs.Select(a => new
+    {
+        id = a.Title,
+        name = a.Title
+
+    }).Distinct().ToList();
+
+
+
+
+    DateTime from = DateTime.UtcNow.AddHours(3).Date;
+    DateTime to = DateTime.UtcNow.AddHours(3).Date;
+
+    int userid = 0;
+
+    string username = "";
+    string type = "";
+
+    if (ViewBag.user != null)
+    {
+        userid = (int)ViewBag.user;
+        username = db.tblUsers.Where(a => a.UserID == userid).Select(a => a.FullName).FirstOrDefault();
+    }
+
+    if (ViewBag.type != null)
+    {
+        type = ViewBag.type;
+
+    }
+
+
+    if (ViewBag.from != null)
+    {
+        from = DateTime.Parse(Convert.ToString(ViewBag.from));
+        to = DateTime.Parse(Convert.ToString(ViewBag.to));
+    }
+
+
+
+    var list = db.TblLogs.Where(a => System.Data.Entity.DbFunctions.TruncateTime(a.LogDate) >= from
+    && System.Data.Entity.DbFunctions.TruncateTime(a.LogDate) <= to
+
+    && (a.Title == type || (type == ""))
+    ).Select(a => new
+    {
+        a.Log_id,
+        a.LogDate,
+        a.Title,
+        a.Details,
+        a.UserID
+
+
+
+    }).Where(a => a.UserID == userid || userid == 0).ToList();
+
+
+
+    if (ViewBag.vdate != null)
+    {
+    }
+
+
+
+
+}
+<div class="content-body">
+    <!-- Basic Tables start -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title"><b>System Transaction log</b></h3>
+                    <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                    <div class="heading-elements">
+                        <ul class="list-inline mb-0">
+                            <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                            <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
+                            <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                            <li><a data-action="close"><i class="ft-x"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card-content collapse show">
+                    <div class="card-body">
+
+
+                        <br />
+                        <form method="post" action="/Report/TransactionLog">
+                            <div class="row" style="width:80%;margin:auto">
+                          
+
+                                <div class="col-md-">Date</div>
+                                <div class="col-md-2">    <input type="text" name="from" id="from" class="form-control" style="display:inline;" value="@from.ToString("yyyy/MM/dd")" /></div>
+                                <div class="col-md-2">     <input type="text" name="to" id="to" required="" class="form-control" style="display:inline;" value="@to.ToString("yyyy/MM/dd")" /> </div>
+
+
+                                <div class="col-md-2">
+                                    @Html.DropDownList("user", new SelectList(users, "id", "name", userid), "Filter by User", new { @class = "form-control" })
+                                </div>
+
+                                <div class="col-md-2">
+                                    @Html.DropDownList("type", new SelectList(types, "id", "name", type), "Filter by Type", new { @class = "form-control" })
+
+                                </div>
+                                <div class="col-md-1">
+                                    <input type="submit" value="View" class="btn btn-primary" />
+                                </div>
+                                <button class="btn btn-primary" onclick="PrintElem();">  <i class="fa fa-print"></i> Print    </button>
+
+                            </div>
+                        </form>
+
+
+
+                        @{
+                            if (list.Count < 1)
+                            {
+                                @Html.Raw(ViewBag.msg)
+                                return;
+                            }
+
+                        }
+
+                        <br /><br />
+                        <div style="width:100%;border:;border-radius:2px;margin:auto; padding:15px;background-color:#fff;box-shadow:inset;-webkit-box-shadow: 1px 0px 5px 3px rgba(245,242,245,1);
+-moz-box-shadow: 1px 0px 5px 3px rgba(245,242,245,1);
+box-shadow: 1px 0px 5px 3px rgb(239, 239, 239);" id="print">
+
+                            <center>
+                                <img src="~/img/logo.png" height="100" width="200" />
+
+
+                                <br />
+                                <h3>System Transaction Log</h3>
+                                From @from.Date.ToString("dd/MM/yyyy")   to  @to.Date.ToString("dd/MM/yyyy")
+
+                                <b>
+
+                                    @if (username != "")
+            {
+                                        <br />
+                                        <ob> User: </ob>                <b>@username </b>
+
+                                    }
+
+                                    @if (type != "")
+            {
+
+                                        <k>&nbsp;|&nbsp;</k>
+                                        <object>Section:</object>
+                                        <b> @type </b>
+                                    }
+                                </b>
+
+                            </center>
+
+                            <table class="table table-bordered">
+
+                                <tr class="">
+                                    <th> Log #.</th>
+                                    <th> Log Date/Time</th>
+                                    <th> Section</th>
+                                    <th> Description</th>
+
+                                    <th>User</th>
+
+                                </tr>
+
+
+                                @{
+
+
+                                }
+                                @foreach (var x in list)
+                                {
+
+
+
+
+                                    <tr>
+                                        <td>
+                                            @x.Log_id
+                                        </td>
+
+                                        @*<td>
+                                                @{ Write(DateTime.Parse(x.Tran_Date.ToString()).ToString("dd/MMM/yyyy"));
+                                                }
+                                            </td>*@
+
+                                        <td>
+                                            @x.LogDate
+                                        </td>
+
+                                        <td>
+                                            @x.Title
+                                        </td>
+
+                                        <td>
+                                            @x.Details
+                                        </td>
+
+
+
+                                        <td>
+                                            @{Write(db.tblUsers.Where(a => a.UserID == x.UserID).Select(a => a.FullName).FirstOrDefault());}
+                                        </td>
+
+                                    </tr>
+                                                }
+
+
+
+                            </table>
+
+                            <br />
+                            Total Record <b> @list.Count </b>
+
+
+
+
+
+
+
+
+
+
+
+
+
+                            <script>
+                                function PrintElem() {
+
+
+
+                                    var mywindow = window.open('', 'PRINT', 'height=600,width=900');
+
+
+                                    var st = '<style type="text/css">table{width:100%;}' +
+                                    ' th, td {' +
+                                    'border:1px solid #ccc;padding:3px;border-collapse:collapse;text-align:center;font-size:9pt;' +
+                                    'padding;0.5em;' +
+                                    '}   table{border-collapse:collapse;}' +
+                                    '</style>'
+
+                                    mywindow.document.write('<html><head>' + st + '<link ref="stylesheet" href="~\Content\bootstrap.min.css">  <title>' + '' + '</title>');
+                                    mywindow.document.write('</head><body >');
+
+                                    mywindow.document.write(document.getElementById("print").innerHTML);
+                                    mywindow.document.write('</body></html>');
+
+                                    mywindow.document.close(); // necessary for IE >= 10
+                                    mywindow.focus(); // necessary for IE >= 10*/
+
+                                    mywindow.print();
+                                    mywindow.close();
+
+                                    return true;
+                                }
+
+
+
+
+                            </script>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Basic Tables end -->
+    </div>

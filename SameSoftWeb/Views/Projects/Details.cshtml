@@ -1,0 +1,115 @@
+﻿@model SameSoftWeb.Models.tblProject
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>tblProject</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Customer_Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Customer_Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Creation_Date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Creation_Date)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Application)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Application)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Total_Cost)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Total_Cost)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Status)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Status)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Quotation_Link)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Quotation_Link)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PaymentAgreement_Link)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PaymentAgreement_Link)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Priority)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Priority)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Created_by)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Created_by)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Payments)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Payments)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Agreement_Status)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Agreement_Status)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Project_Title)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Project_Title)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Project_ID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

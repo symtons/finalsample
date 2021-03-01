@@ -1,0 +1,74 @@
+﻿@model IEnumerable<SameSoftWeb.Models.CustomerTask>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+<div class="content-body">
+    <!-- Basic Tables start -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title"><b>New Task Check-In</b></h3>
+                    <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                    <div class="heading-elements">
+                        <a href="/Tasks/Create/" class="btn waves-effect waves-light btn-primary pull-right hidden-sm-down"> Back To Task</a>
+                    </div>
+                </div>
+                <div class="card-content collapse show">
+                    <div class="card-body">
+                        <!--Start Sercice Details Area -->
+                        <section class="service_details_area section_padding">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-md-9 col-lg-9 col-sm-12 col-xs-12">
+                                        <div class="service_details_page_content">
+
+                                            <p>
+                                                @Html.ActionLink("Create New", "Create")
+                                            </p>
+                                            <table class="table">
+                                                <tr>
+                                                    <th>
+                                                        @Html.DisplayNameFor(model => model.Name)
+                                                    </th>
+                                                    <th>
+                                                        @Html.DisplayNameFor(model => model.Note)
+                                                    </th>
+                                                    <th></th>
+                                                </tr>
+
+                                                @foreach (var item in Model)
+                                                {
+                                                    <tr>
+                                                        <td>
+                                                            @Html.DisplayFor(modelItem => item.Name)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(modelItem => item.Note)
+                                                        </td>
+                                                        <td>
+                                                            @Html.ActionLink("Edit", "Edit", new { id = item.Customer_id }) |
+                                                            @Html.ActionLink("Delete", "Delete", new { id = item.Customer_id })
+                                                        </td>
+                                                    </tr>
+                                                }
+
+                                            </table>
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Basic Tables end -->
+</div>

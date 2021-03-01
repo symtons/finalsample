@@ -1,0 +1,153 @@
+﻿@model IEnumerable<SameSoftWeb.Models.tblProject>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    var db = new SameSoftWeb.Models.SameSoftwareWebEntities();
+
+    var pending = db.tblProjects.Where(a => a.Status == "Pending").Count();
+    var completed = db.tblProjects.Where(a => a.Status == "Completed").Count();
+    var process = db.tblProjects.Where(a => a.Status == "On-Process").Count();
+    var delayed = db.tblProjects.Where(a => a.Status == "Delayed").Count();
+    var Cancelled = db.tblProjects.Where(a => a.Status == "Cancelled").Count();
+}
+
+
+
+<!-- Bread crumb and right sidebar toggle -->
+<!-- ============================================================== -->
+<div class="row page-titles">
+    <div class="col-md-6 col-8 align-self-center">
+        <h3 class="text-themecolor">Project List</h3>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="javascript:void(0)">Projects</a></li>
+            <li class="breadcrumb-item active">Project List</li>
+        </ol>
+    </div>
+    <div class="col-md-7 col-4 align-self-center">
+        <a href="/Projects/Create/" class="btn waves-effect waves-light btn-primary pull-right hidden-sm-down"> + Create New Project</a>
+    </div>
+</div>
+<!-- ============================================================== -->
+<!-- End Bread crumb and right sidebar toggle -->
+
+<div class="card" style="padding:6px;display:inxline;margin:7px;">
+    <div style="display:initial">
+        &nbsp;  &nbsp;  <span class="fa fa-clock-o" style="color:darkorange;display:inline"></span>  <b style="border:1px solid lightgrey;padding-left:8px;padding-right:8px;color:darkblue;border-bottom:2px solid green;">@pending</b> Pending
+        &nbsp; &nbsp;<span class="fa fa-refresh" style="color:blue;display:inline"></span>           <b style="border:1px solid lightgrey;padding-left:8px;padding-right:8px;color:darkblue;;border-bottom:2px solid green"> @process</b> On Process
+        &nbsp;  &nbsp;  <span class="fa fa-reply" style="color:blueviolet;display:inline"></span>  <b style="border:1px solid lightgrey;padding-left:8px;padding-right:8px;color:darkblue;border-bottom:2px solid green">@delayed</b> Delayed
+        &nbsp; &nbsp;  <span class="fa fa-times-circle" style="color:red;display:inline"></span> <b style="border:1px solid lightgrey;padding-left:8px;padding-right:8px;color:darkblue;border-bottom:2px solid green">@Cancelled</b> Cancelled
+        &nbsp; &nbsp;<span class="fa fa-check-circle" style="color:green;display:inline"></span>  <b style="border:1px solid lightgrey;padding-left:8px;padding-right:8px;color:darkblue;border-bottom:2px solid green">@completed</b> Completed
+    </div>
+</div>
+<br />
+    <div class="card">
+        <div class="card-block">
+
+
+
+            <table class="table-bordered" style="font-size:10pt;">
+                <tr class="btn-success">
+                    <th>No.</th>
+                    <th>
+                        Title
+                    </th>
+                    <th>
+                        Customer
+                    </th>
+
+                    <th>
+                        @Html.DisplayNameFor(model => model.Application)
+                    </th>
+                    <th>
+                        Cost
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Status)
+                    </th>
+
+                    <th>
+                        @Html.DisplayNameFor(model => model.Priority)
+                    </th>
+
+                    <th>
+                        @Html.DisplayNameFor(model => model.Payments)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Agreement_Status)
+                    </th>
+
+                    <th><i class="fa fa-edit" style="color:white;display:inline;"></i>_<i class="fa fa-times" style="display:inline;color:white;"></i></th>
+                </tr>
+                @{
+                    int i = 0;
+                }
+                @foreach (var item in Model)
+            {
+                i += 1;
+                    <tr>
+                        <td>@i</td>
+                        <td>
+                            <a href="/Projects/Details/@item.Project_ID"> @Html.DisplayFor(modelItem => item.Project_Title) </a>
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Customer_Name)
+                        </td>
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Application)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Total_Cost)
+                        </td>
+                      
+                        <td style="text-wrap:none;word-wrap:unset;">
+                            @if (item.Status.ToLower() == "pending")
+                            {<i class="fa fa-clock-o" style="color:darkorange"></i>  }
+                            @if (item.Status.ToLower() == "completed")
+                            {<i class="fa fa-check-circle" style="color:green"></i>  }
+
+                            @if (item.Status.ToLower() == "delayed")
+                            {<i class="fa fa-reply" style="color:blueviolet"></i>  }
+
+                            @if (item.Status.ToLower() == "on-process")
+                            {<i class="fa fa-refresh" style="color:blue"></i>  }
+
+                            @if (item.Status.ToLower() == "cancelled")
+                            {<i class="fa fa-times-circle" style="color:red"></i>  }
+
+                            @Html.DisplayFor(modelItem => item.Status)
+                        </td>
+
+
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Priority)
+                        </td>
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Payments)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Agreement_Status)
+                        </td>
+
+                        <td style="text-wrap:none;">
+                            <a href="/Projects/Edit/@item.Project_ID"> <i class="fa fa-edit" style="color:green;display:inline;"></i></a>_<a href="/Projects/Edit/@item.Project_ID">
+                                <i class="fa fa-times" style="color:red;display:inline;"></i>
+                            </a>
+
+                        </td>
+                    </tr>
+                }
+
+            </table>
+
+        </div>
+    </div>
+
+    <style>
+        th, td {
+            padding: 4px;
+        }
+    </style>

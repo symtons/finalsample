@@ -1,0 +1,291 @@
+
+@{
+    ViewBag.Title = "Item Sales Report";
+}
+
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    SameSoftWeb.Models.SameSoftwareWebEntities db = new SameSoftWeb.Models.SameSoftwareWebEntities();
+
+
+    string Currency = db.tblSettings.Where(a => a.Description == "Currency").Select(a => a.Value).FirstOrDefault();
+
+
+
+    DateTime from = DateTime.Now;
+    DateTime to = DateTime.Now;
+    int divid = 0;
+    int customer = 0;
+
+    if (ViewBag.from != null && ViewBag.divid != null)
+    {
+        from = ViewBag.from;
+        to = ViewBag.to;
+        divid = ViewBag.divid;
+
+    }
+
+
+
+    if (ViewBag.customer != null)
+    {
+        customer = ViewBag.customer;
+    }
+
+
+    var list = db.tblInventory_Transactions.Where(a => a.Tran_Date >= from && a.Tran_Date <= to && a.Business_Division_Id == divid && (a.Customer_ID == customer || customer == 0) && a.Status != "Cancelled" && a.Status != "Refunded" && a.Inventory_type_id == 2).Select(a => new
+    {
+        a.Inventory_Tran_ID,
+        a.Inventory_type_id,
+        a.Payment_Method,
+        a.Payment_Status,
+        a.Customer_ID,
+        a.Discount,
+        a.Total,
+        a.Marketer_id,
+        a.UserID,
+        a.Tran_Date,
+        a.Status
+
+
+
+    }).ToList();
+
+
+    var customers = db.tblCustomers.Select(x => new
+    {
+        ID = x.CustomerID,
+        Name = x.Customer_Name
+    }).ToList();
+
+
+
+
+    var ar = db.tblChart_Of_Accounts.Where(a => a.Account_Class_Id == 5 && a.Cash_Or_Bank == "E").ToList();
+    ViewBag.expense = new SelectList(ar, "Account_Number", "Account_Name");
+
+
+    var cashaccount = db.tblChart_Of_Accounts.Where(a => a.Account_Class_Id == 1 && a.Cash_Or_Bank == "C").ToList();
+    ViewBag.cash = new SelectList(cashaccount, "Account_Number", "Account_Name");
+
+}
+
+
+
+
+
+<div class="content-body">
+    <!-- Basic Tables start -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title"><b>Sales Report</b></h3>
+                    <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                    <div class="heading-elements">
+                        <ul class="list-inline mb-0">
+                            <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                            <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
+                            <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                            <li><a data-action="close"><i class="ft-x"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card-content collapse show">
+                    <div class="card-body">
+
+                        <form method="get" action="\Sales\ItemSalesReport">
+
+                            <div class="row">
+                                <div class="col-md-1">
+                                    Date
+                                </div>
+                                <div class="col-md-3">
+                                    <input type="date" name="from" class="form-control" required="" />
+                                </div>
+                                <div class="col-md-3">
+                                    <input type="date" name="to" class="form-control" required="" />
+                                </div>
+                                <input type="hidden" name="divid" id="userid" value="1" />
+                                <div class="col-md-3">
+                                    @Html.DropDownList("customer", new SelectList(customers, "ID", "Name"), "Select Customer", new { @class = "form-control", @style = "width:250px;font-weight:bold;" })
+                                </div>
+                                <div class="col-md-1">
+                                    <input type="submit" class="btn btn-primary" />
+                                </div>
+                                <div class="col-md-1">
+                                    <button class="btn btn-primary" onclick="PrintElem();">  <i class="fa fa-print"></i> Print    </button>
+                                </div>
+
+                            </div>
+
+
+
+                        </form>
+
+                        <hr />
+
+
+
+                        <div id="invoice">
+
+                            <h3>Sales Report</h3>
+
+
+
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                <th> Invoice ID </th>
+                                <th>Type </th>
+                                <th>Date</th>
+                                <th>Sales User</th>
+                                <th>Total</th>
+                                <th>Discount</th>
+                                <th>Customer</th>
+
+                                <th>Status</th>
+                                @*<th>Cancel</th>*@
+
+
+                                </thead>
+                                @{
+                                    float total = 0;
+                                    float discount = 0;
+                                    float net;
+                                }
+                                @foreach (var x in list)
+                                {
+                                    total += x.Total;
+                                    discount += x.Discount;
+                                    <tr>
+                                        <td>
+                                            <a href="\Sales\Receipt\?id=@x.Inventory_Tran_ID" class="label label-primary"> @x.Inventory_Tran_ID </a>
+                                        </td>
+                                        <td>
+                                            @{
+                                                var id = @x.Inventory_type_id;
+                                                Write(db.Inventory_Types.Where(a => a.Inventory_type_id == id).Select(a => a.Inventory_Type).FirstOrDefault());
+                                            }
+
+                                        <td>
+                                            @x.Tran_Date
+                                        </td>
+                                        <td>
+
+                                            @{
+                                                var id2 = @x.UserID;
+                                                Write(db.tblUsers.Where(a => a.UserID == id2).Select(a => a.FullName).FirstOrDefault());
+                                            }
+                                        </td>
+                                        <td>
+                                            @x.Total
+                                        </td>
+                                        <td>
+                                            @x.Discount
+                                        </td>
+                                        <td>
+                                            @{
+                                                var id3 = @x.Customer_ID;
+                                                Write(db.tblCustomers.Where(a => a.CustomerID == id3).Select(a => a.Customer_Name).FirstOrDefault());
+                                            }
+                                        </td>
+
+
+
+
+                                        <td>
+                                            @x.Status
+                                        </td>
+
+                                        @*<td>
+                                                <a href="\Accounting\CancelTransaction?id=@x.Inventory_Tran_ID" class="btn btn-danger" onclick="return confirm('Sure to Cancel this Transaction?');">Cancel</a>
+                                            </td>*@
+                                    </tr>
+
+
+
+                                                }
+
+
+
+                                @{
+                                    if (list.Count == 0)
+                                    {
+                                        return;
+                                    }
+                                    else
+                                    {
+                                        net = total - discount;
+                                    }
+                                }
+
+
+                                <tr>
+
+
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>Sub Total</td>
+
+                                    <td> <b> @Currency @total  </b></td>
+                                    <td><b> @Currency @discount </b></td>
+                                    <td>
+                                        <b>Net : @Currency @net  </b> <b>
+
+
+                                        </b>
+
+                                    </td>
+
+                                    <td></td>
+
+
+                                    <td></td>
+
+                                </tr>
+
+                            </table>
+                        </div>
+
+                        <hr />
+
+
+
+                        <script>
+                            function PrintElem() {
+
+
+
+                                var mywindow = window.open('', 'PRINT', 'height=400,width=600');
+
+
+                                var st = '<style type="text/css">table{width:100%;}' +
+                                ' th, td {' +
+                                'border:1px solid #ccc;padding:3px;border-collapse:collapse;text-align:center;' +
+                                'padding;0.5em;' +
+                                '}  .tb th{border-bottom:3px solid #ccc;} table{border-collapse:collapse;}' +
+                                '</style>'
+
+                                mywindow.document.write('<html><head>' + st + '<link ref="stylesheet" href="~\Content\bootstrap.min.css">  <title>' + '' + '</title>');
+                                mywindow.document.write('</head><body >');
+
+                                mywindow.document.write(document.getElementById("invoice").innerHTML);
+                                mywindow.document.write('</body></html>');
+
+                                mywindow.document.close(); // necessary for IE >= 10
+                                mywindow.focus(); // necessary for IE >= 10*/
+
+                                mywindow.print();
+                                mywindow.close();
+
+                                return true;
+                            }
+                        </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Basic Tables end -->
+</div>

@@ -1,0 +1,100 @@
+﻿
+@{
+    ViewBag.Title = "Payment";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+    var db = new SameSoftWeb.Models.SameSoftwareWebEntities();
+
+    var projects = db.tblProjects.Select(a => new
+    {
+        name = a.Project_Title,
+        id = a.Project_ID
+    }).ToList();
+
+    var customers = db.tblCustomers.Select(a => new
+    {
+        name = a.Customer_Name,
+        id = a.CustomerID
+    }).ToList();
+}
+
+<!-- Bread crumb and right sidebar toggle -->
+<!-- ============================================================== -->
+<div class="row page-titles">
+    <div class="col-md-6 col-8 align-self-center">
+        <h3 class="text-themecolor">Expense Payment</h3>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
+            <li class="breadcrumb-item active">Expense Payment</li>
+        </ol>
+    </div>
+   
+</div>
+<!-- ============================================================== -->
+<!-- End Bread crumb and right sidebar toggle -->
+
+
+@if(ViewBag.msg!=null)
+{
+    <div class="card">
+        <center>
+            &nbsp;  &nbsp;  <h3><i class="fa fa-info-circle"></i> @ViewBag.msg</h3>
+    </center> 
+         </div>
+}
+'
+
+
+<form method="post" action="/Home/Expense/">
+
+
+
+    <div class="row" style="width:60%;margin:auto;background-color:#fff;padding:6px;border-top:3px solid #10a6e8; padding-top:10px; border-radius:4px;">
+
+        <div class="col-md-6">
+
+          <div class="form-group">
+                <label class="col-md-12">Expense Amount</label>
+                <div class="col-md-12">
+                    <input type="text" value="" required="" placeholder=" $0.00" name="amount" class="form-control form-control-line">
+
+                </div>
+            </div>
+
+
+        </div>
+
+        <div class="col-md-6">
+
+            <div class="form-group">
+                <label class="col-md-12">Description</label>
+                <div class="col-md-12">
+                    <input type="text" value="" required="" placeholder="Expense Type .." name="desc" class="form-control form-control-line">
+
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-md-12">Payment Date</label>
+                <div class="col-md-12">
+                    <input type="date" value="" required="" placeholder="..." name="trandate" class="form-control form-control-line">
+                </div>
+            </div>
+
+
+
+            <div class="form-group">
+                <div class="col-sm-12">
+                    <button class="btn btn-success">Complete Payment</button>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+
+
+
+
+</form>

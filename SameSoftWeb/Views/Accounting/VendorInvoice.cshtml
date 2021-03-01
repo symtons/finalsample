@@ -1,0 +1,76 @@
+
+@{
+    ViewBag.Title = "Vendor Invoice";
+
+
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+    SameSoftWeb.Models.SameSoftwareWebEntities db = new SameSoftWeb.Models.SameSoftwareWebEntities();
+
+
+    var vendor = db.tblVendors.ToList();
+    ViewBag.vendor = new SelectList(vendor, "Vendor_ID", "Vendor_Name");
+
+    var payableaccount = db.tblChart_Of_Accounts.Where(a => a.Account_Class_Id == 2).ToList();
+    ViewBag.payableaccount = new SelectList(payableaccount, "Account_Number", "Account_Name");
+
+    var expense = db.tblChart_Of_Accounts.Where(a => a.Account_Class_Id == 5).ToList();
+    ViewBag.expenseaccount = new SelectList(expense, "Account_Number", "Account_Name");
+
+}
+@{ 
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="content-body">
+    <!-- Basic Tables start -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title"><b>Add Transactions to Invoice </b></h3>
+                    <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                    <div class="heading-elements">
+                        <ul class="list-inline mb-0">
+                            <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                            <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
+                            <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                            <li><a data-action="close"><i class="ft-x"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card-content collapse show">
+                    <div class="card-body">
+                        <form method="post" action="\Accounting\AddVendorInvoice">
+
+
+                            <div class="row" style="width:60%;margin:auto;">
+                                <h2>Create Vendor Invoice</h2>
+                                Select Vendor
+                                @Html.DropDownList("vendor", null, "Select  Vendor", new { @class = "form-control", @required = "" })
+                                <br />
+                                Payable Account
+                                @Html.DropDownList("payableaccount", null, "Select Payable Account", new { @class = "form-control", @required = "" })
+                                <br />Expense Account
+                                @Html.DropDownList("expenseaccount", null, "Select Expense Account", new { @class = "form-control", @required = "" })
+
+
+                                <br />Description
+                                <input type="text" class="form-control" name="desc" placeholder="Description" />
+                                <br />Amonut
+                                <input type="text" class="form-control" name="amount" placeholder="Amount" required="" />
+
+                                <br />
+                                <input type="submit" value="Create Invoice" class="btn btn-primary" />
+                                </div>
+
+                        
+                        </form>
+                        <hr />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Basic Tables end -->
+</div>

@@ -1,0 +1,1603 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="SameSoftwareWebModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityContainer Name="SameSoftwareWebEntities" annotation:LazyLoadingEnabled="true">
+    <FunctionImport Name="sp_get_Customer_Balanace" ReturnType="Collection(SameSoftwareWebModel.sp_get_Customer_Balanace_Result)" />
+    <FunctionImport Name="sp_view_fee_collection" ReturnType="Collection(SameSoftwareWebModel.sp_view_fee_collection_Result)">
+      <Parameter Name="var1" Mode="In" Type="DateTime" />
+      <Parameter Name="var2" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <EntitySet Name="IssueTypes" EntityType="SameSoftwareWebModel.IssueType" />
+    <EntitySet Name="sysdiagrams" EntityType="SameSoftwareWebModel.sysdiagram" />
+    <EntitySet Name="tblApplications" EntityType="SameSoftwareWebModel.tblApplication" />
+    <EntitySet Name="tblAppVersions" EntityType="SameSoftwareWebModel.tblAppVersion" />
+    <EntitySet Name="tblCashFlows" EntityType="SameSoftwareWebModel.tblCashFlow" />
+    <EntitySet Name="tblCustomerTranactionTypes" EntityType="SameSoftwareWebModel.tblCustomerTranactionType" />
+    <EntitySet Name="TblCustomerTransactions" EntityType="SameSoftwareWebModel.TblCustomerTransaction" />
+    <EntitySet Name="tblCustomerTypes" EntityType="SameSoftwareWebModel.tblCustomerType" />
+    <EntitySet Name="tblFeatureRequests" EntityType="SameSoftwareWebModel.tblFeatureRequest" />
+    <EntitySet Name="tblPayment_Voucher" EntityType="SameSoftwareWebModel.tblPayment_Voucher" />
+    <EntitySet Name="tblProblems" EntityType="SameSoftwareWebModel.tblProblem" />
+    <EntitySet Name="tblProjects" EntityType="SameSoftwareWebModel.tblProject" />
+    <EntitySet Name="tblReceipt_Voucher" EntityType="SameSoftwareWebModel.tblReceipt_Voucher" />
+    <AssociationSet Name="FK_tblProblems_tblApplications" Association="SameSoftwareWebModel.FK_tblProblems_tblApplications">
+      <End Role="tblApplication" EntitySet="tblApplications" />
+      <End Role="tblProblem" EntitySet="tblProblems" />
+    </AssociationSet>
+    <EntitySet Name="tblUsers" EntityType="SameSoftwareWebModel.tblUser" />
+    <EntitySet Name="tblConnection_Data" EntityType="SameSoftwareWebModel.tblConnection_Data" />
+    <AssociationSet Name="FK_tblConnection_Data_tblUsers" Association="SameSoftwareWebModel.FK_tblConnection_Data_tblUsers">
+      <End Role="tblUser" EntitySet="tblUsers" />
+      <End Role="tblConnection_Data" EntitySet="tblConnection_Data" />
+    </AssociationSet>
+    <EntitySet Name="tblWebLogs" EntityType="SameSoftwareWebModel.tblWebLog" />
+    <EntitySet Name="tblExpenseTypes" EntityType="SameSoftwareWebModel.tblExpenseType" />
+    <EntitySet Name="tblCash_Flow" EntityType="SameSoftwareWebModel.tblCash_Flow" />
+    <EntitySet Name="tblChart_Of_Account_Assignment" EntityType="SameSoftwareWebModel.tblChart_Of_Account_Assignment" />
+    <EntitySet Name="tblChart_Of_Accounts" EntityType="SameSoftwareWebModel.tblChart_Of_Accounts" />
+    <EntitySet Name="tblJournals" EntityType="SameSoftwareWebModel.tblJournal" />
+    <EntitySet Name="tblJournal_Details" EntityType="SameSoftwareWebModel.tblJournal_Details" />
+    <EntitySet Name="tblSMS_API_DATA" EntityType="SameSoftwareWebModel.tblSMS_API_DATA" />
+    <FunctionImport Name="Acc_Update_Journal_Status_Rev_Expense_by_Date">
+      <Parameter Name="Var1" Mode="In" Type="String" />
+      <Parameter Name="Var2" Mode="In" Type="DateTime" />
+      <Parameter Name="Var3" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="Add_Journal_Details">
+      <Parameter Name="Var1" Mode="In" Type="Int32" />
+      <Parameter Name="Var2" Mode="In" Type="Int32" />
+      <Parameter Name="Var3" Mode="In" Type="Single" />
+      <Parameter Name="Var4" Mode="In" Type="Single" />
+    </FunctionImport>
+    <FunctionImport Name="Get_Journal_Balance_By_Account" ReturnType="Collection(Double)">
+      <Parameter Name="Var1" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="Get_Max_Journal_id_by_User" ReturnType="Collection(Int32)">
+      <Parameter Name="Var1" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="Sp_Add_Journal">
+      <Parameter Name="VAR1" Mode="In" Type="DateTime" />
+      <Parameter Name="VAR2" Mode="In" Type="Int32" />
+      <Parameter Name="VAR3" Mode="In" Type="Int32" />
+      <Parameter Name="VAR4" Mode="In" Type="String" />
+      <Parameter Name="VAR5" Mode="In" Type="String" />
+      <Parameter Name="VAR6" Mode="In" Type="Int32" />
+      <Parameter Name="VAR7" Mode="In" Type="String" />
+      <Parameter Name="VAR8" Mode="In" Type="String" />
+      <Parameter Name="VAR9" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="Sp_Add_Journal_Details">
+      <Parameter Name="VAR1" Mode="In" Type="Int32" />
+      <Parameter Name="VAR2" Mode="In" Type="Int32" />
+      <Parameter Name="VAR3" Mode="In" Type="Single" />
+      <Parameter Name="VAR4" Mode="In" Type="Single" />
+    </FunctionImport>
+    <FunctionImport Name="sp_alterdiagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+      <Parameter Name="version" Mode="In" Type="Int32" />
+      <Parameter Name="definition" Mode="In" Type="Binary" />
+    </FunctionImport>
+    <FunctionImport Name="sp_creatediagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+      <Parameter Name="version" Mode="In" Type="Int32" />
+      <Parameter Name="definition" Mode="In" Type="Binary" />
+    </FunctionImport>
+    <FunctionImport Name="Sp_Delete_Cash_Flow_by_Journal_id">
+      <Parameter Name="VAR1" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="Sp_Delete_Journal_by_Tran_Nbr">
+      <Parameter Name="VAR1" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="Sp_Delete_Journal_Detail_by_ID">
+      <Parameter Name="Var1" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="Sp_Delete_Journal_Details_by_ID">
+      <Parameter Name="VAR1" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_dropdiagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="Sp_Get_Max_Journal_Detail_by_UserID" ReturnType="Collection(Int32)">
+      <Parameter Name="VAR1" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_helpdiagramdefinition" ReturnType="Collection(SameSoftwareWebModel.sp_helpdiagramdefinition_Result)">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_helpdiagrams" ReturnType="Collection(SameSoftwareWebModel.sp_helpdiagrams_Result)">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_renamediagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+      <Parameter Name="new_diagramname" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="sp_upgraddiagrams" />
+    <EntitySet Name="TblLogs" EntityType="SameSoftwareWebModel.TblLog" />
+    <FunctionImport Name="Add_Payment_Voucher">
+      <Parameter Name="VAR1" Mode="In" Type="DateTime" />
+      <Parameter Name="VAR2" Mode="In" Type="Single" />
+      <Parameter Name="VAR3" Mode="In" Type="String" />
+      <Parameter Name="VAR4" Mode="In" Type="String" />
+      <Parameter Name="VAR5" Mode="In" Type="Int32" />
+      <Parameter Name="VAR6" Mode="In" Type="Int32" />
+      <Parameter Name="VAR7" Mode="In" Type="String" />
+      <Parameter Name="VAR8" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="AddCashFlow">
+      <Parameter Name="VAR1" Mode="In" Type="String" />
+      <Parameter Name="VAR2" Mode="In" Type="String" />
+      <Parameter Name="VAR3" Mode="In" Type="Int32" />
+      <Parameter Name="VAR4" Mode="In" Type="String" />
+      <Parameter Name="VAR5" Mode="In" Type="Single" />
+      <Parameter Name="VAR6" Mode="In" Type="Single" />
+    </FunctionImport>
+    <FunctionImport Name="Get_Max_VoucherID" ReturnType="Collection(Int32)" />
+    <EntitySet Name="tblVendor_Invoice" EntityType="SameSoftwareWebModel.tblVendor_Invoice" />
+    <EntitySet Name="tblVendor_Tran_Type" EntityType="SameSoftwareWebModel.tblVendor_Tran_Type" />
+    <EntitySet Name="tblVendor_Transaction" EntityType="SameSoftwareWebModel.tblVendor_Transaction" />
+    <FunctionImport Name="Add_Vendor_Transaction">
+      <Parameter Name="VAR1" Mode="In" Type="DateTime" />
+      <Parameter Name="VAR2" Mode="In" Type="Single" />
+      <Parameter Name="VAR3" Mode="In" Type="String" />
+      <Parameter Name="VAR4" Mode="In" Type="Int32" />
+      <Parameter Name="VAR5" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="Add_Vendor_Transaction_Detail">
+      <Parameter Name="VAR1" Mode="In" Type="Int32" />
+      <Parameter Name="VAR2" Mode="In" Type="Single" />
+      <Parameter Name="VAR3" Mode="In" Type="Single" />
+      <Parameter Name="VAR4" Mode="In" Type="String" />
+      <Parameter Name="VAR5" Mode="In" Type="Int32" />
+      <Parameter Name="VAR6" Mode="In" Type="DateTime" />
+      <Parameter Name="VAR7" Mode="In" Type="Int32" />
+      <Parameter Name="VAR8" Mode="In" Type="String" />
+      <Parameter Name="VAR9" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="Get_Total_Vendor_Tranaction_Detial_by_Vendor_TranID" ReturnType="Collection(Double)">
+      <Parameter Name="VAR1" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="Get_Vendor_Tran_Type_By_Tran_Type" ReturnType="Collection(Int32)">
+      <Parameter Name="VAR1" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="Get_Vendor_TransactionID_By_Status_VendorID" ReturnType="Collection(Int32)">
+      <Parameter Name="VAR1" Mode="In" Type="String" />
+      <Parameter Name="VAR2" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="Update_Vendor_Transaction_Amount_By_Vendor_transid">
+      <Parameter Name="VAR1" Mode="In" Type="Single" />
+      <Parameter Name="VAR2" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="Sp_Get_List_of_Cash_Bank" ReturnType="Collection(SameSoftwareWebModel.Sp_Get_List_of_Cash_Bank_Result)" />
+    <FunctionImport Name="SP_Get_Max_Journal_id_by_User" ReturnType="Collection(Int32)">
+      <Parameter Name="VAR1" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <EntitySet Name="Categories" EntityType="SameSoftwareWebModel.Category" />
+    <EntitySet Name="Inventory_Types" EntityType="SameSoftwareWebModel.Inventory_Types" />
+    <EntitySet Name="Items" EntityType="SameSoftwareWebModel.Item" />
+    <EntitySet Name="Manufacturers" EntityType="SameSoftwareWebModel.Manufacturer" />
+    <EntitySet Name="Measurements" EntityType="SameSoftwareWebModel.Measurement" />
+    <EntitySet Name="Quotation_Details" EntityType="SameSoftwareWebModel.Quotation_Details" />
+    <EntitySet Name="tblCompanyInfoes" EntityType="SameSoftwareWebModel.tblCompanyInfo" />
+    <EntitySet Name="tblPurchase_Order" EntityType="SameSoftwareWebModel.tblPurchase_Order" />
+    <EntitySet Name="tblPurchase_Order_Details" EntityType="SameSoftwareWebModel.tblPurchase_Order_Details" />
+    <EntitySet Name="tblQuotations" EntityType="SameSoftwareWebModel.tblQuotation" />
+    <EntitySet Name="tblSetting2" EntityType="SameSoftwareWebModel.tblSetting2" />
+    <EntitySet Name="tblVendor_Documents" EntityType="SameSoftwareWebModel.tblVendor_Documents" />
+    <EntitySet Name="VendorInstallmentPlans" EntityType="SameSoftwareWebModel.VendorInstallmentPlan" />
+    <EntitySet Name="tblInventory_Transaction_Details" EntityType="SameSoftwareWebModel.tblInventory_Transaction_Details" />
+    <EntitySet Name="tblInventory_Transactions" EntityType="SameSoftwareWebModel.tblInventory_Transactions" />
+    <AssociationSet Name="FK_tblInventory_Transaction_Details_tblInventory_Transactions" Association="SameSoftwareWebModel.FK_tblInventory_Transaction_Details_tblInventory_Transactions">
+      <End Role="tblInventory_Transactions" EntitySet="tblInventory_Transactions" />
+      <End Role="tblInventory_Transaction_Details" EntitySet="tblInventory_Transaction_Details" />
+    </AssociationSet>
+    <EntitySet Name="tblBatches" EntityType="SameSoftwareWebModel.tblBatch" />
+    <FunctionImport Name="Sp_Update_Vendor_Trans_Total">
+      <Parameter Name="var1" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <EntitySet Name="Business_Division" EntityType="SameSoftwareWebModel.Business_Division" />
+    <EntitySet Name="tblVendors" EntityType="SameSoftwareWebModel.tblVendor" />
+    <AssociationSet Name="FK_tblInventory_Transactions_dbo_Business_Division" Association="SameSoftwareWebModel.FK_tblInventory_Transactions_dbo_Business_Division">
+      <End Role="Business_Division" EntitySet="Business_Division" />
+      <End Role="tblInventory_Transactions" EntitySet="tblInventory_Transactions" />
+    </AssociationSet>
+    <FunctionImport Name="GetCompanyInfo" ReturnType="Collection(SameSoftwareWebModel.GetCompanyInfo_Result)" />
+    <FunctionImport Name="sp_Get_Purchase_request_letter_by_ID" ReturnType="Collection(SameSoftwareWebModel.sp_Get_Purchase_request_letter_by_ID_Result)">
+      <Parameter Name="var1" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="Sp_Get_Cash_Flow_Details_by_Date" ReturnType="Collection(SameSoftwareWebModel.Sp_Get_Cash_Flow_Details_by_Date_Result)">
+      <Parameter Name="VAR1" Mode="In" Type="DateTime" />
+      <Parameter Name="VAR2" Mode="In" Type="DateTime" />
+      <Parameter Name="var3" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_get_qty_available_by_division_date_Details" ReturnType="Collection(SameSoftwareWebModel.sp_get_qty_available_by_division_date_Details_Result)">
+      <Parameter Name="var1" Mode="In" Type="Int32" />
+      <Parameter Name="var2" Mode="In" Type="DateTime" />
+    </FunctionImport>
+    <FunctionImport Name="sp_get_qty_available_by_division_date" ReturnType="Collection(SameSoftwareWebModel.sp_get_qty_available_by_division_date_Result)">
+      <Parameter Name="var1" Mode="In" Type="Int32" />
+      <Parameter Name="var2" Mode="In" Type="DateTime" />
+    </FunctionImport>
+    <FunctionImport Name="sp_Get_Purchase_Receipt_by_ID" ReturnType="Collection(SameSoftwareWebModel.sp_Get_Purchase_Receipt_by_ID_Result)">
+      <Parameter Name="var1" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <EntitySet Name="tblSettings" EntityType="SameSoftwareWebModel.tblSetting" />
+    <FunctionImport Name="Inv_Get_Qty_Available_by_ProductID" ReturnType="Collection(Double)">
+      <Parameter Name="Var1" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <EntitySet Name="tblCustomer_Transaction" EntityType="SameSoftwareWebModel.tblCustomer_Transaction" />
+    <EntitySet Name="tblCustomerInvoiceGroups" EntityType="SameSoftwareWebModel.tblCustomerInvoiceGroup" />
+    <EntitySet Name="tblInvoiceGroupDetails" EntityType="SameSoftwareWebModel.tblInvoiceGroupDetail" />
+    <FunctionImport Name="Get_Total_Customer_Transaction_Detail_by_TranID" ReturnType="Collection(Double)">
+      <Parameter Name="VAR1" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="Update_Customer_Tranaction_Amount_By_Cust_tran_id">
+      <Parameter Name="VAR1" Mode="In" Type="Single" />
+      <Parameter Name="VAR2" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="Sp_Get_Cash_Bank_Account" ReturnType="Collection(SameSoftwareWebModel.Sp_Get_Cash_Bank_Account_Result)" />
+    <FunctionImport Name="sp_Get_Customer_with_Balance" ReturnType="Collection(SameSoftwareWebModel.sp_Get_Customer_with_Balance_Result)">
+      <Parameter Name="var1" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <EntitySet Name="tblCustomer_Tran_Type" EntityType="SameSoftwareWebModel.tblCustomer_Tran_Type" />
+    <FunctionImport Name="Pro_Get_Invoice_Group_Details" ReturnType="Collection(SameSoftwareWebModel.Pro_Get_Invoice_Group_Details_Result)">
+      <Parameter Name="var1" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_get_customer_transactions_by_id" ReturnType="Collection(SameSoftwareWebModel.sp_get_customer_transactions_by_id_Result)">
+      <Parameter Name="var1" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <EntitySet Name="tblPaymentMethods" EntityType="SameSoftwareWebModel.tblPaymentMethod" />
+    <EntitySet Name="InstallmentPlans" EntityType="SameSoftwareWebModel.InstallmentPlan" />
+    <FunctionImport Name="sp_check_item_batch" ReturnType="Collection(Double)">
+      <Parameter Name="var1" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_get_items_with_batch_qty" ReturnType="Collection(SameSoftwareWebModel.sp_get_items_with_batch_qty_Result)">
+      <Parameter Name="var1" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_get_qty_available_by_division" ReturnType="Collection(SameSoftwareWebModel.sp_get_qty_available_by_division_Result)">
+      <Parameter Name="var1" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_Get_Sales_Receipt_by_ID" ReturnType="Collection(SameSoftwareWebModel.sp_Get_Sales_Receipt_by_ID_Result)">
+      <Parameter Name="var1" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="Sp_Update_Customer_Trans_Total">
+      <Parameter Name="var1" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="View_Item_Sales" ReturnType="Collection(SameSoftwareWebModel.View_Item_Sales_Result)" />
+    <FunctionImport Name="Search_Customer_By_Name" ReturnType="Collection(SameSoftwareWebModel.Search_Customer_By_Name_Result)">
+      <Parameter Name="Var1" Mode="In" Type="String" />
+    </FunctionImport>
+    <EntitySet Name="tblInvoices" EntityType="SameSoftwareWebModel.tblInvoice" />
+    <EntitySet Name="tblCustomer_Transaction_Detail" EntityType="SameSoftwareWebModel.tblCustomer_Transaction_Detail" />
+    <FunctionImport Name="pro_Get_Invoice" ReturnType="Collection(SameSoftwareWebModel.pro_Get_Invoice_Result)">
+      <Parameter Name="var1" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_Get_Customer_with_Balance2" ReturnType="Collection(SameSoftwareWebModel.sp_Get_Customer_with_Balance2_Result)">
+      <Parameter Name="var1" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <EntitySet Name="tblDepartments" EntityType="SameSoftwareWebModel.tblDepartment" />
+    <EntitySet Name="TblDocuments" EntityType="SameSoftwareWebModel.TblDocument" />
+    <EntitySet Name="tblExpenses" EntityType="SameSoftwareWebModel.tblExpense" />
+    <EntitySet Name="CustomerTasks" EntityType="SameSoftwareWebModel.CustomerTask" />
+    <EntitySet Name="tblTasks" EntityType="SameSoftwareWebModel.tblTask" />
+    <FunctionImport Name="Pro_Tasks_List" ReturnType="Collection(SameSoftwareWebModel.Pro_Tasks_List_Result)">
+      <Parameter Name="var1" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="sp_resset" />
+    <EntitySet Name="tblMonths" EntityType="SameSoftwareWebModel.tblMonth" />
+    <FunctionImport Name="pro_Get_Invoice_By_Group" ReturnType="Collection(SameSoftwareWebModel.pro_Get_Invoice_By_Group_Result)">
+      <Parameter Name="var1" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <EntitySet Name="tblDialyTasks" EntityType="SameSoftwareWebModel.tblDialyTask" />
+    <EntitySet Name="tblCustomers" EntityType="SameSoftwareWebModel.tblCustomer" />
+    <AssociationSet Name="FK_tblDialyTasks_tblCustomers" Association="SameSoftwareWebModel.FK_tblDialyTasks_tblCustomers">
+      <End Role="tblCustomer" EntitySet="tblCustomers" />
+      <End Role="tblDialyTask" EntitySet="tblDialyTasks" />
+    </AssociationSet>
+    <FunctionImport Name="View_All_Customers" ReturnType="Collection(SameSoftwareWebModel.View_All_Customers_Result)">
+      <Parameter Name="var1" Mode="In" Type="String" />
+      <Parameter Name="var2" Mode="In" Type="String" />
+      <Parameter Name="var3" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="View_All_Customers_By_Name_Type_Status" ReturnType="Collection(SameSoftwareWebModel.View_All_Customers_By_Name_Type_Status_Result)">
+      <Parameter Name="var1" Mode="In" Type="String" />
+      <Parameter Name="var2" Mode="In" Type="String" />
+      <Parameter Name="var3" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="View_Customer_Maintainance" ReturnType="Collection(SameSoftwareWebModel.View_Customer_Maintainance_Result)">
+      <Parameter Name="var1" Mode="In" Type="Int32" />
+      <Parameter Name="var2" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_get_customer_transactions_by_id_Date_Tran_Type" ReturnType="Collection(SameSoftwareWebModel.sp_get_customer_transactions_by_id_Date_Tran_Type_Result)">
+      <Parameter Name="var1" Mode="In" Type="Int32" />
+      <Parameter Name="var2" Mode="In" Type="Int32" />
+      <Parameter Name="var3" Mode="In" Type="DateTime" />
+      <Parameter Name="var4" Mode="In" Type="DateTime" />
+    </FunctionImport>
+    <FunctionImport Name="sp_get_vendor_transactions_by_id" ReturnType="Collection(SameSoftwareWebModel.sp_get_vendor_transactions_by_id_Result)">
+      <Parameter Name="var1" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_get_vendor_transactions_by_id_Date_Tran_Type" ReturnType="Collection(SameSoftwareWebModel.sp_get_vendor_transactions_by_id_Date_Tran_Type_Result)">
+      <Parameter Name="var1" Mode="In" Type="Int32" />
+      <Parameter Name="var2" Mode="In" Type="Int32" />
+      <Parameter Name="var3" Mode="In" Type="DateTime" />
+      <Parameter Name="var4" Mode="In" Type="DateTime" />
+    </FunctionImport>
+    <FunctionImport Name="Sp_Get_Vendor_with_Balance" ReturnType="Collection(SameSoftwareWebModel.Sp_Get_Vendor_with_Balance_Result)" />
+    <EntitySet Name="tblVendor_Transaction_Detail" EntityType="SameSoftwareWebModel.tblVendor_Transaction_Detail" />
+    <FunctionImport Name="pro_Get_Vendor_Invoice" ReturnType="Collection(SameSoftwareWebModel.pro_Get_Vendor_Invoice_Result)">
+      <Parameter Name="var1" Mode="In" Type="Int32" />
+    </FunctionImport>
+  </EntityContainer>
+  <ComplexType Name="sp_get_Customer_Balanace_Result">
+    <Property Type="Int32" Name="CustomerID" Nullable="false" />
+    <Property Type="String" Name="Customer_Name" Nullable="true" />
+    <Property Type="String" Name="Cutomer_Type" Nullable="true" MaxLength="60" />
+    <Property Type="String" Name="Contact_Numbers" Nullable="true" />
+    <Property Type="Double" Name="Balance" Nullable="false" />
+  </ComplexType>
+  <ComplexType Name="sp_view_fee_collection_Result">
+    <Property Type="Int32" Name="CustomerID" Nullable="false" />
+    <Property Type="Int32" Name="Transction_ID" Nullable="false" />
+    <Property Type="DateTime" Name="Transaction_Date" Nullable="true" Precision="23" />
+    <Property Type="String" Name="Transaction_type" Nullable="true" MaxLength="100" />
+    <Property Type="Single" Name="Debit" Nullable="true" />
+    <Property Type="Single" Name="Credit" Nullable="true" />
+    <Property Type="String" Name="Description" Nullable="true" />
+    <Property Type="Int32" Name="UserID" Nullable="true" />
+    <Property Type="DateTime" Name="Due_Date" Nullable="true" />
+    <Property Type="String" Name="Status" Nullable="true" MaxLength="60" />
+    <Property Type="String" Name="Note" Nullable="true" />
+    <Property Type="String" Name="FullName" Nullable="true" />
+    <Property Type="String" Name="Customer_Name" Nullable="true" />
+    <Property Type="String" Name="Cutomer_Type" Nullable="true" MaxLength="60" />
+  </ComplexType>
+  <EntityType Name="IssueType">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="IssueType1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="sysdiagram">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <EntityType Name="tblApplication">
+    <Key>
+      <PropertyRef Name="Application_ID" />
+    </Key>
+    <Property Name="Application_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Application_Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="Type" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="tblProblems" Relationship="SameSoftwareWebModel.FK_tblProblems_tblApplications" FromRole="tblApplication" ToRole="tblProblem" />
+  </EntityType>
+  <EntityType Name="tblAppVersion">
+    <Key>
+      <PropertyRef Name="App_ID" />
+    </Key>
+    <Property Name="App_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="App_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Latest_Version" Type="Single" />
+    <Property Name="Last_Update_Date" Type="DateTime" Precision="0" />
+    <Property Name="Notes" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="tblCashFlow">
+    <Key>
+      <PropertyRef Name="CashFlowID" />
+    </Key>
+    <Property Name="CashFlowID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Tran_Date" Type="DateTime" Precision="0" />
+    <Property Name="Debit" Type="Single" />
+    <Property Name="Credit" Type="Single" />
+    <Property Name="Type" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="UserID" Type="Int32" />
+    <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="tblCustomerTranactionType">
+    <Key>
+      <PropertyRef Name="Transaction_type_id" />
+    </Key>
+    <Property Name="Transaction_type_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Transaction_type" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="TblCustomerTransaction">
+    <Key>
+      <PropertyRef Name="Transction_ID" />
+    </Key>
+    <Property Name="Transction_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Transaction_Date" Type="DateTime" Precision="3" />
+    <Property Name="Transaction_type_id" Type="Int32" />
+    <Property Name="Debit" Type="Single" />
+    <Property Name="Credit" Type="Single" />
+    <Property Name="Customer_ID" Type="Int32" />
+    <Property Name="UserID" Type="Int32" />
+    <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="Due_Date" Type="DateTime" Precision="0" />
+    <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Note" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="User_ID" Type="Int32" />
+  </EntityType>
+  <EntityType Name="tblCustomerType">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Customer_Type" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="tblFeatureRequest">
+    <Key>
+      <PropertyRef Name="Feature_ID" />
+    </Key>
+    <Property Name="Feature_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Application_ID" Type="Int32" />
+    <Property Name="User_ID" Type="Int32" />
+    <Property Name="Customer_ID" Type="Int32" />
+    <Property Name="Title" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="Deadline" Type="DateTime" Precision="0" />
+    <Property Name="Importance" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Requested_date" Type="DateTime" Precision="3" />
+    <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="tblPayment_Voucher">
+    <Key>
+      <PropertyRef Name="Voucher_ID" />
+    </Key>
+    <Property Name="Voucher_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Payment_Date" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="Amount" Type="Single" Nullable="false" />
+    <Property Name="Payee" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="In_Word" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="UserID" Type="Int32" Nullable="false" />
+    <Property Name="Company_ID" Type="Int32" Nullable="false" />
+    <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Tran_Nbr" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="tblProblem">
+    <Key>
+      <PropertyRef Name="Problem_ID" />
+    </Key>
+    <Property Name="Problem_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Customer_ID" Type="Int32" />
+    <Property Name="Title" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="UserID" Type="Int32" />
+    <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Solution_Note" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="ErrorDate" Type="DateTime" Precision="3" />
+    <Property Name="Application_ID" Type="Int32" />
+    <Property Name="User" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="Type" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Priority" Type="Int32" />
+    <Property Name="SolvedDate" Type="DateTime" Precision="0" />
+    <NavigationProperty Name="tblApplication" Relationship="SameSoftwareWebModel.FK_tblProblems_tblApplications" FromRole="tblProblem" ToRole="tblApplication" />
+  </EntityType>
+  <EntityType Name="tblProject">
+    <Key>
+      <PropertyRef Name="Project_ID" />
+    </Key>
+    <Property Name="Project_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Customer_Name" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="Creation_Date" Type="DateTime" Precision="3" />
+    <Property Name="Application" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+    <Property Name="Total_Cost" Type="Single" />
+    <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Quotation_Link" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="PaymentAgreement_Link" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Priority" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Created_by" Type="Int32" />
+    <Property Name="Payments" Type="Single" />
+    <Property Name="Agreement_Status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Project_Title" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="tblReceipt_Voucher">
+    <Key>
+      <PropertyRef Name="Voucher_ID" />
+    </Key>
+    <Property Name="Voucher_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Receipt_Date" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="Amount" Type="Single" Nullable="false" />
+    <Property Name="Payee" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="In_Word" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="UserID" Type="Int32" Nullable="false" />
+    <Property Name="Company_ID" Type="Int32" Nullable="false" />
+    <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Tran_Nbr" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+    <Property Name="Balance" Type="Single" />
+  </EntityType>
+  <Association Name="FK_tblProblems_tblApplications">
+    <End Type="SameSoftwareWebModel.tblApplication" Role="tblApplication" Multiplicity="0..1" />
+    <End Type="SameSoftwareWebModel.tblProblem" Role="tblProblem" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tblApplication">
+        <PropertyRef Name="Application_ID" />
+      </Principal>
+      <Dependent Role="tblProblem">
+        <PropertyRef Name="Application_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="tblUser">
+    <Key>
+      <PropertyRef Name="UserID" />
+    </Key>
+    <Property Name="UserID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="FullName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="Customer_ID" Type="Int32" />
+    <Property Name="Role" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="UserName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="App_ID" Type="Int32" />
+    <NavigationProperty Name="tblConnection_Data" Relationship="SameSoftwareWebModel.FK_tblConnection_Data_tblUsers" FromRole="tblUser" ToRole="tblConnection_Data" />
+  </EntityType>
+  <EntityType Name="tblConnection_Data">
+    <Key>
+      <PropertyRef Name="Connection_ID" />
+    </Key>
+    <Property Name="Connection_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Customer" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="Generated_by" Type="Int32" />
+    <Property Name="Generated_Date" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Pass_Code" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Database_Server" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Database_User" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Database_Password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Database_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="tblUser" Relationship="SameSoftwareWebModel.FK_tblConnection_Data_tblUsers" FromRole="tblConnection_Data" ToRole="tblUser" />
+    <Property Name="Expire_Date" Type="DateTime" Nullable="false" Precision="0" />
+  </EntityType>
+  <Association Name="FK_tblConnection_Data_tblUsers">
+    <End Type="SameSoftwareWebModel.tblUser" Role="tblUser" Multiplicity="0..1" />
+    <End Type="SameSoftwareWebModel.tblConnection_Data" Role="tblConnection_Data" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tblUser">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="tblConnection_Data">
+        <PropertyRef Name="Generated_by" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="tblWebLog">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Log_Date" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Type" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="Details" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="tblExpenseType">
+    <Key>
+      <PropertyRef Name="Expense_Type_ID" />
+    </Key>
+    <Property Name="Expense_Type_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Expense_Type" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+    <Property Name="Account_Number" Type="Int32" Nullable="false" />
+    <Property Name="Is_Cogs_Item" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+  </EntityType>
+  <EntityType Name="tblCash_Flow">
+    <Key>
+      <PropertyRef Name="Cash_Flow_ID" />
+    </Key>
+    <Property Name="Cash_Flow_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Tran_Type" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="Description" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="Journal_Detail_id" Type="Int32" Nullable="false" />
+    <Property Name="Tran_Nbr" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="Debit" Type="Single" />
+    <Property Name="Credit" Type="Single" />
+  </EntityType>
+  <EntityType Name="tblChart_Of_Account_Assignment">
+    <Key>
+      <PropertyRef Name="Account_ID" />
+    </Key>
+    <Property Name="Account_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Account_Nbr" Type="Int32" Nullable="false" />
+    <Property Name="Account_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="tblChart_Of_Accounts">
+    <Key>
+      <PropertyRef Name="Account_Number" />
+    </Key>
+    <Property Name="Account_Number" Type="Int32" Nullable="false" />
+    <Property Name="Account_Name" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+    <Property Name="Transaction_Type" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+    <Property Name="Account_Main_Group" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+    <Property Name="Account_Sub_Group" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="Level_SLNO" Type="Int32" />
+    <Property Name="Cash_Or_Bank" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+    <Property Name="Affect_Gross_Profit" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+    <Property Name="Parent_id" Type="Int32" />
+    <Property Name="Sort_Rank" Type="Int32" />
+    <Property Name="Account_Class_Id" Type="Int32" />
+    <Property Name="DrOrCrSide" Type="Int32" />
+    <Property Name="level" Type="Int32" />
+    <Property Name="Sub_Type" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="Account_Group" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="tblJournal">
+    <Key>
+      <PropertyRef Name="Journal_id" />
+    </Key>
+    <Property Name="Journal_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Journal_Date" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="Period" Type="Int32" Nullable="false" />
+    <Property Name="TYear" Type="Int32" Nullable="false" />
+    <Property Name="Tran_Nbr" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Description" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="UserID" Type="Int32" Nullable="false" />
+    <Property Name="Status" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="Tran_Type" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+    <Property Name="Journal_Type" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="tblJournal_Details">
+    <Key>
+      <PropertyRef Name="Journal_Detail_id" />
+    </Key>
+    <Property Name="Journal_Detail_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Journal_id" Type="Int32" Nullable="false" />
+    <Property Name="Account_Number" Type="Int32" Nullable="false" />
+    <Property Name="Debit" Type="Single" />
+    <Property Name="Credit" Type="Single" />
+    <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="tblSMS_API_DATA">
+    <Key>
+      <PropertyRef Name="SMS_SENT_ID" />
+    </Key>
+    <Property Name="SMS_SENT_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="DateTime" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Short_Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="Phone" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="SMS_Body" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Request_Url" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <ComplexType Name="sp_helpdiagramdefinition_Result">
+    <Property Type="Int32" Name="version" Nullable="true" />
+    <Property Type="Binary" Name="definition" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="sp_helpdiagrams_Result">
+    <Property Type="String" Name="Database" Nullable="true" MaxLength="128" />
+    <Property Type="String" Name="Name" Nullable="false" MaxLength="128" />
+    <Property Type="Int32" Name="ID" Nullable="false" />
+    <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
+    <Property Type="Int32" Name="OwnerID" Nullable="false" />
+  </ComplexType>
+  <EntityType Name="TblLog">
+    <Key>
+      <PropertyRef Name="Log_id" />
+    </Key>
+    <Property Name="Log_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Title" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Details" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="LogDate" Type="DateTime" Precision="3" />
+    <Property Name="UserID" Type="Int32" />
+  </EntityType>
+  <EntityType Name="tblVendor_Invoice">
+    <Key>
+      <PropertyRef Name="Invoice_Nbr" />
+    </Key>
+    <Property Name="Invoice_Nbr" Type="Int32" Nullable="false" />
+    <Property Name="Invoice_Date" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="Payment_Date" Type="DateTime" Precision="0" />
+    <Property Name="Payment_Method" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="UserID" Type="Int32" Nullable="false" />
+    <Property Name="Check_Number" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+    <Property Name="Received_by" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+    <Property Name="Status" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+    <Property Name="Amount" Type="Single" />
+    <Property Name="VendorID" Type="Int32" Nullable="false" />
+    <Property Name="Payment_type" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+  </EntityType>
+  <EntityType Name="tblVendor_Tran_Type">
+    <Key>
+      <PropertyRef Name="Vendor_Tran_Type_ID" />
+    </Key>
+    <Property Name="Vendor_Tran_Type_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Tran_Type" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="tblVendor_Transaction">
+    <Key>
+      <PropertyRef Name="Vendor_Tran_ID" />
+    </Key>
+    <Property Name="Vendor_Tran_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Tran_Date" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="Amount" Type="Single" Nullable="false" />
+    <Property Name="Status" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="UserID" Type="Int32" Nullable="false" />
+    <Property Name="VendorID" Type="Int32" Nullable="false" />
+  </EntityType>
+  <ComplexType Name="Sp_Get_List_of_Cash_Bank_Result">
+    <Property Type="Int32" Name="ACCOUNT_NUMBER" Nullable="false" />
+    <Property Type="String" Name="ACCOUNT_NAME" Nullable="false" MaxLength="30" />
+  </ComplexType>
+  <EntityType Name="Category">
+    <Key>
+      <PropertyRef Name="Category_Id" />
+    </Key>
+    <Property Name="Category_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Date_Updated" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="IsActive" Type="Boolean" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Inventory_Types">
+    <Key>
+      <PropertyRef Name="Inventory_type_id" />
+    </Key>
+    <Property Name="Inventory_type_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Inventory_Type" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="Item">
+    <Key>
+      <PropertyRef Name="Item_Id" />
+    </Key>
+    <Property Name="Item_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Category_Id" Type="Int32" />
+    <Property Name="Measurement_Id" Type="Int32" />
+    <Property Name="SalesAccountId" Type="Int32" />
+    <Property Name="InventoryAccountId" Type="Int32" />
+    <Property Name="CostOfGoodsSoldAccountId" Type="Int32" />
+    <Property Name="InventoryAdjustmentAccountId" Type="Int32" />
+    <Property Name="Bar_Code" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Unit_Cost" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="Sale_Price" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="Re_Order_Leval" Type="Int32" />
+    <Property Name="IsActive" Type="Boolean" Nullable="false" />
+    <Property Name="ManufacturerId" Type="Int32" />
+    <Property Name="Business_Division_Id" Type="Int32" />
+    <Property Name="ReferenceNo" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="Description" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="Manufacturer">
+    <Key>
+      <PropertyRef Name="ManufacturerId" />
+    </Key>
+    <Property Name="ManufacturerId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="Country" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Address" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="Measurement">
+    <Key>
+      <PropertyRef Name="Measurement_Id" />
+    </Key>
+    <Property Name="Measurement_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Code" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="Quotation_Details">
+    <Key>
+      <PropertyRef Name="Quotation_detail_id" />
+    </Key>
+    <Property Name="Quotation_detail_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Item_id" Type="Int32" />
+    <Property Name="Qty" Type="Single" />
+    <Property Name="Price" Type="Single" />
+    <Property Name="Quotation_ID" Type="Int32" Nullable="false" />
+    <Property Name="Batch" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="tblCompanyInfo">
+    <Key>
+      <PropertyRef Name="Company_ID" />
+    </Key>
+    <Property Name="Company_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Company_Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Company_Phone" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
+    <Property Name="Company_Mobile" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="City" Type="String" MaxLength="120" FixedLength="false" Unicode="true" />
+    <Property Name="Country" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Evc" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="EMAAL" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Salam_Pay" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="tblPurchase_Order">
+    <Key>
+      <PropertyRef Name="Purchase_ID" />
+    </Key>
+    <Property Name="Purchase_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Tran_Date" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Total" Type="Single" Nullable="false" />
+    <Property Name="Status" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
+    <Property Name="UserID" Type="Int32" Nullable="false" />
+    <Property Name="Business_Division_Id" Type="Int32" Nullable="false" />
+    <Property Name="Note" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="Vendor_Id" Type="Int32" />
+    <Property Name="Invoice_no" Type="Int32" />
+  </EntityType>
+  <EntityType Name="tblPurchase_Order_Details">
+    <Key>
+      <PropertyRef Name="Purchase_order_detail_id" />
+    </Key>
+    <Property Name="Purchase_order_detail_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Item_id" Type="Int32" />
+    <Property Name="Qty" Type="Single" />
+    <Property Name="Unit_Cost" Type="Single" />
+    <Property Name="Purchase_ID" Type="Int32" Nullable="false" />
+  </EntityType>
+  <EntityType Name="tblQuotation">
+    <Key>
+      <PropertyRef Name="Quotation_ID" />
+    </Key>
+    <Property Name="Quotation_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Tran_Date" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Tran_Nbr" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="Total" Type="Single" Nullable="false" />
+    <Property Name="Status" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
+    <Property Name="UserID" Type="Int32" Nullable="false" />
+    <Property Name="Business_Division_Id" Type="Int32" Nullable="false" />
+    <Property Name="Discount" Type="Single" Nullable="false" />
+    <Property Name="Customer_ID" Type="Int32" />
+    <Property Name="Marketer_id" Type="Int32" />
+  </EntityType>
+  <EntityType Name="tblSetting2">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" />
+    <Property Name="Description" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Value" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="tblVendor_Documents">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Vendor_ID" Type="Int32" />
+    <Property Name="Document_Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="Path" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="Document_Date" Type="DateTime" Precision="0" />
+  </EntityType>
+  <EntityType Name="VendorInstallmentPlan">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Vendor_Id" Type="Int32" />
+    <Property Name="OrderId" Type="Int32" />
+    <Property Name="payment_persent" Type="Double" />
+    <Property Name="Payment_total" Type="Double" />
+    <Property Name="status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="payment_date" Type="DateTime" Precision="0" />
+    <Property Name="userid" Type="Int32" />
+    <Property Name="paid" Type="Double" />
+    <Property Name="Trans_Detail_ID" Type="Int32" />
+  </EntityType>
+  <EntityType Name="tblInventory_Transaction_Details">
+    <Key>
+      <PropertyRef Name="Inventory_Tran_Detail_ID" />
+    </Key>
+    <Property Name="Inventory_Tran_Detail_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Inventory_Tran_ID" Type="Int32" Nullable="false" />
+    <Property Name="Item_Id" Type="Int32" Nullable="false" />
+    <Property Name="Unit_Price" Type="Single" Nullable="false" />
+    <Property Name="Qty_In" Type="Single" Nullable="false" />
+    <Property Name="Qty_Out" Type="Single" Nullable="false" />
+    <Property Name="Sales_price" Type="Single" Nullable="false" />
+    <Property Name="Batch" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Tax" Type="Double" />
+    <Property Name="Freight" Type="Double" />
+    <Property Name="Barcode" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="tblInventory_Transactions" Relationship="SameSoftwareWebModel.FK_tblInventory_Transaction_Details_tblInventory_Transactions" FromRole="tblInventory_Transaction_Details" ToRole="tblInventory_Transactions" />
+  </EntityType>
+  <EntityType Name="tblInventory_Transactions">
+    <Key>
+      <PropertyRef Name="Inventory_Tran_ID" />
+    </Key>
+    <Property Name="Inventory_Tran_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Tran_Date" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Inventory_type_id" Type="Int32" Nullable="false" />
+    <Property Name="Payment_Method" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+    <Property Name="Tran_Nbr" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="Total" Type="Single" Nullable="false" />
+    <Property Name="Status" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
+    <Property Name="UserID" Type="Int32" Nullable="false" />
+    <Property Name="Business_Division_Id" Type="Int32" Nullable="false" />
+    <Property Name="Payment_Status" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+    <Property Name="Discount" Type="Single" Nullable="false" />
+    <Property Name="Customer_ID" Type="Int32" />
+    <Property Name="Vendor_ID" Type="Int32" />
+    <Property Name="Marketer_id" Type="Int32" />
+    <Property Name="Invoice_No" Type="Int32" />
+    <Property Name="Cash_Payment" Type="Single" />
+    <NavigationProperty Name="tblInventory_Transaction_Details" Relationship="SameSoftwareWebModel.FK_tblInventory_Transaction_Details_tblInventory_Transactions" FromRole="tblInventory_Transactions" ToRole="tblInventory_Transaction_Details" />
+    <NavigationProperty Name="Business_Division" Relationship="SameSoftwareWebModel.FK_tblInventory_Transactions_dbo_Business_Division" FromRole="tblInventory_Transactions" ToRole="Business_Division" />
+  </EntityType>
+  <Association Name="FK_tblInventory_Transaction_Details_tblInventory_Transactions">
+    <End Type="SameSoftwareWebModel.tblInventory_Transactions" Role="tblInventory_Transactions" Multiplicity="1" />
+    <End Type="SameSoftwareWebModel.tblInventory_Transaction_Details" Role="tblInventory_Transaction_Details" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tblInventory_Transactions">
+        <PropertyRef Name="Inventory_Tran_ID" />
+      </Principal>
+      <Dependent Role="tblInventory_Transaction_Details">
+        <PropertyRef Name="Inventory_Tran_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="tblBatch">
+    <Key>
+      <PropertyRef Name="Batch_id" />
+    </Key>
+    <Property Name="Batch_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Batch" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Manufacture_Date" Type="DateTime" Precision="0" />
+    <Property Name="Expire_Date" Type="DateTime" Precision="0" />
+    <Property Name="Inventory_Detail_id" Type="Int32" />
+  </EntityType>
+  <EntityType Name="Business_Division">
+    <Key>
+      <PropertyRef Name="Business_Division_Id" />
+    </Key>
+    <Property Name="Business_Division_Id" Type="Int32" Nullable="false" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="ContactPerson" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Mobile" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="LandLine" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Address" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="Company_Id" Type="Int32" Nullable="false" />
+    <Property Name="ProfilePic" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="tblInventory_Transactions" Relationship="SameSoftwareWebModel.FK_tblInventory_Transactions_dbo_Business_Division" FromRole="Business_Division" ToRole="tblInventory_Transactions" />
+  </EntityType>
+  <EntityType Name="tblVendor">
+    <Key>
+      <PropertyRef Name="Vendor_ID" />
+    </Key>
+    <Property Name="Vendor_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Vendor_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Address" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Tel" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <Association Name="FK_tblInventory_Transactions_dbo_Business_Division">
+    <End Type="SameSoftwareWebModel.Business_Division" Role="Business_Division" Multiplicity="1" />
+    <End Type="SameSoftwareWebModel.tblInventory_Transactions" Role="tblInventory_Transactions" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Business_Division">
+        <PropertyRef Name="Business_Division_Id" />
+      </Principal>
+      <Dependent Role="tblInventory_Transactions">
+        <PropertyRef Name="Business_Division_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <ComplexType Name="GetCompanyInfo_Result">
+    <Property Type="Int32" Name="Company_ID" Nullable="false" />
+    <Property Type="String" Name="Company_Name" Nullable="false" MaxLength="50" />
+    <Property Type="String" Name="Company_Phone" Nullable="true" MaxLength="80" />
+    <Property Type="String" Name="Company_Mobile" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="City" Nullable="true" MaxLength="120" />
+    <Property Type="String" Name="Country" Nullable="false" MaxLength="50" />
+    <Property Type="String" Name="Email" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="Evc" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="EMAAL" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="Salam_Pay" Nullable="true" MaxLength="50" />
+  </ComplexType>
+  <ComplexType Name="sp_Get_Purchase_request_letter_by_ID_Result">
+    <Property Type="Int32" Name="Purchase_ID" Nullable="false" />
+    <Property Type="DateTime" Name="Tran_Date" Nullable="false" Precision="23" />
+    <Property Type="Single" Name="Total" Nullable="false" />
+    <Property Type="Single" Name="Total1" Nullable="false" />
+    <Property Type="String" Name="Status" Nullable="false" MaxLength="10" />
+    <Property Type="String" Name="FullName" Nullable="true" />
+    <Property Type="String" Name="Customer_Name" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="Customer_Phone" Nullable="true" MaxLength="50" />
+    <Property Type="Int32" Name="Item_Id" Nullable="true" />
+    <Property Type="Single" Name="Unit_Cost" Nullable="true" />
+    <Property Type="Single" Name="Qty_Out" Nullable="true" />
+    <Property Type="String" Name="Item_Name" Nullable="true" />
+    <Property Type="String" Name="DivName" Nullable="false" MaxLength="100" />
+    <Property Type="String" Name="DivMobile" Nullable="false" MaxLength="20" />
+    <Property Type="String" Name="LandLine" Nullable="true" MaxLength="20" />
+    <Property Type="String" Name="Email" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="Address" Nullable="false" MaxLength="500" />
+    <Property Type="String" Name="ProfilePic" Nullable="true" MaxLength="200" />
+  </ComplexType>
+  <ComplexType Name="Sp_Get_Cash_Flow_Details_by_Date_Result">
+    <Property Type="String" Name="TRAN_TYPE" Nullable="false" MaxLength="200" />
+    <Property Type="String" Name="DESCRIPTION" Nullable="false" MaxLength="500" />
+    <Property Type="Single" Name="DEBIT" Nullable="true" />
+    <Property Type="Single" Name="CREDIT" Nullable="true" />
+    <Property Type="DateTime" Name="JOURNAL_DATE" Nullable="true" />
+    <Property Type="String" Name="ACCOUNT_NAME" Nullable="true" MaxLength="30" />
+  </ComplexType>
+  <ComplexType Name="sp_get_qty_available_by_division_date_Details_Result">
+    <Property Type="Int32" Name="Item_Id" Nullable="false" />
+    <Property Type="String" Name="Item_Name" Nullable="true" />
+    <Property Type="String" Name="Category" Nullable="true" MaxLength="50" />
+    <Property Type="Double" Name="QTYIN" Nullable="true" />
+    <Property Type="Double" Name="QTY_Out" Nullable="true" />
+    <Property Type="Double" Name="Available_Qty" Nullable="true" />
+    <Property Type="Double" Name="Total_Cost" Nullable="false" />
+    <Property Type="Double" Name="Total_Sales_Value" Nullable="false" />
+    <Property Type="Double" Name="Profit" Nullable="false" />
+    <Property Type="Int32" Name="Business_Division_Id" Nullable="false" />
+    <Property Type="String" Name="Batch" Nullable="true" MaxLength="50" />
+  </ComplexType>
+  <ComplexType Name="sp_get_qty_available_by_division_date_Result">
+    <Property Type="Int32" Name="Item_Id" Nullable="false" />
+    <Property Type="String" Name="Item_Name" Nullable="true" />
+    <Property Type="String" Name="Category" Nullable="true" MaxLength="50" />
+    <Property Type="Double" Name="QTYIN" Nullable="true" />
+    <Property Type="Double" Name="QTY_Out" Nullable="true" />
+    <Property Type="Double" Name="Available_Qty" Nullable="true" />
+    <Property Type="Double" Name="Total_Cost" Nullable="false" />
+    <Property Type="Double" Name="Total_Sales_Value" Nullable="false" />
+    <Property Type="Double" Name="Profit" Nullable="false" />
+    <Property Type="Int32" Name="Business_Division_Id" Nullable="false" />
+    <Property Type="Decimal" Name="Unit_Cost" Nullable="true" Precision="18" Scale="2" />
+  </ComplexType>
+  <ComplexType Name="sp_Get_Purchase_Receipt_by_ID_Result">
+    <Property Type="Int32" Name="Inventory_Tran_ID" Nullable="false" />
+    <Property Type="DateTime" Name="Tran_Date" Nullable="false" Precision="23" />
+    <Property Type="String" Name="Payment_Method" Nullable="true" MaxLength="10" />
+    <Property Type="String" Name="Tran_Nbr" Nullable="false" MaxLength="20" />
+    <Property Type="Single" Name="Total" Nullable="false" />
+    <Property Type="Single" Name="Net" Nullable="false" />
+    <Property Type="String" Name="Status" Nullable="false" MaxLength="10" />
+    <Property Type="String" Name="FullName" Nullable="true" />
+    <Property Type="String" Name="Payment_Status" Nullable="true" MaxLength="30" />
+    <Property Type="Single" Name="Discount" Nullable="false" />
+    <Property Type="String" Name="Customer_Name" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="Customer_Phone" Nullable="true" MaxLength="50" />
+    <Property Type="Int32" Name="Item_Id" Nullable="false" />
+    <Property Type="Single" Name="Unit_Price" Nullable="false" />
+    <Property Type="String" Name="Batch" Nullable="true" MaxLength="50" />
+    <Property Type="Single" Name="Qty_Out" Nullable="false" />
+    <Property Type="String" Name="Item_Name" Nullable="true" />
+    <Property Type="String" Name="DivName" Nullable="false" MaxLength="100" />
+    <Property Type="String" Name="DivMobile" Nullable="false" MaxLength="20" />
+    <Property Type="String" Name="LandLine" Nullable="true" MaxLength="20" />
+    <Property Type="String" Name="Email" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="Address" Nullable="false" MaxLength="500" />
+    <Property Type="String" Name="ProfilePic" Nullable="true" MaxLength="200" />
+    <Property Type="Double" Name="Tax" Nullable="false" />
+    <Property Type="Double" Name="Freight" Nullable="false" />
+  </ComplexType>
+  <EntityType Name="tblSetting">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" />
+    <Property Name="Description" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Value" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="tblCustomer_Transaction">
+    <Key>
+      <PropertyRef Name="Cust_Tran_ID" />
+    </Key>
+    <Property Name="Cust_Tran_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Tran_Date" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="Amount" Type="Single" Nullable="false" />
+    <Property Name="Status" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="UserID" Type="Int32" Nullable="false" />
+    <Property Name="CustomerID" Type="Int32" Nullable="false" />
+  </EntityType>
+  <EntityType Name="tblCustomerInvoiceGroup">
+    <Key>
+      <PropertyRef Name="Invoice_Group_Id" />
+    </Key>
+    <Property Name="Invoice_Group_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Invoice_Date" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="Title" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="UserID" Type="Int32" />
+    <Property Name="Customer_ID" Type="Int32" />
+    <Property Name="Invoice_Number" Type="Int32" />
+    <Property Name="Last_Update" Type="DateTime" Precision="0" />
+    <Property Name="Updated_by" Type="Int32" />
+  </EntityType>
+  <EntityType Name="tblInvoiceGroupDetail">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="Invoice_Group_Id" Type="Int32" />
+    <Property Name="Cust_Transaction_Detail_id" Type="Int32" />
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="QTY" Type="Single" />
+  </EntityType>
+  <ComplexType Name="Sp_Get_Cash_Bank_Account_Result">
+    <Property Type="Int32" Name="ACCOUNT_NUMBER" Nullable="false" />
+    <Property Type="String" Name="ACCOUNT_NAME" Nullable="false" MaxLength="30" />
+    <Property Type="String" Name="CASH_BANK" Nullable="false" MaxLength="4" />
+  </ComplexType>
+  <ComplexType Name="sp_Get_Customer_with_Balance_Result">
+    <Property Type="Int32" Name="CustomerID" Nullable="false" />
+    <Property Type="String" Name="Customer_Name" Nullable="true" />
+    <Property Type="String" Name="Contact_Numbers" Nullable="true" />
+    <Property Type="String" Name="Address" Nullable="true" />
+    <Property Type="Double" Name="Total" Nullable="false" />
+  </ComplexType>
+  <EntityType Name="tblCustomer_Tran_Type">
+    <Key>
+      <PropertyRef Name="Cust_Tran_Type_ID" />
+    </Key>
+    <Property Name="Cust_Tran_Type_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Tran_Type" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <ComplexType Name="Pro_Get_Invoice_Group_Details_Result">
+    <Property Type="Int32" Name="Cust_Transaction_Detail_id" Nullable="false" />
+    <Property Type="Int32" Name="Cust_Tran_ID" Nullable="false" />
+    <Property Type="Single" Name="Debit" Nullable="false" />
+    <Property Type="Single" Name="Credit" Nullable="false" />
+    <Property Type="String" Name="Description" Nullable="false" MaxLength="200" />
+    <Property Type="String" Name="FullName" Nullable="true" />
+    <Property Type="Int32" Name="UserID" Nullable="false" />
+    <Property Type="DateTime" Name="Trans_Date" Nullable="false" />
+    <Property Type="String" Name="Tran_Type" Nullable="false" MaxLength="20" />
+    <Property Type="String" Name="Status" Nullable="true" MaxLength="20" />
+    <Property Type="String" Name="Tran_Nbr" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="Route" Nullable="true" MaxLength="30" />
+    <Property Type="String" Name="Airline" Nullable="true" MaxLength="30" />
+    <Property Type="Single" Name="Amount" Nullable="true" />
+    <Property Type="DateTime" Name="Dept_Date" Nullable="true" />
+    <Property Type="Int32" Name="Invoice_Group_Id" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="sp_get_customer_transactions_by_id_Result">
+    <Property Type="Int32" Name="CustomerID" Nullable="false" />
+    <Property Type="String" Name="Customer_Name" Nullable="true" />
+    <Property Type="String" Name="Contact_Numbers" Nullable="true" />
+    <Property Type="String" Name="Address" Nullable="true" />
+    <Property Type="Int32" Name="Cust_Tran_ID" Nullable="false" />
+    <Property Type="Int32" Name="Cust_Transaction_Detail_id" Nullable="false" />
+    <Property Type="Single" Name="Debit" Nullable="false" />
+    <Property Type="Single" Name="Credit" Nullable="false" />
+    <Property Type="String" Name="Description" Nullable="false" MaxLength="200" />
+    <Property Type="DateTime" Name="Trans_Date" Nullable="false" />
+    <Property Type="String" Name="Tran_Type" Nullable="false" MaxLength="20" />
+    <Property Type="Int32" Name="UserID" Nullable="false" />
+    <Property Type="String" Name="FullName" Nullable="true" />
+  </ComplexType>
+  <EntityType Name="tblPaymentMethod">
+    <Key>
+      <PropertyRef Name="Payment_Type_id" />
+    </Key>
+    <Property Name="Payment_Type_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Payment_Method" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="InstallmentPlan">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Customer_Id" Type="Int32" />
+    <Property Name="OrderId" Type="Int32" />
+    <Property Name="payment_persent" Type="Double" />
+    <Property Name="Payment_total" Type="Double" />
+    <Property Name="status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="payment_date" Type="DateTime" Precision="0" />
+    <Property Name="userid" Type="Int32" />
+    <Property Name="paid" Type="Double" />
+    <Property Name="Trans_Detail_ID" Type="Int32" />
+  </EntityType>
+  <ComplexType Name="sp_get_items_with_batch_qty_Result">
+    <Property Type="Int32" Name="Inventory_Tran_Detail_ID" Nullable="false" />
+    <Property Type="Int32" Name="Item_Id" Nullable="false" />
+    <Property Type="String" Name="Item" Nullable="true" />
+    <Property Type="Double" Name="QTY" Nullable="false" />
+    <Property Type="DateTime" Name="Expire_Date" Nullable="false" Precision="23" />
+    <Property Type="Single" Name="Sales_price" Nullable="true" />
+    <Property Type="String" Name="Batch" Nullable="false" MaxLength="50" />
+  </ComplexType>
+  <ComplexType Name="sp_get_qty_available_by_division_Result">
+    <Property Type="Int32" Name="Item_Id" Nullable="false" />
+    <Property Type="String" Name="Item_Name" Nullable="true" />
+    <Property Type="String" Name="Category" Nullable="true" MaxLength="50" />
+    <Property Type="Double" Name="QTYIN" Nullable="true" />
+    <Property Type="Double" Name="QTY_Out" Nullable="true" />
+    <Property Type="Double" Name="Available_Qty" Nullable="true" />
+    <Property Type="Double" Name="Total_Cost" Nullable="false" />
+    <Property Type="Double" Name="Total_Sales_Value" Nullable="false" />
+    <Property Type="Double" Name="Profit" Nullable="false" />
+    <Property Type="Int32" Name="Business_Division_Id" Nullable="false" />
+    <Property Type="String" Name="Batch" Nullable="true" MaxLength="50" />
+  </ComplexType>
+  <ComplexType Name="sp_Get_Sales_Receipt_by_ID_Result">
+    <Property Type="Int32" Name="Inventory_Tran_ID" Nullable="false" />
+    <Property Type="DateTime" Name="Tran_Date" Nullable="false" Precision="23" />
+    <Property Type="String" Name="Payment_Method" Nullable="true" MaxLength="10" />
+    <Property Type="String" Name="Tran_Nbr" Nullable="false" MaxLength="20" />
+    <Property Type="Single" Name="Total" Nullable="false" />
+    <Property Type="Single" Name="Net" Nullable="false" />
+    <Property Type="String" Name="Status" Nullable="false" MaxLength="10" />
+    <Property Type="String" Name="FullName" Nullable="true" />
+    <Property Type="String" Name="Payment_Status" Nullable="true" MaxLength="30" />
+    <Property Type="Single" Name="Discount" Nullable="false" />
+    <Property Type="String" Name="Customer_Name" Nullable="false" />
+    <Property Type="String" Name="Customer_Phone" Nullable="true" />
+    <Property Type="Int32" Name="Item_Id" Nullable="false" />
+    <Property Type="Single" Name="Sales_price" Nullable="false" />
+    <Property Type="Single" Name="Qty_Out" Nullable="false" />
+    <Property Type="String" Name="Item_Name" Nullable="true" />
+    <Property Type="String" Name="DivName" Nullable="false" MaxLength="100" />
+    <Property Type="String" Name="DivMobile" Nullable="false" MaxLength="20" />
+    <Property Type="String" Name="LandLine" Nullable="true" MaxLength="20" />
+    <Property Type="String" Name="Email" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="Address" Nullable="false" MaxLength="500" />
+    <Property Type="String" Name="ProfilePic" Nullable="true" MaxLength="200" />
+    <Property Type="String" Name="Batch" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="Expr1" Nullable="true" MaxLength="50" />
+    <Property Type="DateTime" Name="Expire_Date" Nullable="true" />
+    <Property Type="DateTime" Name="Manufacture_Date" Nullable="true" />
+    <Property Type="String" Name="Code" Nullable="true" />
+    <Property Type="String" Name="Description" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="View_Item_Sales_Result">
+    <Property Type="Int32" Name="Inventory_Tran_ID" Nullable="false" />
+    <Property Type="Int32" Name="Inventory_Tran_Detail_ID" Nullable="false" />
+    <Property Type="Int32" Name="Item_Id" Nullable="false" />
+    <Property Type="Single" Name="Qty_In" Nullable="false" />
+    <Property Type="Single" Name="Qty_Out" Nullable="false" />
+    <Property Type="Single" Name="Sales_price" Nullable="false" />
+    <Property Type="String" Name="Status" Nullable="false" MaxLength="10" />
+    <Property Type="DateTime" Name="Tran_Date" Nullable="false" Precision="23" />
+    <Property Type="Int32" Name="Inventory_type_id" Nullable="false" />
+    <Property Type="String" Name="Payment_Method" Nullable="true" MaxLength="10" />
+    <Property Type="Int32" Name="UserID" Nullable="false" />
+    <Property Type="Int32" Name="Business_Division_Id" Nullable="false" />
+    <Property Type="Int32" Name="Invoice_No" Nullable="true" />
+    <Property Type="String" Name="Name" Nullable="true" />
+    <Property Type="String" Name="Inventory_Type" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="Branch_Name" Nullable="false" MaxLength="100" />
+    <Property Type="Decimal" Name="Unit_Cost" Nullable="true" Precision="18" Scale="2" />
+    <Property Type="Double" Name="Cost" Nullable="true" />
+    <Property Type="Double" Name="Price" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="Search_Customer_By_Name_Result">
+    <Property Type="Int32" Name="CustomerID" Nullable="false" />
+    <Property Type="String" Name="Customer_Name" Nullable="true" />
+    <Property Type="String" Name="Contact_Numbers" Nullable="true" />
+  </ComplexType>
+  <EntityType Name="tblInvoice">
+    <Key>
+      <PropertyRef Name="Invoice_id" />
+    </Key>
+    <Property Name="Invoice_id" Type="Int32" Nullable="false" />
+    <Property Name="Invoice_No" Type="Int32" />
+  </EntityType>
+  <EntityType Name="tblCustomer_Transaction_Detail">
+    <Key>
+      <PropertyRef Name="Cust_Transaction_Detail_id" />
+    </Key>
+    <Property Name="Cust_Transaction_Detail_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Cust_Tran_ID" Type="Int32" Nullable="false" />
+    <Property Name="Debit" Type="Single" Nullable="false" />
+    <Property Name="Credit" Type="Single" Nullable="false" />
+    <Property Name="Qty" Type="Single" />
+    <Property Name="Unit_price" Type="Single" />
+    <Property Name="Description" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="UserID" Type="Int32" Nullable="false" />
+    <Property Name="Trans_Date" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="Cust_Tran_Type_ID" Type="Int32" Nullable="false" />
+    <Property Name="Status" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="Tran_Nbr" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Route" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+    <Property Name="Airline" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+    <Property Name="Amount" Type="Single" />
+    <Property Name="Dept_Date" Type="DateTime" Precision="0" />
+    <Property Name="Invoice_Group_Id" Type="Int32" />
+    <Property Name="Booking_ID" Type="Int32" />
+    <Property Name="Inventory_Tran_ID" Type="Int32" />
+    <Property Name="Invoice_No" Type="Int32" />
+    <Property Name="Balance" Type="Single" />
+  </EntityType>
+  <ComplexType Name="pro_Get_Invoice_Result">
+    <Property Type="Int32" Name="Cust_Transaction_Detail_id" Nullable="false" />
+    <Property Type="Int32" Name="Cust_Tran_ID" Nullable="false" />
+    <Property Type="Single" Name="Debit" Nullable="false" />
+    <Property Type="Single" Name="Credit" Nullable="false" />
+    <Property Type="String" Name="Description" Nullable="false" MaxLength="200" />
+    <Property Type="DateTime" Name="Trans_Date" Nullable="false" />
+    <Property Type="String" Name="Status" Nullable="true" MaxLength="20" />
+    <Property Type="String" Name="Route" Nullable="true" MaxLength="30" />
+    <Property Type="String" Name="Airline" Nullable="true" MaxLength="30" />
+    <Property Type="DateTime" Name="Dept_Date" Nullable="true" />
+    <Property Type="Int32" Name="Invoice_Group_Id" Nullable="true" />
+    <Property Type="String" Name="Tran_Type" Nullable="false" MaxLength="20" />
+    <Property Type="Single" Name="Qty" Nullable="true" />
+    <Property Type="Single" Name="Unit_price" Nullable="true" />
+    <Property Type="Single" Name="Balance" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="sp_Get_Customer_with_Balance2_Result">
+    <Property Type="Int32" Name="CustomerID" Nullable="false" />
+    <Property Type="String" Name="Customer_Name" Nullable="true" />
+    <Property Type="String" Name="Contact_Numbers" Nullable="true" />
+    <Property Type="String" Name="Address" Nullable="true" />
+    <Property Type="Double" Name="Total" Nullable="false" />
+  </ComplexType>
+  <EntityType Name="tblDepartment">
+    <Key>
+      <PropertyRef Name="Dept_ID" />
+    </Key>
+    <Property Name="Dept_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Dept_Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="TblDocument">
+    <Key>
+      <PropertyRef Name="Doc_Id" />
+    </Key>
+    <Property Name="Doc_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Documents" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Cust_Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="RefNo" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Tran_Date" Type="DateTime" Nullable="false" Precision="0" />
+  </EntityType>
+  <EntityType Name="tblExpense">
+    <Key>
+      <PropertyRef Name="Expense_ID" />
+    </Key>
+    <Property Name="Expense_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Expense_Date" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="Expense_Type_ID" Type="Int32" Nullable="false" />
+    <Property Name="Dr" Type="Single" />
+    <Property Name="Cr" Type="Single" Nullable="false" />
+    <Property Name="Balance" Type="Single" />
+    <Property Name="UserID" Type="Int32" Nullable="false" />
+    <Property Name="Status" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="Note" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Voucher" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="Payment_Method" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="Period" Type="Int32" Nullable="false" />
+    <Property Name="Year" Type="Int32" Nullable="false" />
+    <Property Name="Quarter" Type="Int32" Nullable="false" />
+    <Property Name="Tran_Nbr" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="CustomerTask">
+    <Key>
+      <PropertyRef Name="Customer_id" />
+    </Key>
+    <Property Name="Customer_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Note" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="tblTask">
+    <Key>
+      <PropertyRef Name="TaskID" />
+    </Key>
+    <Property Name="TaskID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Title" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+    <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="Creation_Date" Type="DateTime" Precision="3" />
+    <Property Name="Project_id" Type="Int32" />
+    <Property Name="Priority" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Assigned_for" Type="Int32" />
+    <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Last_Update" Type="DateTime" Precision="3" />
+    <Property Name="Start_Date" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="End_Date" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Created_by" Type="Int32" />
+    <Property Name="Notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="Customer_id" Type="Int32" />
+    <Property Name="Department" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <ComplexType Name="Pro_Tasks_List_Result">
+    <Property Type="Int32" Name="TaskID" Nullable="false" />
+    <Property Type="String" Name="Title" Nullable="true" MaxLength="500" />
+    <Property Type="String" Name="Description" Nullable="true" />
+    <Property Type="DateTime" Name="Creation_Date" Nullable="true" Precision="23" />
+    <Property Type="String" Name="Priority" Nullable="true" MaxLength="50" />
+    <Property Type="Int32" Name="Assigned_for" Nullable="true" />
+    <Property Type="String" Name="Status" Nullable="true" MaxLength="50" />
+    <Property Type="DateTime" Name="Last_Update" Nullable="true" Precision="23" />
+    <Property Type="String" Name="Start_Date" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="End_Date" Nullable="true" MaxLength="50" />
+    <Property Type="Int32" Name="Created_by" Nullable="true" />
+    <Property Type="String" Name="Notes" Nullable="true" />
+    <Property Type="Int32" Name="Customer_id" Nullable="true" />
+    <Property Type="String" Name="assigned_for1" Nullable="true" />
+    <Property Type="String" Name="cusromer_name" Nullable="true" MaxLength="50" />
+    <Property Type="Int32" Name="UserID" Nullable="false" />
+    <Property Type="String" Name="Department" Nullable="true" />
+  </ComplexType>
+  <EntityType Name="tblMonth">
+    <Key>
+      <PropertyRef Name="Month_ID" />
+    </Key>
+    <Property Name="Month_ID" Type="Int32" Nullable="false" />
+    <Property Name="Month_Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <ComplexType Name="pro_Get_Invoice_By_Group_Result">
+    <Property Type="Int32" Name="Cust_Transaction_Detail_id" Nullable="false" />
+    <Property Type="Int32" Name="Cust_Tran_ID" Nullable="false" />
+    <Property Type="Single" Name="Debit" Nullable="false" />
+    <Property Type="Single" Name="Credit" Nullable="false" />
+    <Property Type="String" Name="Description" Nullable="false" MaxLength="200" />
+    <Property Type="DateTime" Name="Trans_Date" Nullable="false" />
+    <Property Type="String" Name="Status" Nullable="true" MaxLength="20" />
+    <Property Type="String" Name="Route" Nullable="true" MaxLength="30" />
+    <Property Type="String" Name="Airline" Nullable="true" MaxLength="30" />
+    <Property Type="DateTime" Name="Dept_Date" Nullable="true" />
+    <Property Type="Int32" Name="Invoice_Group_Id" Nullable="true" />
+    <Property Type="String" Name="Tran_Type" Nullable="false" MaxLength="20" />
+    <Property Type="Single" Name="Qty" Nullable="true" />
+    <Property Type="Single" Name="Unit_price" Nullable="true" />
+    <Property Type="Single" Name="Balance" Nullable="true" />
+  </ComplexType>
+  <EntityType Name="tblDialyTask">
+    <Key>
+      <PropertyRef Name="Daily_Task_ID" />
+    </Key>
+    <Property Name="Daily_Task_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserID" Type="Int32" />
+    <Property Name="Task_Decription" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="CustomerID" Type="Int32" />
+    <Property Name="Task_Date" Type="DateTime" Precision="0" />
+    <Property Name="From_Time" Type="Time" Precision="7" />
+    <Property Name="To_Time" Type="Time" Precision="7" />
+    <Property Name="Record_Date_Time" Type="DateTime" Precision="3" />
+    <Property Name="Last_Updated" Type="DateTime" Precision="3" />
+    <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Transportation" Type="Single" />
+    <Property Name="Transportation_Mode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="tblCustomer" Relationship="SameSoftwareWebModel.FK_tblDialyTasks_tblCustomers" FromRole="tblDialyTask" ToRole="tblCustomer" />
+  </EntityType>
+  <EntityType Name="tblCustomer">
+    <Key>
+      <PropertyRef Name="CustomerID" />
+    </Key>
+    <Property Name="CustomerID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Customer_Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="Address" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="Cutomer_Type" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Contact_Numbers" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="Contract_Date" Type="DateTime" Precision="0" />
+    <Property Name="Maintainance" Type="Single" />
+    <Property Name="Notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="tblDialyTasks" Relationship="SameSoftwareWebModel.FK_tblDialyTasks_tblCustomers" FromRole="tblCustomer" ToRole="tblDialyTask" />
+  </EntityType>
+  <Association Name="FK_tblDialyTasks_tblCustomers">
+    <End Type="SameSoftwareWebModel.tblCustomer" Role="tblCustomer" Multiplicity="0..1" />
+    <End Type="SameSoftwareWebModel.tblDialyTask" Role="tblDialyTask" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tblCustomer">
+        <PropertyRef Name="CustomerID" />
+      </Principal>
+      <Dependent Role="tblDialyTask">
+        <PropertyRef Name="CustomerID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <ComplexType Name="View_All_Customers_Result">
+    <Property Type="Int32" Name="CustomerID" Nullable="false" />
+    <Property Type="String" Name="Customer_Name" Nullable="true" />
+    <Property Type="String" Name="Address" Nullable="true" />
+    <Property Type="String" Name="Cutomer_Type" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="Status" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="Contact_Numbers" Nullable="true" />
+    <Property Type="DateTime" Name="Contract_Date" Nullable="true" />
+    <Property Type="String" Name="Notes" Nullable="true" />
+    <Property Type="Single" Name="Maintainance" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="View_All_Customers_By_Name_Type_Status_Result">
+    <Property Type="Int32" Name="CustomerID" Nullable="false" />
+    <Property Type="String" Name="Customer_Name" Nullable="true" />
+    <Property Type="String" Name="Address" Nullable="true" />
+    <Property Type="String" Name="Cutomer_Type" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="Status" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="Contact_Numbers" Nullable="true" />
+    <Property Type="DateTime" Name="Contract_Date" Nullable="true" />
+    <Property Type="Single" Name="Maintainance" Nullable="true" />
+    <Property Type="String" Name="Notes" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="View_Customer_Maintainance_Result">
+    <Property Type="Int32" Name="CustomerID" Nullable="false" />
+    <Property Type="String" Name="Customer_Name" Nullable="true" />
+    <Property Type="Single" Name="Maintainance" Nullable="true" />
+    <Property Type="String" Name="Cutomer_Type" Nullable="true" MaxLength="50" />
+  </ComplexType>
+  <ComplexType Name="sp_get_customer_transactions_by_id_Date_Tran_Type_Result">
+    <Property Type="Int32" Name="CustomerID" Nullable="false" />
+    <Property Type="String" Name="Customer_Name" Nullable="true" />
+    <Property Type="String" Name="Contact_Numbers" Nullable="true" />
+    <Property Type="String" Name="Address" Nullable="true" />
+    <Property Type="Int32" Name="Cust_Tran_ID" Nullable="false" />
+    <Property Type="Int32" Name="Cust_Transaction_Detail_id" Nullable="false" />
+    <Property Type="Single" Name="Debit" Nullable="false" />
+    <Property Type="Single" Name="Credit" Nullable="false" />
+    <Property Type="String" Name="Description" Nullable="false" MaxLength="200" />
+    <Property Type="DateTime" Name="Trans_Date" Nullable="false" />
+    <Property Type="String" Name="Tran_Type" Nullable="false" MaxLength="20" />
+    <Property Type="Int32" Name="UserID" Nullable="false" />
+    <Property Type="String" Name="FullName" Nullable="true" />
+    <Property Type="Int32" Name="Cust_Tran_Type_ID" Nullable="false" />
+    <Property Type="Single" Name="Qty" Nullable="true" />
+    <Property Type="Single" Name="Unit_price" Nullable="true" />
+    <Property Type="String" Name="Status" Nullable="true" MaxLength="20" />
+    <Property Type="Int32" Name="Invoice_No" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="sp_get_vendor_transactions_by_id_Result">
+    <Property Type="Int32" Name="Vendor_Tran_ID" Nullable="false" />
+    <Property Type="Int32" Name="Vendor_Transaction_Detail_id" Nullable="false" />
+    <Property Type="Int32" Name="Expr1" Nullable="false" />
+    <Property Type="Single" Name="Debit" Nullable="false" />
+    <Property Type="Single" Name="Credit" Nullable="false" />
+    <Property Type="String" Name="Description" Nullable="false" />
+    <Property Type="Int32" Name="UserID" Nullable="false" />
+    <Property Type="DateTime" Name="Trans_Date" Nullable="false" />
+    <Property Type="Int32" Name="Vendor_Tran_Type_ID" Nullable="true" />
+    <Property Type="String" Name="Tran_Nbr" Nullable="true" MaxLength="30" />
+    <Property Type="String" Name="Tran_Type" Nullable="false" MaxLength="20" />
+    <Property Type="String" Name="FullName" Nullable="true" />
+    <Property Type="Int32" Name="VendorID" Nullable="false" />
+    <Property Type="String" Name="Vendor_Name" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="Address" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="Tel" Nullable="true" MaxLength="50" />
+  </ComplexType>
+  <ComplexType Name="sp_get_vendor_transactions_by_id_Date_Tran_Type_Result">
+    <Property Type="Int32" Name="Vendor_Transaction_Detail_id" Nullable="false" />
+    <Property Type="Int32" Name="Vendor_Tran_ID" Nullable="false" />
+    <Property Type="Single" Name="Debit" Nullable="false" />
+    <Property Type="Single" Name="Credit" Nullable="false" />
+    <Property Type="String" Name="Description" Nullable="false" />
+    <Property Type="Int32" Name="UserID" Nullable="false" />
+    <Property Type="DateTime" Name="Trans_Date" Nullable="false" />
+    <Property Type="Int32" Name="Vendor_Tran_Type_ID" Nullable="true" />
+    <Property Type="String" Name="Tran_Nbr" Nullable="true" MaxLength="30" />
+    <Property Type="String" Name="Tran_Type" Nullable="false" MaxLength="20" />
+    <Property Type="String" Name="FullName" Nullable="true" />
+    <Property Type="Int32" Name="VendorID" Nullable="false" />
+    <Property Type="String" Name="Vendor_Name" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="Address" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="Tel" Nullable="true" MaxLength="50" />
+  </ComplexType>
+  <ComplexType Name="Sp_Get_Vendor_with_Balance_Result">
+    <Property Type="Double" Name="BALANCE" Nullable="true" />
+    <Property Type="String" Name="Vendor_Name" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="Tel" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="Address" Nullable="true" MaxLength="50" />
+    <Property Type="Int32" Name="VENDOR_TRAN_ID" Nullable="false" />
+    <Property Type="Int32" Name="Vendor_ID" Nullable="false" />
+  </ComplexType>
+  <EntityType Name="tblVendor_Transaction_Detail">
+    <Key>
+      <PropertyRef Name="Vendor_Transaction_Detail_id" />
+    </Key>
+    <Property Name="Vendor_Transaction_Detail_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Vendor_Tran_ID" Type="Int32" Nullable="false" />
+    <Property Name="Debit" Type="Single" Nullable="false" />
+    <Property Name="Credit" Type="Single" Nullable="false" />
+    <Property Name="Description" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="UserID" Type="Int32" Nullable="false" />
+    <Property Name="Trans_Date" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="Vendor_Tran_Type_ID" Type="Int32" />
+    <Property Name="Tran_Nbr" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+    <Property Name="Inventory_Tran_ID" Type="Int32" />
+    <Property Name="Invoice_No" Type="Int32" />
+    <Property Name="Qty" Type="Single" />
+    <Property Name="Unit_price" Type="Single" />
+    <Property Name="Balance" Type="Single" />
+  </EntityType>
+  <ComplexType Name="pro_Get_Vendor_Invoice_Result">
+    <Property Type="Int32" Name="Vendor_Transaction_Detail_id" Nullable="false" />
+    <Property Type="Int32" Name="Vendor_Tran_ID" Nullable="false" />
+    <Property Type="Single" Name="Debit" Nullable="false" />
+    <Property Type="Single" Name="Credit" Nullable="false" />
+    <Property Type="String" Name="Description" Nullable="false" />
+    <Property Type="Int32" Name="UserID" Nullable="false" />
+    <Property Type="DateTime" Name="Trans_Date" Nullable="false" />
+    <Property Type="Int32" Name="Vendor_Tran_Type_ID" Nullable="true" />
+    <Property Type="String" Name="Tran_Nbr" Nullable="true" MaxLength="30" />
+    <Property Type="Int32" Name="Inventory_Tran_ID" Nullable="true" />
+    <Property Type="String" Name="Tran_Type" Nullable="false" MaxLength="20" />
+    <Property Type="Int32" Name="Invoice_No" Nullable="true" />
+    <Property Type="Single" Name="Qty" Nullable="true" />
+    <Property Type="Single" Name="Unit_price" Nullable="true" />
+    <Property Type="Single" Name="Balance" Nullable="true" />
+  </ComplexType>
+</Schema>

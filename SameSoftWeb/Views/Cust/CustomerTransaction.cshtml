@@ -1,0 +1,313 @@
+﻿
+
+
+
+<script>
+    $(document).ready(function () {
+        $("#from").datepicker({
+            autoClose: true,
+            format: "yyyy/mm/dd"
+        })
+        $("#to").datepicker({
+            autoClose: true,
+            format: "yyyy/mm/dd"
+        })
+    })
+</script>
+
+
+@{
+   
+
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    SameSoftWeb.Models.SameSoftwareWebEntities db = new SameSoftWeb.Models.SameSoftwareWebEntities();
+    string Currency = db.tblSettings.Where(a => a.Description == "Currency").Select(a => a.Value).FirstOrDefault();
+    DateTime from = DateTime.UtcNow.AddHours(3).Date;
+    DateTime to = DateTime.UtcNow.AddHours(3).Date;
+
+    if (ViewBag.from != null)
+    {
+        from = DateTime.Parse(Convert.ToString(ViewBag.from));
+        to = DateTime.Parse(Convert.ToString(ViewBag.to));
+    }
+
+    int id = 0;
+    if (ViewBag.id != null)
+    {
+        id = (int)ViewBag.id;
+    }
+
+    int type = 0;
+    if (ViewBag.type != null)
+    {
+        type = (int)ViewBag.type;
+    }
+
+    var type_list = db.tblCustomer_Tran_Type.Select(a => new
+    {
+        id = a.Cust_Tran_Type_ID,
+        name = a.Tran_Type
+    }).ToList();
+
+    var cust_list = db.tblCustomers.Select(a => new
+    {
+        id = a.CustomerID,
+        name = a.Customer_Name
+    }).ToList();
+
+    var items = db.sp_get_customer_transactions_by_id_Date_Tran_Type(type,id,from,to).Select(x => new
+    {
+        CustomerID = x.CustomerID,
+        CustomerName = x.Customer_Name,
+        Phone = x.Contact_Numbers,
+        Contact = x.Address,
+        debit = x.Debit,
+        credit = x.Credit,
+        description = x.Description,
+        trandate = x.Trans_Date.ToShortDateString(),
+        invoiceid = x.Cust_Tran_ID,
+        tranid = x.Cust_Transaction_Detail_id,
+        user = x.FullName,
+        type=x.Tran_Type,
+        name=x.Contact_Numbers,
+        invoice=x.Invoice_No
+        
+    }).ToList();
+
+
+
+
+    string custname = "";
+    int custid = 0;
+    if (items.Count > 0)
+    {
+        custname = items[0].CustomerName;
+        custid = items[0].CustomerID;
+    }
+    float totald = 0;
+    float totalc = 0;
+    int divid = 1;
+    var acc = db.tblChart_Of_Accounts.Where(a => a.Cash_Or_Bank == "C").ToList();
+    ViewBag.cashacc = new SelectList(acc, "Account_Number", "Account_Name");
+
+    var aracc = db.tblChart_Of_Accounts.Where(a => a.Account_Class_Id == 1).ToList();
+    ViewBag.aracc = new SelectList(aracc, "Account_Number", "Account_Name");
+
+    var discountacc = db.tblChart_Of_Accounts.Where(a => a.Account_Class_Id == 4).ToList();
+    ViewBag.discountacc = new SelectList(discountacc, "Account_Number", "Account_Name");
+
+}
+
+<style>
+    td {
+        padding: 4px;
+        text-align: center;
+    }
+
+    th {
+        padding: 4px;
+        text-align: center;
+    }
+</style>
+
+
+@*@if ((int)Session["RoleID"] == 4)
+    {
+
+        int customer = (int)Session["customerid"];
+        int curcust = int.Parse(Request.QueryString["id"]);
+
+        if (customer != curcust)
+        {
+            Response.Redirect("\\Users\\Login");
+        }
+
+    }*@
+
+
+<div class="content-body">
+    <!-- Basic Tables start -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title"><b>Customer Statement</b></h3>
+                    <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                    <div class="heading-elements">
+                        <ul class="list-inline mb-0">
+                            <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                            <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
+                            <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                            <li><a data-action="close"><i class="ft-x"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card-content collapse show">
+                    <div class="card-body">
+
+                        <br /><br />
+
+                        <div class="row" style="width:90%;padding:7px;border:1px #f6ecec;margin:auto;">
+                            <form method="get" action="/Cust/CustomerTransaction">
+                                <div class="row">
+
+                                    <div class="col-md-2">
+
+                                    </div>
+
+                                    <div class="col-md-2">    <input type="text" name="from" id="from" class="form-control" style="display:inline;" value="@from.ToString("yyyy/MM/dd")" /></div>
+                                    <div class="col-md-2">     <input type="text" name="to" id="to" required="" class="form-control" style="display:inline;" value="@to.ToString("yyyy/MM/dd")" /> </div>
+
+
+                                    <div class="col-md-2">
+                                        @Html.DropDownList("type", new SelectList(type_list, "id", "name"), "Select Tran Type ", new { @class = "form-control" })
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        @Html.DropDownList("id", new SelectList(cust_list, "id", "name"), "Select Customer", new { @class = "form-control" })
+                                    </div>
+
+                                    <div class="col-md-1">
+                                        <input type="submit" value="View" class="btn btn-primary" />
+                                    </div>
+                                    <button class="btn btn-primary" onclick="PrintElem();">  <i class="fa fa-print"></i> Print    </button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div style="width:90%;padding:7px;border:1px #f6ecec;margin:auto;background-color:#fff;border:1px solid #a6fcfc" id="invoice">
+
+
+                            <center style="font-size:13pt;font-weight:unset;">
+                                <img src="~/img/logo.png" style="width:240px;height:90px;" />   <br />
+
+
+                                <b> Customer Statement </b>
+                                <hr />
+                            </center>
+                    
+                            <hr />
+
+                            <table class="tb table-bordered" style="width:98%;padding:3px;">
+                                <thead>
+                                <th>TransID </th>
+                                <th>Customer Name</th>
+                                <th>Tran Type</th>
+                                <th>Transaction Date </th>
+                                <th>Description </th>
+                                <th>Invoice </th>
+                                <th>User </th>
+                                <th>Debit </th>
+                                <th>Credit </th>
+                                </thead>
+
+                                @foreach (var x in items)
+            {
+                totald = totald + @x.debit;
+                totalc = totalc + @x.credit;
+                var inv = db.tblCustomer_Transaction_Detail.Where(a => a.Cust_Transaction_Detail_id == x.tranid).Select(a => a.Invoice_No).FirstOrDefault();
+
+                string purid = (x.tranid == null) ? "N/A" : "<a href='/Accounting/PrintInvoice/?id=" + @inv + "' class='fa fa-print'> Inv.<text></text>" + @inv;
+
+                                    <text>
+                                        <tr>
+
+                                            <td>@x.tranid</td>
+                                            <td>@x.CustomerName</td>
+                                            <td>@x.type</td>
+                                            <td>@x.trandate</td>
+                                            <td>@x.description</td>
+                                            <td>@Html.Raw(purid)</td>
+                                            <td>@x.user</td>
+                                            <td>@x.debit</td>
+                                            <td>@x.credit</td>
+
+
+                                        </tr>
+                                    </text>
+                                }
+                                <tr> <td></td>  <td></td> <td></td><td></td> <td></td><td></td> <td> Total </td> <td><b>@Currency @totald  </b></td><td><b>@Currency @totalc  </b></td></tr>
+                                <tr> <td></td>  <td></td><td></td> <td></td> <td></td><td></td> <td> Balance </td> <td colspan="2"><b style="border-bottom:1px double blue;"><b>@Currency @{ Write(totald - totalc); } </b></td>  </b></td></tr>
+                            </table>
+
+
+
+                        </div>
+
+
+                        <br /><br />
+
+
+                        <script>
+                            function PrintElem() {
+
+
+
+                                var mywindow = window.open('', 'PRINT', 'height=400,width=600');
+
+
+                                var st = '<style type="text/css">' +
+                                '.tb th, .tb td {' +
+                                'border:1px solid #ccc;padding:3px;border-collapse:collapse;text-align:center;' +
+                                'padding;0.5em;' +
+                                '}  .tb th{border-bottom:3px solid #ccc;} table{border-collapse:collapse;}' +
+                                '</style>'
+
+                                mywindow.document.write('<html><head>' + st + '<link ref="stylesheet" href="~\Content\bootstrap.min.css">  <title>' + '' + '</title>');
+                                mywindow.document.write('</head><body >');
+
+                                mywindow.document.write(document.getElementById("invoice").innerHTML);
+                                mywindow.document.write('</body></html>');
+
+                                mywindow.document.close(); // necessary for IE >= 10
+                                mywindow.focus(); // necessary for IE >= 10*/
+
+                                mywindow.print();
+                                mywindow.close();
+
+                                return true;
+                            }
+
+                            function ViewCash() {
+
+                                var va = $("#trantype").val();
+                                if (va == 2) {
+                                    $("#cashaccx").prop("disabled", true);
+
+                                    $("#discountacc").prop("disabled", false);
+                                }
+                                else {
+                                    $("#cashaccx").prop("disabled", false);
+
+                                    $("#discountacc").prop("disabled", true);
+                                }
+                            }
+
+                            function validate() {
+
+                                var t = $("#trantype").val();
+                                var c = $("#cashacc").val();
+
+                                if (t == "") {
+                                    alert("Please Select Transaction Type");
+                                    return false;
+                                }
+
+                                if (t == 1 && c == "") {
+
+                                    alert("Please Select Cash Account");
+                                    return false;
+                                }
+
+                            }
+
+
+                        </script>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Basic Tables end -->
+</div>

@@ -1,0 +1,412 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+    int user_id = (int)Session["UserID"];
+    string role = Session["Role"].ToString();
+
+    var db = new SameSoftWeb.Models.SameSoftwareWebEntities();
+    var Pendingtasks = db.tblTasks.Where(a => a.Status == "Pending" && (a.Assigned_for == user_id || role == "Admin")).Select(a => new
+    {
+        a.Assigned_for,
+        a.Created_by,
+        a.Customer_id,
+        a.Description,
+        a.End_Date,
+        a.Last_Update,
+        a.Notes,
+        a.Priority,
+        a.Project_id,
+        a.Title,
+        a.TaskID,
+        a.Status,
+        a.Start_Date,
+        a.Department
+
+    }).ToList();
+
+
+    var completedtasks = db.tblTasks.Where(a => a.Status == "Completed" && (a.Assigned_for == user_id || role == "Admin")).Select(a => new
+    {
+        a.Assigned_for,
+        a.Created_by,
+        a.Customer_id,
+        a.Description,
+        a.End_Date,
+        a.Last_Update,
+        a.Notes,
+        a.Priority,
+        a.Project_id,
+        a.Title,
+        a.TaskID,
+        a.Status,
+        a.Start_Date,
+        a.Department
+
+    }).ToList();
+
+
+    var alltasks = db.tblTasks.Select(a => new
+    {
+        a.Assigned_for,
+        a.Created_by,
+        a.Customer_id,
+        a.Description,
+        a.End_Date,
+        a.Last_Update,
+        a.Notes,
+        a.Priority,
+        a.Project_id,
+        a.Title,
+        a.TaskID,
+        a.Status,
+        a.Start_Date,
+        a.Department
+
+    }).Where(a => a.Assigned_for == user_id || role == "Admin").ToList();
+}
+
+
+
+<div class="content-body" style="width:100%">
+    <!-- Basic Tables start -->
+    <div class="row" style="width:100%">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title"><b>Connection List</b></h3>
+                    <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                    <div class="heading-elements">
+                        <ul class="list-inline mb-0">
+                            <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                            <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
+                            <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                            <li><a data-action="close"><i class="ft-x"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card-content collapse show">
+                    <div class="card-body">
+                        <!--Start Sercice Details Area -->
+                        <section class="service_details_area section_padding">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-md-9 col-lg-9 col-sm-12 col-xs-12">
+                                        <div class="service_details_page_content">
+
+                                            <!-- Bread crumb and right sidebar toggle -->
+                                            <!-- ============================================================== -->
+                                            <div class="row page-titles">
+                                                <div class="col-md-6 col-8 align-self-center"><br />
+                                                    <h3 class="text-themecolor">Task list</h3>
+                                                    @*<ol class="breadcrumb">
+                                                        <li class="breadcrumb-item"><a href="javascript:void(0)">Tasks</a></li>
+                                                        <li class="breadcrumb-item active">Task List</li>
+                                                    </ol>*@
+                                                </div>
+                                                <div class="col-md-6 col-8 align-self-center">
+                                                    @if (Session["Role"].ToString() == "Admin")
+                                                    {
+
+                                                        <a href="/Tasks/Create/" class="btn waves-effect waves-light btn-primary pull-right hidden-sm-down"> + Create New Task</a>
+
+                                                    }
+                                                </div>
+                                            </div>
+                                            <!-- ============================================================== -->
+                                            <!-- End Bread crumb and right sidebar toggle -->
+
+
+
+
+
+
+
+
+
+
+
+                                            <div class="card">
+                                                <!-- Nav tabs -->
+                                                <ul class="nav nav-tabs profile-tab" role="tablist">
+                                                    <li class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#home" role="tab">Pending Tasks</a> </li>
+                                                    <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#profile" role="tab">Completed Tasks</a> </li>
+                                                    <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#last" role="tab">All Tasks</a> </li>
+                                                </ul>
+                                                <!-- Tab panes -->
+                                                <div class="tab-content">
+                                                    <div class="tab-pane active" id="home" role="tabpanel">
+                                                        <div class="card-block">
+                                                            Pending Tasks
+                                                            <table class="table table-bordered" >
+                                                                <thead>
+                                                            <tr>
+                                                                <th>Task ID</th>
+                                                                <th>Title</th>
+                                                                <th>Department</th>
+                                                                <th>Description</th>
+                                                                <th>Assigned For</th>
+                                                                <th>Start</th>
+                                                                <th>End Date</th>
+                                                                <th>Priority</th>
+                                                                <th>Status</th>
+                                                                <th>Update</th>
+                                                            </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    @foreach (var x in Pendingtasks)
+                                                                    {
+                                                                        <tr>
+                                                                            <td>@x.TaskID  <a href="/Tasks/Update/@x.TaskID/"><i class="fa fa-gears" onclick="edit();"></i></a> </td>
+                                                                            <td>@x.Title</td>
+                                                                            <th>@x.Department</th>
+                                                                            <td>@x.Description</td>
+                                                                            <td>@db.tblUsers.Where(a => a.UserID == x.Assigned_for).Select(a => a.FullName).FirstOrDefault()</td>
+                                                                            <td>@x.Start_Date</td>
+                                                                            <td>@x.End_Date</td>
+                                                                            <td>
+
+                                                                                @if (x.Priority.ToLower() == "highest")
+                                                                                { <i class="fa fa-arrow-circle-up" style="color:red"></i>  }
+
+                                                                                @if (x.Priority.ToLower() == "high")
+                                                                                {
+                                                                                    <i class="fa fa-arrow-circle-up" style="color:darkorange"></i>  }
+
+
+                                                                                @if (x.Priority.ToLower() == "normal")
+                                                                                {
+                                                                                    <i class="fa fa-arrow-circle-up" style="color:blue"></i>  }
+
+
+                                                                                @if (x.Priority.ToLower() == "low")
+                                                                                {<i class="fa fa-arrow-circle-down" style="color:green"></i>  }
+
+                                                                                @x.Priority
+                 
+                                                                            </td>
+
+                                                                            <td>
+                                                                                @if (x.Status.ToLower() == "pending")
+                                                                                {<i class="fa fa-clock-o" style="color:darkorange"></i>  }
+                                                                                @if (x.Status.ToLower() == "completed")
+                                                                                {<i class="fa fa-check-circle" style="color:green"></i>  }
+
+                                                                                @if (x.Status.ToLower() == "delayed")
+                                                                                {<i class="fa fa-reply" style="color:blueviolet"></i>  }
+
+                                                                                @if (x.Status.ToLower() == "on Process")
+                                                                                {<i class="fa fa-refresh" style="color:blue"></i>  }
+
+                                                                                @if (x.Status.ToLower() == "cancelled")
+                                                                                {<i class="fa fa-times-circle" style="color:red"></i>  }
+
+                                                                                @x.Status
+                                                                            </td>
+                                                                            <td><a href="/Tasks/Update/@x.TaskID/"><i class="fa fa-gears" onclick="edit();"></i>Update</a> </td>
+
+                                                                        </tr>
+                                                                    }
+
+                                                                </tbody>
+                                                            </table>
+
+                                                        </div>
+                                                    </div>
+                                                    <!--second tab-->
+                                                    <div class="tab-pane" id="profile" role="tabpanel">
+                                                        <div class="card-block">
+                                                            Completed Tasks
+                                                            <table class="table table-bordered" >
+                                                                <thead>
+                                                           <tr>
+                                                               <th>Task ID</th>
+                                                               <th>Title</th>
+                                                               <th>Department</th>
+                                                               <th>Description</th>
+                                                               <th>Assigned For</th>
+                                                               <th>Start</th>
+                                                               <th>End Date</th>
+                                                               <th>Priority</th>
+                                                               <th>Status</th>
+                                                               <th>Update</th>
+                                                           </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    @foreach (var x in completedtasks)
+                                                                    {
+                                                                        <tr>
+                                                                            <td>@x.TaskID  <a href="/Tasks/Update/@x.TaskID/"><i class="fa fa-gears" onclick="edit();"></i></a> </td>
+
+                                                                            <td>@x.Title</td>
+                                                                            <td>@x.Department</td>
+                                                                            <td>@x.Description</td>
+                                                                            <td>@db.tblUsers.Where(a => a.UserID == x.Assigned_for).Select(a => a.FullName).FirstOrDefault()</td>
+
+                                                                            <td>@x.Start_Date</td>
+                                                                            <td>@x.End_Date</td>
+
+
+                                                                            <td>
+
+                                                                                @if (x.Priority.ToLower() == "highest")
+                                                                                { <i class="fa fa-arrow-circle-up" style="color:red"></i>  }
+
+                                                                                @if (x.Priority.ToLower() == "high")
+                                                                                {
+                                                                                    <i class="fa fa-arrow-circle-up" style="color:darkorange"></i>  }
+
+
+                                                                                @if (x.Priority.ToLower() == "normal")
+                                                                                {
+                                                                                    <i class="fa fa-arrow-circle-up" style="color:blue"></i>  }
+
+
+                                                                                @if (x.Priority.ToLower() == "low")
+                                                                                {<i class="fa fa-arrow-circle-down" style="color:green"></i>  }
+
+                                                                                @x.Priority
+                                                                            </td>
+
+
+                                                                            <td>
+                                                                                @if (x.Status.ToLower() == "pending")
+                                                                                {<i class="fa fa-clock-o" style="color:darkorange"></i>  }
+                                                                                @if (x.Status.ToLower() == "completed")
+                                                                                {<i class="fa fa-check-circle" style="color:green"></i>  }
+
+                                                                                @if (x.Status.ToLower() == "delayed")
+                                                                                {<i class="fa fa-reply" style="color:blueviolet"></i>  }
+
+                                                                                @if (x.Status.ToLower() == "on Process")
+                                                                                {<i class="fa fa-refresh" style="color:blue"></i>  }
+
+                                                                                @if (x.Status.ToLower() == "cancelled")
+                                                                                {<i class="fa fa-times-circle" style="color:red"></i>  }
+
+                                                                                @x.Status
+                                                                            </td>
+                                                                            <td><a href="/Tasks/Update/@x.TaskID/"><i class="fa fa-gears" onclick="edit();"></i>Update</a> </td>
+
+                                                                        </tr>
+                                                                    }
+
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="tab-pane" id="last" role="tabpanel">
+                                                        <div class="card-block">
+                                                            All Tasks
+                                                            <table class="table table-bordered" >
+                                                                <thead>
+                                                              <tr>
+                                                                  <th>Task ID</th>
+                                                                  <th>Title</th>
+                                                                  <th>Department</th>
+                                                                  <th>Description</th>
+                                                                  <th>Assigned For</th>
+                                                                  <th>Start</th>
+                                                                  <th>End Date</th>
+                                                                  <th>Priority</th>
+                                                                  <th>Status</th>
+                                                                  <th>Update</th>
+                                                              </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    @foreach (var x in alltasks)
+                                                                    {
+                                                                        <tr>
+                                                                            <td>@x.TaskID  <a href="/Tasks/Update/@x.TaskID/"><i class="fa fa-gears" onclick="edit();"></i></a> </td>
+
+                                                                            <td>@x.Title</td>
+                                                                            <td>@x.Department</td>
+                                                                            <td>@x.Description</td>
+                                                                            <td>@db.tblUsers.Where(a => a.UserID == x.Assigned_for).Select(a => a.FullName).FirstOrDefault()</td>
+                                                                            <td>@x.Start_Date</td>
+                                                                            <td>@x.End_Date</td>
+
+                                                                            <td>
+
+                                                                                @if (x.Priority.ToLower() == "highest")
+                                                                                { <i class="fa fa-arrow-circle-up" style="color:red"></i>  }
+
+                                                                                @if (x.Priority.ToLower() == "high")
+                                                                                {
+                                                                                    <i class="fa fa-arrow-circle-up" style="color:darkorange"></i>  }
+
+
+                                                                                @if (x.Priority.ToLower() == "normal")
+                                                                                {
+                                                                                    <i class="fa fa-arrow-circle-up" style="color:blue"></i>  }
+
+
+                                                                                @if (x.Priority.ToLower() == "low")
+                                                                                {<i class="fa fa-arrow-circle-down" style="color:green"></i>  }
+
+                                                                                @x.Priority
+                                                                            </td>
+
+                                                                            <td>
+                                                                                @if (x.Status.ToLower() == "pending")
+                                                                                {<i class="fa fa-clock-o" style="color:darkorange"></i>  }
+                                                                                @if (x.Status.ToLower() == "completed")
+                                                                                {<i class="fa fa-check-circle" style="color:green"></i>  }
+
+                                                                                @if (x.Status.ToLower() == "delayed")
+                                                                                {<i class="fa fa-reply" style="color:blueviolet"></i>  }
+
+                                                                                @if (x.Status == "On Process")
+                                                                                {<i class="fa fa-refresh" style="color:blue"></i>  }
+
+                                                                                @if (x.Status.ToLower() == "cancelled")
+                                                                                {<i class="fa fa-times-circle" style="color:red"></i>  }
+
+                                                                                @x.Status
+                                                                            </td>
+                                                                            <td><a href="/Tasks/Update/@x.TaskID/"><i class="fa fa-gears" onclick="edit();"></i>Update</a> </td>
+
+                                                                        </tr>
+                                                                    }
+
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+
+
+
+
+                                            <script>
+
+
+                                                function edit() {
+
+                                                    bootbox.show();
+
+                                                }
+
+
+                                            </script>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Basic Tables end -->

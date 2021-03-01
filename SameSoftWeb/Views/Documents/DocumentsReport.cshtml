@@ -1,0 +1,233 @@
+﻿<script>
+    $(document).ready(function () {
+        $("#from").datepicker({
+            autoClose: true,
+            format: "yyyy/mm/dd"
+        })
+        $("#to").datepicker({
+            autoClose: true,
+            format: "yyyy/mm/dd"
+        })
+    })
+</script>
+
+@{
+    ViewBag.Title = "DocumentsReport";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    SameSoftWeb.Models.SameSoftwareWebEntities db = new SameSoftWeb.Models.SameSoftwareWebEntities();
+
+
+
+    DateTime from = DateTime.UtcNow.AddHours(3).Date;
+    DateTime to = DateTime.UtcNow.AddHours(3).Date;
+
+
+
+    int type = 0;
+    string typename = "";
+    if (ViewBag.type != null)
+    {
+        type = (int)ViewBag.type;
+        typename = db.tblExpenseTypes.Where(a => a.Expense_Type_ID == type).Select(a => a.Expense_Type).FirstOrDefault();
+
+    }
+
+
+    if (ViewBag.from != null)
+    {
+        from = DateTime.Parse(Convert.ToString(ViewBag.from));
+        to = DateTime.Parse(Convert.ToString(ViewBag.to));
+    }
+
+    var list = db.TblDocuments.OrderBy(a => a.Tran_Date).Where(a => System.Data.Entity.DbFunctions.TruncateTime(a.Tran_Date) >= from && System.Data.Entity.DbFunctions.TruncateTime(a.Tran_Date) <= to).Select(a => new
+    {
+        a.Cust_Name,
+        a.Documents,
+        a.Doc_Id,
+        a.RefNo,
+        a.Tran_Date,
+
+    }).ToList();
+
+
+
+    if (ViewBag.vdate != null)
+    {
+    }
+
+
+
+
+}
+<div class="content-body">
+    <!-- Basic Tables start -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title"><b>Documents Report</b></h3>
+                    <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                    <div class="heading-elements">
+                        <ul class="list-inline mb-0">
+                            <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                            <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
+                            <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                            <li><a data-action="close"><i class="ft-x"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card-content collapse show">
+                    <div class="card-body">
+
+
+                        <form method="post" action="/Documents/DocumentsReport">
+                            <div class="row">
+
+                                <div class="col-md-2">
+                                    <b>Documents Report </b>
+                                </div>
+
+                                <div class="col-md-2">    <input type="text" name="from" id="from" class="form-control" style="display:inline;" value="@from.ToString("yyyy/MM/dd")" /></div>
+                                <div class="col-md-2">     <input type="text" name="to" id="to" required="" class="form-control" style="display:inline;" value="@to.ToString("yyyy/MM/dd")" /> </div>
+
+
+
+                                <div class="col-md-1">
+                                    <input type="submit" value="View" class="btn btn-primary" />
+                                </div>
+                                <button class="btn btn-primary" onclick="PrintElem();">  <i class="fa fa-print"></i> Print    </button>
+                            </div>
+                        </form>
+
+
+
+
+                        @{
+                            if (list.Count < 1)
+                            {
+                                @Html.Raw(ViewBag.msg)
+                                return;
+                            }
+
+                        }
+
+                        <br /><br />
+                        <div id="print">
+
+                            <center>
+                                <img src="~/img/logo.png" height="100" width="200" />
+                                <br />
+
+                                From @from.Date.ToString("dd/MM/yyyy")   to  @to.Date.ToString("dd/MM/yyyy")
+
+                               
+
+                            </center>
+
+                            <table class="table table-bordered">
+                                <thead>
+                                <th>Ref No.</th>
+                                <th>Customer Name</th>
+                                <th>Tran Date</th>
+
+                                <th>Document</th>
+                                <th>Print</th>
+                                </th>
+
+                                @foreach (var x in list)
+                                {
+
+                                    <tr>
+                                        <td>
+                                            @x.RefNo
+
+                                        </td>
+
+
+                                        <td>
+                                            @x.Cust_Name
+                                        </td>
+
+                                        <td>
+                                            @x.Tran_Date
+
+                                        </td>
+
+
+
+
+
+                                        <td>
+                                            @x.Documents
+                                        </td>
+                                        <td><a href="/Documents/Print/@x.Doc_Id" class="btn btn-success"> <i class="fa fa-print"></i> Print</a></td>
+                                    </tr>
+                                }
+
+
+
+                            </table>
+
+                            <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+                            Total Record <b> @list.Count </b>
+
+
+
+
+
+
+
+
+
+
+
+
+
+                            <script>
+                                function PrintElem() {
+
+
+
+                                    var mywindow = window.open('', 'PRINT', 'height=600,width=900');
+
+
+                                    var st = '<style type="text/css">table{width:100%;}' +
+                                    ' th, td {' +
+                                    'border:1px solid #ccc;padding:3px;border-collapse:collapse;text-align:center;font-size:9pt;' +
+                                    'padding;0.5em;' +
+                                    '}   table{border-collapse:collapse;}' +
+                                    '</style>'
+
+                                    mywindow.document.write('<html><head>' + st + '<link ref="stylesheet" href="~\Content\bootstrap.min.css">  <title>' + '' + '</title>');
+                                    mywindow.document.write('</head><body >');
+
+                                    mywindow.document.write(document.getElementById("print").innerHTML);
+                                    mywindow.document.write('</body></html>');
+
+                                    mywindow.document.close(); // necessary for IE >= 10
+                                    mywindow.focus(); // necessary for IE >= 10*/
+
+                                    mywindow.print();
+                                    mywindow.close();
+
+                                    return true;
+                                }
+
+
+
+
+                            </script>
+
+
+
+
+                        
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Basic Tables end -->
+    </div>

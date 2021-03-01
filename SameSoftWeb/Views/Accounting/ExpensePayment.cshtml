@@ -1,0 +1,328 @@
+﻿
+<script>
+    $(document).ready(function () {
+        $("#from").datepicker({
+            autoClose: true,
+            format: "yyyy/mm/dd"
+        })
+        $("#to").datepicker({
+            autoClose: true,
+            format: "yyyy/mm/dd"
+        })
+    })
+</script>
+@{
+    ViewBag.Title = "ExpensePayment";
+
+    string note = "", amount = "", date = "", type = "";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+    SameSoftWeb.Models.SameSoftwareWebEntities db = new SameSoftWeb.Models.SameSoftwareWebEntities();
+    var acc = db.Sp_Get_List_of_Cash_Bank().Select(x => new
+    {
+        name = x.ACCOUNT_NAME,
+        id = x.ACCOUNT_NUMBER,
+    }).ToList();
+
+
+    var vendors = db.tblVendors.Select(x => new
+    {
+        id = x.Vendor_ID,
+        name = x.Vendor_Name,
+    }).ToList();
+
+    var expenses = db.tblExpenses.Where(a => a.Status == "Open").Select(a => new
+    {
+        a.Expense_ID,
+        a.Expense_Date,
+        a.Expense_Type_ID,
+        a.Note,
+        a.Status,
+        a.UserID,
+        a.Cr
+
+
+
+
+    }).ToList();
+    int? id = ViewBag.id;
+    var exp = db.tblExpenses.Where(a => a.Expense_ID == id).FirstOrDefault();
+
+    if (exp != null)
+    {
+        note = exp.Note;
+        date = exp.Expense_Date.ToShortDateString();
+        type = db.tblExpenseTypes.Where(a => a.Expense_Type_ID == exp.Expense_Type_ID).Select(a => a.Expense_Type).FirstOrDefault();
+        amount = exp.Cr.ToString();
+    }
+}
+
+
+
+
+<div class="content-body">
+    <!-- Basic Tables start -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title"><b>Expense Payment</b></h3>
+                    <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                    <div class="heading-elements">
+                        <ul class="list-inline mb-0">
+                            <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                            <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
+                            <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                            <li><a data-action="close"><i class="ft-x"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card-content collapse show">
+                    <div class="card-body">
+
+
+
+                        @if (ViewBag.msg != null)
+                        {
+                            <h4 style="color:blue"><i class="fa fa-envlope"></i> @ViewBag.msg</h4>
+                        }
+                        @if (ViewBag.id == null)
+                        {
+
+                            <table class="table table-bordered" style="background-color:white">
+
+                                <thead>
+                                <th>Expense No.</th>
+                                <th>Expense Type.</th>
+                                <th>Expense Date.</th>
+                                <th>Amount</th>
+                                <th>Note</th>
+
+                                <th>User</th>
+                                <th>...</th>
+                                <th>...</th>
+                                </thead>
+
+
+                                @foreach (var x in expenses)
+                                {
+                                    <tr>
+                                        <td>@x.Expense_ID</td>
+                                        <td>
+                                            @{Write(db.tblExpenseTypes.Where(a => a.Expense_Type_ID == x.Expense_Type_ID).Select(a => a.Expense_Type).FirstOrDefault());
+                                            }
+                                        </td>
+                                        <td>@x.Expense_Date.ToShortDateString()</td>
+                                        <td>@x.Cr </td>
+                                        <td>@x.Note</td>
+                                        <td>@{Write(db.tblUsers.Where(a => a.UserID == x.UserID).Select(a => a.FullName).FirstOrDefault());} </td>
+                                        <td><a href="/Accounting/ExpensePayment/?id=@x.Expense_ID" class="btn btn-success">Payment  </a></td>
+                                        <td><a href="/Accounting/DeleteExpense/?id=@x.Expense_ID" class="btn btn-danger" onclick="return confirm('Sure to Delete this Expense?');">Delete  </a></td>
+
+                                    </tr>
+                                            }
+
+
+
+
+                            </table>
+
+
+                                            }
+
+                                            else
+                                            {
+                                                <form method="post" action="\Accounting\ExpensePayment">
+
+
+                                                    <div class="row" style="width:100%;margin:auto;background-color:white">
+
+                                                        <div class="col-md-4">
+                                                            <br /><br />
+                                                            <div class="list-group" style="" id="update">
+
+                                                                <a href="#" class="list-group-item " style="background-color:#67B0D1;color:white;">
+                                                                    Expense #@ViewBag.id Payment
+                                                                </a>
+
+
+                                                                <a href="#" class="list-group-item">Type : @type </a>
+                                                                <a href="#" class="list-group-item">Amount : @amount </a>
+                                                                <a href="#" class="list-group-item">Note : @note </a>
+                                                                <a href="#" class="list-group-item">Date : @date </a>
+
+
+
+                                                            </div>
+                                                        </div>
+
+
+
+                                                        <div class="col-md-6">
+
+
+                                                            <input type="hidden" name="id" value="@ViewBag.id" />
+
+
+
+
+                                                            <b>Payment Method</b>
+
+                                                            <br />
+                                                            <input type="radio" id="type1" name="paymenttype" value="1" />
+                                                            <label for="type1">Cash Payment</label>
+
+                                                            <br />
+                                                            <input type="radio" id="type2" name="paymenttype" value="2" />
+                                                            <label for="type2">Credit Payment</label>
+
+                                                            <hr />
+
+                                                            <div class="row">
+                                                                <div class="col-md-6" id="cash">
+                                                                    * Cash Payment <hr />
+                                                                    @Html.DropDownList("acc", new SelectList(acc, "id", "name"), "Select Cash Account", new { @class = "form-control" })
+                                                                    Payee
+                                                                    <input type="text" name="payee" class="form-control" placeholder="Payee Name" />
+                                                                </div>
+                                                                <div class="col-md-6" id="credit" style="border-left:1px solid green">
+                                                                    * Credit Payment
+                                                                    <hr />
+                                                                    @Html.DropDownList("vendor", new SelectList(vendors, "id", "name"), "Select  Vendor", new { @class = "form-control" })
+
+
+
+                                                                </div>
+                                                            </div>
+
+
+
+                                                            <hr />
+
+                                                            Transaction Date
+                                                            <input type="text" name="trandate" class="form-control" placeholder="Transaction Date" value="@exp.Expense_Date.ToString("yyyy/MM/dd")" id="from" />
+
+
+
+
+
+
+
+
+
+                                                            <br />
+                                                            <input type="submit" value="Complete" class="btn btn-primary" id="save" />
+
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <a href="/Accounting/ExpensePayment" class="btn btn-default"><i class="fa fa-angle-left"></i> Back to List</a>
+                                                        </div>
+
+                                                    </div>
+                                                </form>
+                                                <hr />
+
+                                                @*<script>
+
+                                                        $(document).ready(function () {
+
+
+
+
+
+                                                            $("input[name=paymenttype]:radio").click(function () {
+
+                                                                var save = document.getElementById("save");
+                                                                save.disabled = false;
+
+
+                                                                if ($(this).attr("value") == "1") {
+                                                                    enable(1);
+
+                                                                }
+                                                                if ($(this).attr("value") == "2") {
+                                                                    enable(2);
+                                                                }
+                                                            });
+
+
+
+
+
+
+
+
+                                                        });
+
+                                                        var nodes = document.getElementById("cash").getElementsByTagName('*');
+                                                        for (var i = 0; i < nodes.length; i++) {
+                                                            nodes[i].disabled = true;
+                                                        }
+
+                                                        var nodes = document.getElementById("credit").getElementsByTagName('*');
+                                                        for (var i = 0; i < nodes.length; i++) {
+                                                            nodes[i].disabled = true;
+                                                        }
+
+
+                                                        var save = document.getElementById("save");
+                                                        save.disabled = true;
+
+                                                        function enable(id) {
+
+
+
+                                                            if (id == 1) {
+                                                                var nodes = document.getElementById("cash").getElementsByTagName('*');
+                                                                for (var i = 0; i < nodes.length; i++) {
+                                                                    nodes[i].disabled = false;
+                                                                }
+                                                                nodes = document.getElementById("credit").getElementsByTagName('*');
+                                                                for (var i = 0; i < nodes.length; i++) {
+                                                                    nodes[i].disabled = true;
+                                                                }
+
+
+                                                            }
+
+
+                                                            if (id == 2) {
+                                                                var nodes = document.getElementById("credit").getElementsByTagName('*');
+                                                                for (var i = 0; i < nodes.length; i++) {
+                                                                    nodes[i].disabled = false;
+                                                                }
+
+
+                                                                nodes = document.getElementById("cash").getElementsByTagName('*');
+                                                                for (var i = 0; i < nodes.length; i++) {
+                                                                    nodes[i].disabled = true;
+                                                                }
+                                                            }
+
+
+
+
+
+                                                        }
+
+
+                                                    </script>*@
+
+
+
+
+
+
+                                            }
+
+
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Basic Tables end -->
+</div>

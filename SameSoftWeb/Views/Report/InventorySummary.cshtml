@@ -1,0 +1,269 @@
+@{
+    ViewBag.Title = "AvailableInventory";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+    }
+
+
+
+
+    <h2>Available Inventory</h2>
+
+
+    <style type="text/css">
+        .col-md-4 {
+            padding-top: 5px;
+        }
+
+        td {
+            border: 1px solid black;
+        }
+    </style>
+
+    <section class="content-header">
+
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-th-list"></i> Reports</a></li>
+            <li class="active">Available Inventory</li>
+        </ol>
+    </section>
+    <section class="content">
+        <div class="row">
+            <div class="col-md-12">
+                <!-- general form elements -->
+                <div class="box box-primary">
+
+
+
+
+                    <div class="box-body ">
+
+
+                        <br />
+                        <div id="tabletitle">
+
+                            <hr />
+                            &nbsp; &nbsp; &nbsp;
+                            @{
+                            @*using (var db = new SOSMSE_SYS.Models.SosmeDbEntities())
+                            {
+
+                            if (Session["divid"] != null)
+                            {
+                            <input type="hidden" value="@Session[" divid"]" id="exps" />
+                            }
+                            else
+                            {
+                            var deposit = db.Business_Division.Select(x => new
+                            {
+                            NameOfAccount = x.Name,
+                            AccountNumber = x.Business_Division_Id,
+                            }).ToList();
+                            ViewBag.exps = new SelectList(deposit, "AccountNumber", "NameOfAccount", "");
+                            @Html.DropDownList("exps", null, "Select Business Division", new { @class = "form-control", onchange = "", @style = "width:450px;display:inline;", @id = "exps" })
+
+                            }
+                            }*@
+
+                            }
+
+
+
+
+
+
+
+                            <input type="date" id="vdate" />
+                            <input type="submit" id="btnview" style="display:inline-block;" class="btn btn-primary" value="View Report" onclick="view();" />
+                            &nbsp;&nbsp;  <input type="submit" value="Print" class="btn btn-primary" id="btnprint" onclick="print();" style="height:33px;width:67px;display:inline-block;">
+
+                            <hr />
+                        </div>
+                        <div  id="print">
+                            <input type="hidden" id="divname" value="1" />
+                            <div class="row" style="background-color:white;">
+                                <div class="col-md-12" id="divpaymentlist">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- /.box -->
+            </div>
+            <!--/.col (left) -->
+        </div>
+    </section>
+<br /><br />
+
+
+    <script type="text/javascript">
+
+
+        $(document).ready(function () {
+            $('#datepicker').datepicker({
+                startDate: '+0d',
+
+            }).on('change', function () {
+                $('.datepicker').hide();
+            });
+
+            getexpenses();
+        });
+
+
+
+
+
+
+
+
+
+
+
+    </script>
+
+
+    <script type="text/javascript">
+
+        function view() {
+            idx = $("#exps").val();
+            var vdate = $("#vdate").val();
+
+            var total = 0;
+            var totalin = 0;
+            var totalout = 0;
+
+            $.ajax({
+                type: "POST",
+                global: false,
+                data: { divid: idx, date: vdate },
+                url: url = "/Reports/GetAvailableInventory",
+                success: function (data) {
+
+
+
+                    $("#tabletitle").show("fade");
+                    $("#divpaymentlist").show("fade");
+                    var str = "";
+
+                    str += '<center><h3>Inventory Summary as of ' + vdate + '</h3> </center> <table  class="table table-bordered" id="tabledivpaymentlist"><thead><tr class="alert-info">';
+                    str += '<th style="width: 15vw; text-align: center;">Item No.</th>';
+                    str += '<th style="width: 15vw; text-align: center;">Item Name Date</th>';
+
+
+                    //str += '<th style="width: 15vw; text-align: center;">Category</th>';
+                    str += '<th style="width: 15vw; text-align: center;">QTY IN</th>';
+                    str += '<th style="width: 15vw; text-align: center;">QTY OUT</th>';
+                    str += '<th style="width: 15vw; text-align: center;">Available Quantity</th>';
+
+                    //str += '<th style="width: 15vw; text-align: center;">Cost.</th>';
+
+                    str += '</tr></thead><tbody>';
+
+
+
+
+                    try {
+
+                        $.each(data, function (i, rec) {
+                            str += '<tr>';
+                            total = total + rec.qtyavailable;
+                            totalin = totalin + rec.qtyin;
+                            totalout = totalout + rec.qtyout;
+
+                            str += '<td style="text-align: center;">' + rec.item_id + '</td>';
+                            str += '<td style="text-align: center;">' + rec.Item_name + '</td>';
+                            //str += '<td style="text-align: center;">' + rec.batch + '</td>';
+                            //str += '<td style="text-align: center;">' + rec.category + '</td>';
+                            str += '<td style="text-align: center;">' + rec.qtyin + '</td>';
+                            str += '<td style="text-align: center;">' + rec.qtyout + '</td>';
+                            str += '<td style="text-align: center;"><b>' + rec.qtyavailable + '</b></td>';
+
+                            //str += '<td style="text-align: center;">' + rec.cost + '</td>';
+
+
+                        });
+                    }
+
+                    catch (e) {
+                        alert(e);
+                    }
+                    str += '</tr><tr><td></td> <td></td> <td></td> <td style="text-align: center;"><b>' + totalin + '</b></td> <td style="text-align: center;"><b>' + totalout + '</b></td> <td style="text-align: center;"><b>' + total + '</b></td><td style="text-align: center;"></td> </tr>';
+
+                    str += '</tbody></table>';
+
+                    $("#divpaymentlist").html(str);
+
+                    $("#tabledivpaymentlist").dataTable({
+                        "bPaginate": false,
+                        "bLengthChange": false,
+                        "bFilter": false,
+                        "bSort": false,
+                        "bInfo": false,
+                        "bAutoWidth": false,
+                        "bDestroy": true,
+                        "bRetrieve": false
+                    });
+
+                    if (response.status == false) {
+                        if (!IsEmpty(response.output)) {
+                            new PNotify({
+                                title: 'Error!',
+                                text: "" + response.output + "",
+                                type: 'error',
+                                addclass: 'notification-success',
+                                icon: 'fa fa-check',
+                                delay: '1000'
+
+                            });
+                        }
+                    }
+
+                },
+                error: function (response) {
+                    if (console) {
+                        console.log("Error", response);
+                        new PNotify({
+                            title: 'Error!',
+                            text: "Please Select Valid Date",  // + response.responseText + "",
+                            type: 'error',
+                            addclass: 'notification-success',
+                            icon: 'fa fa-check',
+                            delay: '1000'
+                        });
+                    }
+                },
+                dataType: "json"
+            });
+        }
+
+
+
+
+        function print() {
+            debugger;
+            var mywindow = window.open('', 'PRINT', 'height=800,width=1200');
+
+
+            mywindow.document.write('<html><style> #divpaymentlist{border:1px solid grey;border-collapse:collapse;} table{cell-spacing:0;border-collapse:collapse;} td{border:1px solid grey;border-collapse:collapse;} th{font-weight:bold;border:1px solid grey;border-collapse:collapse;background-color:gery;} </style>');
+            var fr = "";
+            var divname = $("#divname").val();
+
+            mywindow.document.write('<body > <center> <h2>' + divname + ' </h2>' + fr + "</center> <br>");
+            //   mywindow.document.write('<h1>' + document.title + '</h1>');
+            mywindow.document.write(document.getElementById("divpaymentlist").innerHTML);
+            mywindow.document.write('</body></html>');
+
+            mywindow.document.close(); // necessary for IE >= 10
+            mywindow.focus(); // necessary for IE >= 10*/
+
+            mywindow.print();
+            mywindow.close();
+
+            return true;
+
+        }
+    </script>
+
+    </div>

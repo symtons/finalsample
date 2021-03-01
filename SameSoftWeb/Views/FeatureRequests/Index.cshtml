@@ -1,0 +1,93 @@
+﻿@model IEnumerable<SameSoftWeb.Models.tblFeatureRequest>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!--Start Sercice Details Area -->
+<section class="service_details_area section_padding">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-9 col-lg-9 col-sm-12 col-xs-12">
+                <div class="service_details_page_content">
+                    <h2>Index</h2>
+
+                    <p>
+                        @Html.ActionLink("Create New", "Create")
+                    </p>
+                    <table class="table">
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Application_ID)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.User_ID)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Customer_ID)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Title)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Description)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Deadline)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Importance)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Requested_date)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Status)
+                            </th>
+                            <th></th>
+                        </tr>
+
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Application_ID)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.User_ID)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Customer_ID)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Title)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Description)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Deadline)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Importance)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Requested_date)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Status)
+                                </td>
+                                <td>
+                                    @Html.ActionLink("Edit", "Edit", new { id = item.Feature_ID }) |
+                                    @Html.ActionLink("Details", "Details", new { id = item.Feature_ID }) |
+                                    @Html.ActionLink("Delete", "Delete", new { id = item.Feature_ID })
+                                </td>
+                            </tr>
+                        }
+
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

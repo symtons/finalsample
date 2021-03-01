@@ -1,0 +1,172 @@
+﻿<script>
+    function PrintElem() {
+
+
+
+        var mywindow = window.open('', 'PRINT', 'height=600,width=900');
+
+
+        var st = '<style type="text/css">table{width:100%;}' +
+        ' th, td {' +
+        'border:None;padding:3px;border-collapse:collapse;text-align:left;font-size:9pt;' +
+        'padding;0.6em;' +
+        '}   table{border-collapse:collapse;border:;padding:20px;}' +
+        '</style>'
+
+        mywindow.document.write('<html><head>' + st + '<link ref="stylesheet" href="~\Content\bootstrap.min.css">  <title>' + '' + '</title>');
+        mywindow.document.write('</head><body >');
+
+        mywindow.document.write(document.getElementById("print").innerHTML);
+        mywindow.document.write('</body></html>');
+
+        mywindow.document.close(); // necessary for IE >= 10
+        mywindow.focus(); // necessary for IE >= 10*/
+
+        mywindow.print();
+        mywindow.close();
+
+        return true;
+    }
+</script>
+
+
+
+
+@{
+
+    int id = 0;
+
+    ViewBag.Title = "Create Airline Fare";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+    SameSoftWeb.Models.SameSoftwareWebEntities db = new SameSoftWeb.Models.SameSoftwareWebEntities();
+
+    if (ViewBag.id == null)
+    {
+
+    }
+    else
+    {
+        id = (int)ViewBag.id;
+
+
+
+    }
+
+
+    var voucher = db.tblReceipt_Voucher.Where(a => a.Voucher_ID == id).Select(a => new
+    {
+
+        a.Voucher_ID,
+        a.UserID,
+        a.Tran_Nbr,
+        a.Receipt_Date,
+        a.Payee,
+        a.In_Word,
+        a.Description,
+        a.Company_ID,
+        a.Balance,
+        a.Amount
+    }).ToList();
+
+
+
+
+
+}
+
+    <!--Start Sercice Details Area -->
+    <section class="service_details_area section_padding">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-9 col-lg-9 col-sm-12 col-xs-12">
+                    <div class="service_details_page_content">
+                        
+
+                        <div class="col-md-12">
+                            <br />
+                            <button class="btn btn-primary" onclick="PrintElem();">  <i class="fa fa-print"></i> Print    </button>
+                        </div>
+
+                        <div style="width:70%;border:;border-radius:2px;margin:auto; padding:16px;background-color:#fff;box-shadow:inset;-webkit-box-shadow: 1px 0px 6px 3px rgba(246,242,246,1);
+-moz-box-shadow: 1px 0px 6px 3px rgba(246,242,246,1);
+box-shadow: 1px 0px 6px 3px rgb(239, 239, 239);" id="print">
+
+
+                            <center>
+                                <img src="~/img/logo.png" style="height:80px;width:200px" />
+                                <br />Same Soft Inc.
+                                <br />www.samesoftware.com
+                                <br />info@samesoftware.com
+                                <br />+262616661844
+                                <h3>Receipt Voucher</h3>
+
+                            </center>
+
+                            <table style="">
+                                <tr></tr>
+                                <td style="padding-right:30px;">Voucher ID : </td>
+                                <td style="font-weight:bold;">@voucher[0].Voucher_ID</td> </tr>
+                                <tr> <td style="padding-right:30px;"> Payment Date :</td> <td>   @voucher[0].Receipt_Date.ToString("ddd dd MMM , yyyy") </td></tr>
+                                <tr> <td style="padding-right:30px;"> Payee : </td> <td> @voucher[0].Payee</td></tr>
+                                <tr>  <td style="padding-right:30px;">Amount Paid :</td> <td style="font-weight:bold;"> @voucher[0].Amount </td></tr>
+                                <tr>  <td style="padding-right:30px;">In Word :  </td>  <td> @voucher[0].In_Word </td> </tr>
+                                <tr>  <td style="padding-right:30px;">Description : </td> <td> @voucher[0].Description</td></tr>
+                                <tr>  <td style="padding-right:30px;"> Balance :</td> <td> @voucher[0].Balance</td></tr>
+                                <tr>
+                                    <td style="padding-right:30px;">User : </td>
+                                    <td>
+                                        @{
+                                            int uid = (int)voucher[0].UserID;
+                                            Write(db.tblUsers.Where(a => a.UserID == uid).Select(a => a.UserName).FirstOrDefault());
+
+                                        }
+                                    </td>
+                                </tr>
+                                <tr>   <td style="padding-right:30px;"> Signature : </td> <td>______________________</td> </tr>
+
+                            </table>
+
+                            <br />
+                            <hr /><br />
+
+                            <center>
+                                <img src="~/img/logo.png" style="height:80px;width:200px" />
+                                <br />Same Soft Inc.
+                                <br />www.samesoftware.com
+                                <br />info@samesoftware.com
+                                <br />+262616661844
+                                <h3>Receipt Voucher</h3>
+                            </center>
+
+
+                            <table style="">
+                                <tr></tr>
+                                <td style="padding-right:30px;">Voucher ID : </td>
+                                <td style="font-weight:bold;">@voucher[0].Voucher_ID</td> </tr>
+                                            <tr> <td style="padding-right:30px;"> Payment Date :</td> <td>   @voucher[0].Receipt_Date.ToString("ddd dd MMM , yyyy") </td></tr>
+                                            <tr> <td style="padding-right:30px;"> Payee : </td> <td> @voucher[0].Payee</td></tr>
+                                            <tr>  <td style="padding-right:30px;">Amount Paid :</td> <td style="font-weight:bold;">$ @voucher[0].Amount </td></tr>
+                                            <tr>  <td style="padding-right:30px;">In Word :  </td>  <td> @voucher[0].In_Word </td> </tr>
+                                            <tr>  <td style="padding-right:30px;">Description : </td> <td> @voucher[0].Description</td></tr>
+                                            <tr>  <td style="padding-right:30px;"> Balance :</td> <td> @voucher[0].Balance</td></tr>
+                                            <tr>
+                                                <td style="padding-right:30px;">User : </td>
+                                                <td>
+                                                    @{
+                                                        uid = (int)voucher[0].UserID;
+                                                        Write(db.tblUsers.Where(a => a.UserID == uid).Select(a => a.UserName).FirstOrDefault());
+
+                                                    }
+                                                </td>
+                                            </tr>
+                                            <tr>   <td style="padding-right:30px;"> Signature : </td> <td>______________________</td> </tr>
+
+
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>

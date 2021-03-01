@@ -1,0 +1,765 @@
+
+@{
+    ViewBag.Title = "Sales - New Order";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@{
+    int divid = 1;
+    SameSoftWeb.Models.SameSoftwareWebEntities db = new SameSoftWeb.Models.SameSoftwareWebEntities();
+    var items = db.sp_get_qty_available_by_division(divid).Select(x => new
+    {
+        Item_id = x.Item_Id,
+        Name = x.Item_Name
+    }).OrderBy(a => a.Name).ToList();
+
+
+
+    //var marketers = db.Marketers.Where(a => a.Business_Division_Id == divid).Select(x => new
+    //{
+    //    ID = x.Marketer_id,
+    //    Name = x.FullName
+    //}).ToList();
+
+    ViewBag.Item_id_list = new SelectList(items, "Item_id", "Name", "");
+
+    //ViewBag.marketer = new SelectList(marketers, "ID", "Name", "");
+
+    var cust = db.tblCustomers.ToList();
+    ViewBag.customers = cust;
+
+
+    int serialno = 0;
+    int? sr = db.tblInvoices.Where(a => a.Invoice_id == 1).Select(a => a.Invoice_No).FirstOrDefault();
+    if (sr == null || sr == 0)
+    {
+        serialno = int.Parse(db.tblSettings.Where(a => a.ID == 1).Select(a => a.Value).FirstOrDefault());
+    }
+    else
+    {
+        serialno = (int)sr + 1;
+    }
+
+
+}
+<div class="content-body">
+    <!-- Basic Tables start -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title"><b>New Sales</b></h3>
+                    <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                    <div class="heading-elements">
+                        <ul class="list-inline mb-0">
+                            <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                            <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
+                            <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                            <li><a data-action="close"><i class="ft-x"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card-content collapse show">
+                    <div class="card-body">
+                        <div id="itemsaple" style="display:none;">
+                        </div>
+                        <h2>Sales <small> New Order (<b style="color:blue;">Invoice # @serialno</b>)</small></h2>
+                        <form method="post" action="/Sales/add_sales_order" id="form1">
+                            <div class="row">
+
+                                <div class="col-md-2">
+                                    Sales Type <select id="payment_method" name="payment_method" class="form-control" style="font-weight:bold;width:100px;">
+
+                                        <option value="Invoice"> Invoice </option>
+                                        <option value="Cash"> Cash </option>
+                                    </select>
+                                </div>
+                                <div class="col-md-2">
+                                    Customer  @Html.DropDownList("customer_id", new SelectList(ViewBag.customers, "CustomerID", "Customer_Name"), "Select Customer", new { @class = "form-control", @style = "width:250px;font-weight:bold;", @required = "", @id = "customer_id" })
+                                </div>
+
+                                <div class="col-md-2">
+                                    Cash Payment <input type="number" class="form-control" style="font-weight:bold;" name="cash_payment" id="cash_payment" value="0" onkeyup="" />
+                                </div>
+
+                                <div class="col-md-2">
+                                    Discount <input type="number" class="form-control" style="font-weight:bold;" name="discount" id="discount" value="0" onkeyup="getsubtotal();" />
+                                </div>
+
+
+
+                                @*<div class="col-md-2">
+                                        Marketer @Html.DropDownList("marketer", new SelectList(marketers, "ID", "Name"), "Select Marketer", new { @class = "form-control", @style = "width:250px;font-weight:bold;", @required = "" })
+                                    </div>*@
+                                <div class="col-md-2">
+                                    Date (leave if Now)
+                                    <input type="date" name="trandate" class="form-control" />
+                                </div>
+                            </div>
+
+
+                            <hr />
+
+
+
+
+                            <div class="field_wrapper">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="input-group">
+                                            @Html.DropDownList("Item_id_list", null, "Select Item", new { @class = "form-control", onchange = "", @style = "width:250px;", @id = "item", @onchage = "" })
+                                            <span class="input-group-btn">
+                                                <button type="button" class="btn btn-success" onclick="addmanual()"><i class="fa fa-plus"></i> Add</button>
+                                            </span>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <img src="~/img/barcode.jpg" style="width:140px;height:40px;" autofocus="" />
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="input-group">
+                                            <input type="text" autofocus="" class="form-control" id="scanInput" />
+                                            <span class="input-group-btn"><button class="btn btn-danger" onclick="$('#scanInput').val(''); $('#scanInput').focus();" type="button" id="btnclear">x</button></span>
+                                        </div>
+                                    </div>
+
+
+
+                                    <div class="col-md-3">
+                                        <button href="javascript:void(0);" type="button" onclick="return comp()" class="btn btn-primary"><i class="fa fa-check"></i> Complete</button>
+                                    </div>
+                                </div>
+
+
+                                <hr />
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <table class="table table-bordered" style="width:auto;">
+                                            <thead>
+                                            <th style="padding:4px;width:255px">Item</th>
+                                            <th style="padding:4px; width:160px;">Quantity</th>
+                                            <th style="padding:4px; width:110px;">Price</th>
+                                            <th style="padding:4px; width:80px;">Available</th>
+                                            @*<th style="padding:4px; width:110px;">Lot No. </th>*@
+                                            <th style="padding:4px; width:90px;"> Total </th>
+                                            <th style="padding:4px; width:190px;">Sub Total: <span id="divtotal" style="color:darkblue;border-bottom:1px double double;padding-bottom:3px;"></span></th>
+                                            </thead>
+                                        </table>
+                                    </div>
+                                    <div class="col-md-0" id="details">
+
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+
+
+
+                        </form>
+
+
+                        <script type="text/javascript">
+                            var rowid = 0;
+
+                            $(document).ready(function () {
+                                var id = 0;
+                                var ordersubtotal = 0;
+                                $("#scanInput").focus();
+                            });
+
+
+                            function add(id, name) {
+                                var addButton = $('.add_button');
+                                //    var wrapper = $('.field_wrapper');
+                                //    var fieldHTML = '<tr id="' + rowid + '"><td style="padding:4px;"><select name="item_id" class="form-control" style="width:250px;"><option value="' + id + '">' + name + '</option></select></td>';
+                                // fieldHTML = fieldHTML + '<td style="padding:4px;"  ><input type="number"  style="width:150px;font-weight:bold;"  name="qty[]" class="qty form-control"  id="qty' + rowid + '"/></td>';
+                                //    fieldHTML = fieldHTML + '<td style="padding:4px;"><input type="number"  style="width:60px;font-weight:bold;" name="price[]" class="prc form-control" id="price' + rowid + '" value=""/></td>';
+                                //    fieldHTML = fieldHTML + '<td style="padding:4px;"><input type="number"  style="width:70px;" name="avial[]" readonly=""  class="form-control" id="avail' + rowid + '" value="0"/><input type="hidden" id="availx' + rowid + '" value=""/> </td>';
+                                //   fieldHTML = fieldHTML + '<td style="padding:4px;"><input type="text"  style="width:80px;" name="batch[]" readonly="" id="batch' + rowid + '" class="form-control" value=""/></td>';
+                                // fieldHTML = fieldHTML + '<td style="padding:4px;"><input type="number"  style="width:100px;font-weight:bold;background-color:#D6FFAD;" name="total[]" readonly="" id="total' + rowid + '" class="form-control subtotal" value=""/></td>';
+                                // fieldHTML = fieldHTML + '<td style="padding:4px;"><a href="javascript:void(0);"  id="remove_button" class="btn btn-danger"> X </a></td></tr>';
+                                //    $(wrapper).append(fieldHTML);
+                                //    rowid = rowid + 1;
+                            }
+
+                            function additem(id, name, qty, lot, price) {
+                                //if (qty > 0) {
+                                var addButton = $('.add_button');
+                                var wrapper = $('.field_wrapper');
+                                var fieldHTML = '<tr id="' + rowid + '"><td style="padding:4px;"><input name="item_id" type="hidden"  id="itemid' + id + '" value="' + id + '"><input style="width:250px;background-color:white;" readonly="readonly" type="text" class="form-control" value="' + name + '"></td>';
+                                fieldHTML = fieldHTML + '<td style="padding:4px;"  ><input type="number"  style="width:150px;font-weight:bold;"  name="qty[]" class="qty form-control"  id="qty' + rowid + '"  required=""  /></td>';
+                                fieldHTML = fieldHTML + '<td style="padding:4px;"><input type="number"  style="width:105px;font-weight:bold;" name="price[]" class="prc form-control"  id="price' + rowid + '" value="' + price + '" required="" /></td>';
+                                fieldHTML = fieldHTML + '<td style="padding:4px;"><input type="number"  style="width:105px;" name="avial[]" readonly=""  class="form-control" id="avail' + rowid + '" value="' + qty + '"/><input type="hidden" id="availx' + rowid + '" value="' + qty + '"/> <input type="hidden"  style="width:105px;" name="batch[]" readonly="" id="batch' + rowid + '" class="form-control" value="' + lot + '"/></td>';
+                                fieldHTML = fieldHTML + '<td style="padding:4px;"><input type="number"  style="width:100px;font-weight:bold;background-color:#D6FFAD;" name="total[]" readonly="" id="total' + rowid + '" class="mnc form-control" value=""/></td>';
+                                fieldHTML = fieldHTML + '<td style="padding:4px;"><a href="javascript:void(0);"  id="remove_button" class="btn btn-danger"> X </a></td><td>  </td></tr>';
+
+
+
+                                $(wrapper).append(fieldHTML);
+                                rowid = rowid + 1;
+
+                                bootbox.hideAll();
+                                //}
+                                //else {
+                                //    alert("Quantity Must be greater than Zero");
+                                //}
+                            }
+
+
+                            function comp() {
+                                var a = false;
+                                $('input[name="item_id"]').each(function () {
+                                    a = true;
+                                });
+
+                                if (a == false) {
+                                    alert("Please add at least One Item in the Order to Complete");
+                                    return false;
+                                }
+
+                                var type = $("#payment_method").val();
+                                var customer = $("#customer_id").val();
+
+                                var n = type.includes("Invoice");
+
+                                if (n == true && customer < 1) {
+
+                                    alert("Please Select Customer for this  Credit Sale");
+                                    return false;
+                                }
+
+
+                                if (confirm("Sure to Submit Sales Order?") == true) {
+                                    submitform();
+                                }
+
+
+                            }
+
+                            function submitform() {
+                                var form = $("#form1");
+                                form.submit();
+                            }
+
+                            function remove($obj) {
+                                this.style.color = '#ff0000';
+
+                                //e.preventDefault();
+                                //alert(element);
+                                //  $(element).remove();
+                                //$(element).parent('div').remove();
+
+                            }
+
+                            $(function () {
+
+                                $("#barcode").focus();
+
+                                //bootbox.alert("--");
+                                //bootbox.hideAll();
+
+                                $(".field_wrapper").on('click', '#remove_button', function (e) {
+
+                                    e.preventDefault();
+                                    $(this).closest('tr').remove();
+                                    getsubtotal();
+
+
+                                });
+
+
+
+
+
+                                //   $(".field_wrapper").on('change', '#item', function (e) {
+
+                                //       e.preventDefault();
+                                //   var rowid = $(this).parent().parent().attr('id')
+                                //var itemid=$(this).val();
+                                //    getDetails(rowid,itemid);
+                                //   });
+
+                                $(".field_wrapper").on('keyup', '.qty', function (e) {
+
+
+                                    $("#details").html("<h4 style='color:red'></h4>");
+                                    e.preventDefault();
+                                    var rowid = $(this).parent().parent().attr('id')
+
+                                    var price = Number($("#price" + rowid).val());
+                                    var avail = Number($("#availx" + rowid).val());
+                                    var qty = Number($(this).val());
+
+                                    $("#total" + rowid).val(price * qty);
+
+                                    // ordersubtotal += (price * qty);
+
+                                    getsubtotal();
+
+
+                                    $("#avail" + rowid).val(avail - qty)
+
+                                    if (qty > avail + 50000) {
+                                        $("#details").html("<h4 style='color:red'>* Quantity is not available</h4>");
+                                        $("#qty" + rowid).val(0);
+                                        $("#avail" + rowid).val(avail);
+                                        $("#total" + rowid).val(0);
+                                    }
+
+
+                                });
+
+                                $(".field_wrapper").on('keyup', '.prc', function (e) {
+
+
+                                    //$("#details").html("<h1>909808080</h1>");
+                                    e.preventDefault();
+                                    var rowid = $(this).parent().parent().attr('id')
+
+                                    var qty = Number($("#qty" + rowid).val());
+                                    var price = Number($(this).val());
+                                    $("#total" + rowid).val(qty * price);
+
+
+                                    getsubtotal();
+
+                                });
+
+
+
+
+                                //$("#barcode").on("keyup", function (e) {
+                                //    addbarcode(this.value);
+                                //});
+
+
+
+
+
+                            });
+
+                            function gettotal() {
+
+                            }
+
+                            function getDetails(rowid, itemid) {
+                                get_batches(itemid, rowid);
+
+                            }
+                            function selectbatch(qty, batch, rowid, price) {
+
+                                bootbox.hideAll();
+                                $("#avail" + rowid).val(qty);
+                                $("#availx" + rowid).val(qty);
+                                $("#batch" + rowid).val(batch);
+                                $("#price" + rowid).val(price);
+
+                                $("#btnclear").click();
+
+
+
+                            }
+
+
+                            function checkexist(id) {
+
+
+                                var item = $('#itemid' + id).val();
+
+                                if (item > 0) {
+                                    alert("Item Already Exist in the Order");
+                                    return false;
+                                }
+                                else {
+
+                                    var x = $("#item").val();
+                                    if (x > 0) {
+                                        var text = $("#item option:selected").text();
+                                        var value = $("#item option:selected").val();
+
+                                        //  getdetails(this.value)
+
+                                        get_Qty_Price(value, text);
+                                    }
+
+                                    return true;
+                                }
+
+
+                            }
+
+
+                            function addmanual() {
+                                var id = $("#item").val();
+                                checkexist(id);
+                            }
+
+
+                            function addbarcode(barcode) {
+
+
+                                $.ajax({
+                                    type: "GET",
+                                    global: false,
+                                    url: "@Url.Action("GetItemIDbyBarcode", "Sales")",
+                                    data: { barcode: barcode },
+                                    dataType: 'json',
+                                    async: false,
+                                    success: function (data) {
+
+                                        if (data > 0) {
+
+                                            var item = $('#itemid' + data).val();
+
+                                            if (item > 0) {
+                                                alert("Item Already Exist in the Order");
+                                                return false;
+                                            }
+
+
+
+                                            get_Qty_Price(data, "name");
+                                            debugger;
+
+                                        }
+                                        else {
+                                            bootbox.alert("<hr><h3>Item with Barcode :" + barcode + " Does not exist");
+                                            debugger;
+                                        }
+
+
+
+                                    }, error: function (x) {
+
+                                    }
+                                });
+
+
+
+                            }
+
+
+                            function get_Qty_Price(idx, name) {
+
+                                //bootbox.alert("--");
+                                //bootbox.hideAll();
+                                var passid = Number(idx);
+
+                                $.ajax({
+                                    type: "GET",
+                                    global: false,
+                                    url: "@Url.Action("get_batches", "Sales")",
+                                    data: { id: passid },
+                                    dataType: 'json',
+                                    success: function (data) {
+
+                                        debugger;
+
+
+
+                                        if (isNaN(data) == false) {
+                                            selectbatch(data, "", rowid, 0);
+                                            return;
+                                        }
+                                        var tbl = "<table class='table table-bordered'><tr><th>ID </th> <th>Item Name </th><th> QTY Available </th><th>Select</th></tr>";
+                                        $.each(data, function (index, e) {
+                                            // tbl = tbl + "<tr><td>" + e.id + "</td><td>" + e.name + "</td><td>" + e.batch + "</td><td>" + e.qty + "</td><td>" + e.expire + "</td><td><button class='btn btn-primary' onclick=' selectbatch(" + e.qty + ", \"" + e.batch + "\" ," + rowid + "," + e.price + ");' >  <i class='fa fa-user'></i> Select </button></td></tr>";
+                                            tbl = tbl + "<tr><td>" + e.id + "</td><td>" + e.name + "</td><td>" + e.qty + "</td><td><button class='btn btn-primary' onclick=' additem(" + e.id + ", \"" + e.name + "\" ," + e.qty + ", \"" + e.batch + "\" ," + e.price + ");' >  <i class='fa fa-user'></i> Select </button></td></tr>";
+
+                                        });
+                                        tbl = tbl + "</table>";
+
+
+                                        bootbox.dialog({
+                                            title: 'Sale from Item Batch',
+                                            message: tbl
+                                        });
+
+
+
+
+                                    },
+                                    error: function (xhr, ajaxOptions, thrownError) {
+
+                                        dialog.find('.bootbox-body').html('Error <hr>' + xhr.responseText);
+                                    }
+
+                                });
+                            }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                            function get_batches(id, rowid) {
+
+                                var dialog;
+                                try {
+
+                                    //dialog = bootbox.dialog({
+                                    //    title: 'Sale from Item Batch',
+                                    //    message: '<p><i class="fa fa-spin fa-spinner"></i> Loading Please wait...</p>'
+                                    //});
+
+
+                                    $.ajax({
+                                        type: "GET",
+                                        global: false,
+
+                                        url: "@Url.Action("get_batches", "Sales")",
+                                        data: { id: id },
+                                        dataType: 'json',
+                                        success: function (data) {
+
+                                            debugger;
+
+                                            if (isNaN(data) == false) {
+                                                selectbatch(data, "", rowid, 0);
+                                                return;
+                                            }
+
+
+                                            var tbl = "<table class='table table-bordered'><tr><th>ID </th> <th>Item Name </th><td>Lot No.</th><th> QTY Available </th><th> Expire Date </th><th>Select</th></tr>";
+                                            $.each(data, function (index, e) {
+
+                                                tbl = tbl + "<tr><td>" + e.id + "</td><td>" + e.name + "</td><td>" + e.batch + "</td><td>" + e.qty + "</td><td>" + e.expire + "</td><td><button class='btn btn-primary' onclick=' selectbatch(" + e.qty + ", \"" + e.batch + "\" ," + rowid + "," + e.price + ");' >  <i class='fa fa-user'></i> Select </button></td></tr>";
+
+                                            });
+                                            tbl = tbl + "</table>";
+
+
+                                            bootbox.dialog({
+                                                title: 'Sale from Item Lot No.',
+                                                message: tbl
+                                            });
+
+
+
+
+
+
+
+                                        }
+                                       ,
+                                        error: function (xhr, ajaxOptions, thrownError) {
+
+
+                                            dialog.find('.bootbox-body').html('Error <hr>' + xhr.responseText);
+                                            //alert(xhr.status);
+                                            //alert(thrownError);
+                                            //alert(xhr.responseText);
+                                        }
+
+                                    });
+                                }
+                                catch (e) {
+                                    alert(e);
+                                }
+                            }
+
+
+
+
+
+
+
+
+
+
+
+
+                            //barcode
+                            var inputStart, inputStop, firstKey, lastKey, timing, userFinishedEntering;
+                            var minChars = 3;
+                            // handle a key value being entered by either keyboard or scanner
+                            $("#scanInput").keypress(function (e) {
+                                // restart the timer
+                                if (timing) {
+                                    clearTimeout(timing);
+                                }
+
+                                // handle the key event
+                                if (e.which == 13) {
+                                    // Enter key was entered
+
+                                    // don't submit the form
+                                    e.preventDefault();
+
+                                    // has the user finished entering manually?
+                                    if ($("#scanInput").val().length >= minChars) {
+                                        userFinishedEntering = true; // incase the user pressed the enter key
+                                        inputComplete();
+                                    }
+                                }
+                                else {
+                                    // some other key value was entered
+
+                                    // could be the last character
+                                    inputStop = performance.now();
+                                    lastKey = e.which;
+
+                                    // don't assume it's finished just yet
+                                    userFinishedEntering = false;
+
+                                    // is this the first character?
+                                    if (!inputStart) {
+                                        firstKey = e.which;
+                                        inputStart = inputStop;
+
+                                        // watch for a loss of focus
+                                        $("body").on("blur", "#scanInput", inputBlur);
+                                    }
+
+                                    // start the timer again
+                                    timing = setTimeout(inputTimeoutHandler, 500);
+                                }
+                            });
+
+                            // Assume that a loss of focus means the value has finished being entered
+                            function inputBlur() {
+                                clearTimeout(timing);
+                                if ($("#scanInput").val().length >= minChars) {
+                                    userFinishedEntering = true;
+                                    inputComplete();
+                                }
+                            };
+
+
+                            // reset the page
+                            $("#reset").click(function (e) {
+                                e.preventDefault();
+                                resetValues();
+                            });
+
+                            function resetValues() {
+                                // clear the variables
+                                inputStart = null;
+                                inputStop = null;
+                                firstKey = null;
+                                lastKey = null;
+                                // clear the results
+                                inputComplete();
+                            }
+
+                            // Assume that it is from the scanner if it was entered really fast
+                            function isScannerInput() {
+                                return (((inputStop - inputStart) / $("#scanInput").val().length) < 15);
+                            }
+
+                            // Determine if the user is just typing slowly
+                            function isUserFinishedEntering() {
+                                return !isScannerInput() && userFinishedEntering;
+                            }
+
+                            function inputTimeoutHandler() {
+                                // stop listening for a timer event
+                                clearTimeout(timing);
+                                // if the value is being entered manually and hasn't finished being entered
+                                if (!isUserFinishedEntering() || $("#scanInput").val().length < 3) {
+                                    // keep waiting for input
+                                    return;
+                                }
+                                else {
+                                    reportValues();
+                                }
+                            }
+
+                            // here we decide what to do now that we know a value has been completely entered
+                            function inputComplete() {
+                                // stop listening for the input to lose focus
+                                $("body").off("blur", "#scanInput", inputBlur);
+                                // report the results
+                                // reportValues();
+                                var value = $("#scanInput").val();
+                                addbarcode(value);
+
+
+                            }
+
+                            function reportValues() {
+                                // update the metrics
+                                $("#startTime").text(inputStart == null ? "" : inputStart);
+                                $("#firstKey").text(firstKey == null ? "" : firstKey);
+                                $("#endTime").text(inputStop == null ? "" : inputStop);
+                                $("#lastKey").text(lastKey == null ? "" : lastKey);
+                                $("#totalTime").text(inputStart == null ? "" : (inputStop - inputStart) + " milliseconds");
+
+                                if (!inputStart) {
+                                    // clear the results
+                                    $("#resultsList").html("");
+                                    $("#scanInput").focus().select();
+                                } else {
+                                    // prepend another result item
+                                    var inputMethod = isScannerInput() ? "Scanner" : "Keyboard";
+                                    $("#resultsList").prepend("<div class='resultItem " + inputMethod + "'>" +
+                                        "<span>Value: " + $("#scanInput").val() + "<br/>" +
+                                        "<span>ms/char: " + ((inputStop - inputStart) / $("#scanInput").val().length) + "</span></br>" +
+                                        "<span>InputMethod: <strong>" + inputMethod + "</strong></span></br>" +
+                                        "</span></div></br>");
+                                    $("#scanInput").focus().select();
+                                    inputStart = null;
+                                }
+                            }
+
+                            $("#scanInput").focus();
+
+
+
+
+                            function getsubtotal() {
+
+
+                                try {
+
+
+                                    var total = 0;
+                                    var discount = $("#discount").val();
+
+                                    if (isNaN(discount)) {
+                                        discount = 0;
+                                    }
+
+                                    $("#divtotal").html(0);
+
+
+                                    $('.mnc').each(function () {
+
+                                        total += Number($(this).val());
+
+                                    });
+
+
+                                    $("#divtotal").html(total - discount);
+                                }
+                                catch (e) {
+                                    alert(e);
+                                }
+                            }
+
+
+
+                        </script>
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Basic Tables end -->
+</div>

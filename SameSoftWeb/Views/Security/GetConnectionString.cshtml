@@ -1,0 +1,57 @@
+﻿
+@{
+    ViewBag.Title = "GetConnectionString";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Generate Connection String</h2>
+
+<div class="row">
+    <div class="col-md-6">
+
+<form method="post" action="/Security/GetConnectionString">
+
+    Serial
+    <input type="text" name="serial" class="form-control" />
+
+    Server
+    <input type="text" name="str_server" class="form-control" />
+
+
+    Database
+    <input type="text" name="DB" class="form-control" />
+
+    User
+    <input type="text" name="user" class="form-control" />
+
+
+    Password
+    <input type="text" name="pass" class="form-control" />
+    <br />
+    <input type="submit" class="btn btn-primary" value="Generate Connection String" />
+
+
+
+</form>
+</div>
+        <div class="col-md-6">
+            @if (ViewBag.connection!=null)
+            { 
+
+            <hr />
+
+            <h3>
+              <i class="fa fa-check-circle"></i> Generated Connection String<br />
+                <textarea style="font-size:13pt;color:darkgreen;" cols="60" rows="6"> @ViewBag.connection </textarea>
+
+                <hr /> <a href="/Security/downloadConnection?conn=@ViewBag.connection">Download Connection File</a>
+
+    </h3>
+
+            }
+            else
+            {
+                <h3> Generate Connection String by filling the form   </h3>
+                    }
+</div>
+    </div>

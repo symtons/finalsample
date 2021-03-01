@@ -1,0 +1,1156 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="SameSoftwareWebModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Business_Division">
+    <Key>
+      <PropertyRef Name="Business_Division_Id" />
+    </Key>
+    <Property Name="Business_Division_Id" Type="int" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="ContactPerson" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Mobile" Type="nvarchar" MaxLength="20" Nullable="false" />
+    <Property Name="LandLine" Type="nvarchar" MaxLength="20" />
+    <Property Name="Email" Type="nvarchar" MaxLength="50" />
+    <Property Name="Address" Type="nvarchar" MaxLength="500" Nullable="false" />
+    <Property Name="Company_Id" Type="int" Nullable="false" />
+    <Property Name="ProfilePic" Type="nvarchar" MaxLength="200" />
+  </EntityType>
+  <EntityType Name="Category">
+    <Key>
+      <PropertyRef Name="Category_Id" />
+    </Key>
+    <Property Name="Category_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Date_Updated" Type="datetime" Nullable="false" />
+    <Property Name="IsActive" Type="bit" Nullable="false" />
+  </EntityType>
+  <EntityType Name="CustomerTasks">
+    <Key>
+      <PropertyRef Name="Customer_id" />
+    </Key>
+    <Property Name="Customer_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="varchar" MaxLength="50" />
+    <Property Name="Note" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="InstallmentPlans">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Customer_Id" Type="int" />
+    <Property Name="OrderId" Type="int" />
+    <Property Name="payment_persent" Type="float" />
+    <Property Name="Payment_total" Type="float" />
+    <Property Name="status" Type="varchar" MaxLength="50" />
+    <Property Name="payment_date" Type="date" />
+    <Property Name="userid" Type="int" />
+    <Property Name="paid" Type="float" />
+    <Property Name="Trans_Detail_ID" Type="int" />
+  </EntityType>
+  <EntityType Name="Inventory_Types">
+    <Key>
+      <PropertyRef Name="Inventory_type_id" />
+    </Key>
+    <Property Name="Inventory_type_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Inventory_Type" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="IssueTypes">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" Nullable="false" />
+    <Property Name="IssueType" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="Item">
+    <Key>
+      <PropertyRef Name="Item_Id" />
+    </Key>
+    <Property Name="Item_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Category_Id" Type="int" />
+    <Property Name="Measurement_Id" Type="int" />
+    <Property Name="SalesAccountId" Type="int" />
+    <Property Name="InventoryAccountId" Type="int" />
+    <Property Name="CostOfGoodsSoldAccountId" Type="int" />
+    <Property Name="InventoryAdjustmentAccountId" Type="int" />
+    <Property Name="Bar_Code" Type="nvarchar(max)" />
+    <Property Name="Name" Type="nvarchar(max)" />
+    <Property Name="Unit_Cost" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="Sale_Price" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="Re_Order_Leval" Type="int" />
+    <Property Name="IsActive" Type="bit" Nullable="false" />
+    <Property Name="ManufacturerId" Type="int" />
+    <Property Name="Business_Division_Id" Type="int" />
+    <Property Name="ReferenceNo" Type="varchar" MaxLength="200" />
+    <Property Name="Description" Type="varchar" MaxLength="200" />
+  </EntityType>
+  <EntityType Name="Manufacturer">
+    <Key>
+      <PropertyRef Name="ManufacturerId" />
+    </Key>
+    <Property Name="ManufacturerId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="varchar(max)" />
+    <Property Name="Country" Type="varchar" MaxLength="50" />
+    <Property Name="Address" Type="varchar" MaxLength="100" />
+  </EntityType>
+  <EntityType Name="Measurement">
+    <Key>
+      <PropertyRef Name="Measurement_Id" />
+    </Key>
+    <Property Name="Measurement_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Code" Type="nvarchar(max)" />
+    <Property Name="Description" Type="nvarchar(max)" />
+  </EntityType>
+  <EntityType Name="Quotation_Details">
+    <Key>
+      <PropertyRef Name="Quotation_detail_id" />
+    </Key>
+    <Property Name="Quotation_detail_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Item_id" Type="int" />
+    <Property Name="Qty" Type="real" />
+    <Property Name="Price" Type="real" />
+    <Property Name="Quotation_ID" Type="int" Nullable="false" />
+    <Property Name="Batch" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="principal_id" Type="int" Nullable="false" />
+    <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="version" Type="int" />
+    <Property Name="definition" Type="varbinary(max)" />
+  </EntityType>
+  <EntityType Name="tblApplications">
+    <Key>
+      <PropertyRef Name="Application_ID" />
+    </Key>
+    <Property Name="Application_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Application_Name" Type="varchar(max)" />
+    <Property Name="Type" Type="varchar" MaxLength="50" />
+    <Property Name="Description" Type="varchar(max)" />
+  </EntityType>
+  <EntityType Name="tblAppVersions">
+    <Key>
+      <PropertyRef Name="App_ID" />
+    </Key>
+    <Property Name="App_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="App_Name" Type="varchar" MaxLength="50" />
+    <Property Name="Latest_Version" Type="real" />
+    <Property Name="Last_Update_Date" Type="date" />
+    <Property Name="Notes" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="tblBatch">
+    <Key>
+      <PropertyRef Name="Batch_id" />
+    </Key>
+    <Property Name="Batch_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Batch" Type="varchar" MaxLength="50" />
+    <Property Name="Manufacture_Date" Type="date" />
+    <Property Name="Expire_Date" Type="date" />
+    <Property Name="Inventory_Detail_id" Type="int" />
+  </EntityType>
+  <EntityType Name="tblCash_Flow">
+    <Key>
+      <PropertyRef Name="Cash_Flow_ID" />
+    </Key>
+    <Property Name="Cash_Flow_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Tran_Type" Type="nvarchar" MaxLength="200" Nullable="false" />
+    <Property Name="Description" Type="nvarchar" MaxLength="500" Nullable="false" />
+    <Property Name="Journal_Detail_id" Type="int" Nullable="false" />
+    <Property Name="Tran_Nbr" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="Debit" Type="real" />
+    <Property Name="Credit" Type="real" />
+  </EntityType>
+  <EntityType Name="tblCashFlow">
+    <Key>
+      <PropertyRef Name="CashFlowID" />
+    </Key>
+    <Property Name="CashFlowID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Tran_Date" Type="date" />
+    <Property Name="Debit" Type="real" />
+    <Property Name="Credit" Type="real" />
+    <Property Name="Type" Type="varchar" MaxLength="50" />
+    <Property Name="UserID" Type="int" />
+    <Property Name="Description" Type="varchar(max)" />
+  </EntityType>
+  <EntityType Name="tblChart_Of_Account_Assignment">
+    <Key>
+      <PropertyRef Name="Account_ID" />
+    </Key>
+    <Property Name="Account_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Account_Nbr" Type="int" Nullable="false" />
+    <Property Name="Account_Name" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="tblChart_Of_Accounts">
+    <Key>
+      <PropertyRef Name="Account_Number" />
+    </Key>
+    <Property Name="Account_Number" Type="int" Nullable="false" />
+    <Property Name="Account_Name" Type="nvarchar" MaxLength="30" Nullable="false" />
+    <Property Name="Transaction_Type" Type="varchar" MaxLength="2" />
+    <Property Name="Account_Main_Group" Type="varchar" MaxLength="2" />
+    <Property Name="Account_Sub_Group" Type="varchar" MaxLength="20" />
+    <Property Name="Level_SLNO" Type="int" />
+    <Property Name="Cash_Or_Bank" Type="varchar" MaxLength="2" />
+    <Property Name="Affect_Gross_Profit" Type="varchar" MaxLength="2" />
+    <Property Name="Parent_id" Type="int" />
+    <Property Name="Sort_Rank" Type="int" />
+    <Property Name="Account_Class_Id" Type="int" />
+    <Property Name="DrOrCrSide" Type="int" />
+    <Property Name="level" Type="int" />
+    <Property Name="Sub_Type" Type="varchar" MaxLength="100" />
+    <Property Name="Account_Group" Type="varchar" MaxLength="100" />
+  </EntityType>
+  <EntityType Name="tblCompanyInfo">
+    <Key>
+      <PropertyRef Name="Company_ID" />
+    </Key>
+    <Property Name="Company_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Company_Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Company_Phone" Type="nvarchar" MaxLength="80" />
+    <Property Name="Company_Mobile" Type="nvarchar" MaxLength="50" />
+    <Property Name="City" Type="nvarchar" MaxLength="120" />
+    <Property Name="Country" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Email" Type="nvarchar" MaxLength="50" />
+    <Property Name="Evc" Type="nvarchar" MaxLength="50" />
+    <Property Name="EMAAL" Type="nvarchar" MaxLength="50" />
+    <Property Name="Salam_Pay" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="tblConnection_Data">
+    <Key>
+      <PropertyRef Name="Connection_ID" />
+    </Key>
+    <Property Name="Connection_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Customer" Type="nvarchar" MaxLength="200" />
+    <Property Name="Generated_by" Type="int" />
+    <Property Name="Generated_Date" Type="datetime" Nullable="false" />
+    <Property Name="Pass_Code" Type="varchar" MaxLength="50" />
+    <Property Name="Database_Server" Type="varchar" MaxLength="50" />
+    <Property Name="Database_User" Type="varchar" MaxLength="50" />
+    <Property Name="Database_Password" Type="varchar" MaxLength="50" />
+    <Property Name="Database_Name" Type="varchar" MaxLength="50" />
+    <Property Name="Expire_Date" Type="date" Nullable="false" />
+  </EntityType>
+  <EntityType Name="tblCustomer_Tran_Type">
+    <Key>
+      <PropertyRef Name="Cust_Tran_Type_ID" />
+    </Key>
+    <Property Name="Cust_Tran_Type_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Tran_Type" Type="nvarchar" MaxLength="20" Nullable="false" />
+  </EntityType>
+  <EntityType Name="tblCustomer_Transaction">
+    <Key>
+      <PropertyRef Name="Cust_Tran_ID" />
+    </Key>
+    <Property Name="Cust_Tran_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Tran_Date" Type="date" Nullable="false" />
+    <Property Name="Amount" Type="real" Nullable="false" />
+    <Property Name="Status" Type="nvarchar" MaxLength="20" />
+    <Property Name="UserID" Type="int" Nullable="false" />
+    <Property Name="CustomerID" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="tblCustomer_Transaction_Detail">
+    <Key>
+      <PropertyRef Name="Cust_Transaction_Detail_id" />
+    </Key>
+    <Property Name="Cust_Transaction_Detail_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Cust_Tran_ID" Type="int" Nullable="false" />
+    <Property Name="Debit" Type="real" Nullable="false" />
+    <Property Name="Credit" Type="real" Nullable="false" />
+    <Property Name="Qty" Type="real" />
+    <Property Name="Unit_price" Type="real" />
+    <Property Name="Description" Type="nvarchar" MaxLength="200" Nullable="false" />
+    <Property Name="UserID" Type="int" Nullable="false" />
+    <Property Name="Trans_Date" Type="date" Nullable="false" />
+    <Property Name="Cust_Tran_Type_ID" Type="int" Nullable="false" />
+    <Property Name="Status" Type="nvarchar" MaxLength="20" />
+    <Property Name="Tran_Nbr" Type="nvarchar" MaxLength="50" />
+    <Property Name="Route" Type="nvarchar" MaxLength="30" />
+    <Property Name="Airline" Type="nvarchar" MaxLength="30" />
+    <Property Name="Amount" Type="real" />
+    <Property Name="Dept_Date" Type="date" />
+    <Property Name="Invoice_Group_Id" Type="int" />
+    <Property Name="Booking_ID" Type="int" />
+    <Property Name="Inventory_Tran_ID" Type="int" />
+    <Property Name="Invoice_No" Type="int" />
+    <Property Name="Balance" Type="real" />
+  </EntityType>
+  <EntityType Name="tblCustomerInvoiceGroups">
+    <Key>
+      <PropertyRef Name="Invoice_Group_Id" />
+    </Key>
+    <Property Name="Invoice_Group_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Invoice_Date" Type="date" Nullable="false" />
+    <Property Name="Title" Type="varchar" MaxLength="100" />
+    <Property Name="Description" Type="varchar(max)" />
+    <Property Name="UserID" Type="int" />
+    <Property Name="Customer_ID" Type="int" />
+    <Property Name="Invoice_Number" Type="int" />
+    <Property Name="Last_Update" Type="date" />
+    <Property Name="Updated_by" Type="int" />
+  </EntityType>
+  <EntityType Name="tblCustomers">
+    <Key>
+      <PropertyRef Name="CustomerID" />
+    </Key>
+    <Property Name="CustomerID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Customer_Name" Type="varchar(max)" />
+    <Property Name="Address" Type="varchar(max)" />
+    <Property Name="Cutomer_Type" Type="varchar" MaxLength="50" />
+    <Property Name="Status" Type="varchar" MaxLength="50" />
+    <Property Name="Contact_Numbers" Type="varchar(max)" />
+    <Property Name="Contract_Date" Type="date" />
+    <Property Name="Maintainance" Type="real" />
+    <Property Name="Notes" Type="varchar(max)" />
+  </EntityType>
+  <EntityType Name="tblCustomerTranactionType">
+    <Key>
+      <PropertyRef Name="Transaction_type_id" />
+    </Key>
+    <Property Name="Transaction_type_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Transaction_type" Type="varchar" MaxLength="100" />
+  </EntityType>
+  <EntityType Name="TblCustomerTransactions">
+    <Key>
+      <PropertyRef Name="Transction_ID" />
+    </Key>
+    <Property Name="Transction_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Transaction_Date" Type="datetime" />
+    <Property Name="Transaction_type_id" Type="int" />
+    <Property Name="Debit" Type="real" />
+    <Property Name="Credit" Type="real" />
+    <Property Name="Customer_ID" Type="int" />
+    <Property Name="UserID" Type="int" />
+    <Property Name="Description" Type="varchar(max)" />
+    <Property Name="Due_Date" Type="date" />
+    <Property Name="Status" Type="varchar" MaxLength="50" />
+    <Property Name="Note" Type="varchar(max)" />
+    <Property Name="User_ID" Type="int" />
+  </EntityType>
+  <EntityType Name="tblCustomerTypes">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Customer_Type" Type="varchar(max)" />
+  </EntityType>
+  <EntityType Name="tblDepartments">
+    <Key>
+      <PropertyRef Name="Dept_ID" />
+    </Key>
+    <Property Name="Dept_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Dept_Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="tblDialyTasks">
+    <Key>
+      <PropertyRef Name="Daily_Task_ID" />
+    </Key>
+    <Property Name="Daily_Task_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserID" Type="int" />
+    <Property Name="Task_Decription" Type="varchar(max)" />
+    <Property Name="CustomerID" Type="int" />
+    <Property Name="Task_Date" Type="date" />
+    <Property Name="From_Time" Type="time" Precision="7" />
+    <Property Name="To_Time" Type="time" Precision="7" />
+    <Property Name="Record_Date_Time" Type="datetime" />
+    <Property Name="Last_Updated" Type="datetime" />
+    <Property Name="Status" Type="varchar" MaxLength="50" />
+    <Property Name="Transportation" Type="real" />
+    <Property Name="Transportation_Mode" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="TblDocuments">
+    <Key>
+      <PropertyRef Name="Doc_Id" />
+    </Key>
+    <Property Name="Doc_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Documents" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Cust_Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="RefNo" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Tran_Date" Type="date" Nullable="false" />
+  </EntityType>
+  <EntityType Name="tblExpense">
+    <Key>
+      <PropertyRef Name="Expense_ID" />
+    </Key>
+    <Property Name="Expense_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Expense_Date" Type="date" Nullable="false" />
+    <Property Name="Expense_Type_ID" Type="int" Nullable="false" />
+    <Property Name="Dr" Type="real" />
+    <Property Name="Cr" Type="real" Nullable="false" />
+    <Property Name="Balance" Type="real" />
+    <Property Name="UserID" Type="int" Nullable="false" />
+    <Property Name="Status" Type="nvarchar" MaxLength="20" />
+    <Property Name="Note" Type="nvarchar(max)" />
+    <Property Name="Voucher" Type="nvarchar" MaxLength="20" />
+    <Property Name="Payment_Method" Type="nvarchar" MaxLength="20" />
+    <Property Name="Period" Type="int" Nullable="false" />
+    <Property Name="Year" Type="int" Nullable="false" />
+    <Property Name="Quarter" Type="int" Nullable="false" />
+    <Property Name="Tran_Nbr" Type="nvarchar" MaxLength="30" />
+  </EntityType>
+  <EntityType Name="tblExpenseType">
+    <Key>
+      <PropertyRef Name="Expense_Type_ID" />
+    </Key>
+    <Property Name="Expense_Type_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Expense Type" Type="nvarchar" MaxLength="30" Nullable="false" />
+    <Property Name="Account_Number" Type="int" Nullable="false" />
+    <Property Name="Is_Cogs_Item" Type="nchar" MaxLength="10" />
+  </EntityType>
+  <EntityType Name="tblFeatureRequests">
+    <Key>
+      <PropertyRef Name="Feature_ID" />
+    </Key>
+    <Property Name="Feature_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Application_ID" Type="int" />
+    <Property Name="User_ID" Type="int" />
+    <Property Name="Customer_ID" Type="int" />
+    <Property Name="Title" Type="varchar(max)" />
+    <Property Name="Description" Type="varchar(max)" />
+    <Property Name="Deadline" Type="date" />
+    <Property Name="Importance" Type="varchar" MaxLength="50" />
+    <Property Name="Requested_date" Type="datetime" />
+    <Property Name="Status" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="tblInventory_Transaction_Details">
+    <Key>
+      <PropertyRef Name="Inventory_Tran_Detail_ID" />
+    </Key>
+    <Property Name="Inventory_Tran_Detail_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Inventory_Tran_ID" Type="int" Nullable="false" />
+    <Property Name="Item_Id" Type="int" Nullable="false" />
+    <Property Name="Unit_Price" Type="real" Nullable="false" />
+    <Property Name="Qty_In" Type="real" Nullable="false" />
+    <Property Name="Qty_Out" Type="real" Nullable="false" />
+    <Property Name="Sales_price" Type="real" Nullable="false" />
+    <Property Name="Batch" Type="varchar" MaxLength="50" />
+    <Property Name="Tax" Type="float" />
+    <Property Name="Freight" Type="float" />
+    <Property Name="Barcode" Type="varchar(max)" />
+  </EntityType>
+  <EntityType Name="tblInventory_Transactions">
+    <Key>
+      <PropertyRef Name="Inventory_Tran_ID" />
+    </Key>
+    <Property Name="Inventory_Tran_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Tran_Date" Type="datetime" Nullable="false" />
+    <Property Name="Inventory_type_id" Type="int" Nullable="false" />
+    <Property Name="Payment_Method" Type="nchar" MaxLength="10" />
+    <Property Name="Tran_Nbr" Type="nvarchar" MaxLength="20" Nullable="false" />
+    <Property Name="Total" Type="real" Nullable="false" />
+    <Property Name="Status" Type="nchar" MaxLength="10" Nullable="false" />
+    <Property Name="UserID" Type="int" Nullable="false" />
+    <Property Name="Business_Division_Id" Type="int" Nullable="false" />
+    <Property Name="Payment_Status" Type="nvarchar" MaxLength="30" />
+    <Property Name="Discount" Type="real" Nullable="false" />
+    <Property Name="Customer_ID" Type="int" />
+    <Property Name="Vendor_ID" Type="int" />
+    <Property Name="Marketer_id" Type="int" />
+    <Property Name="Invoice_No" Type="int" />
+    <Property Name="Cash_Payment" Type="real" />
+  </EntityType>
+  <EntityType Name="tblInvoice">
+    <Key>
+      <PropertyRef Name="Invoice_id" />
+    </Key>
+    <Property Name="Invoice_id" Type="int" Nullable="false" />
+    <Property Name="Invoice_No" Type="int" />
+  </EntityType>
+  <EntityType Name="tblInvoiceGroupDetails">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="Invoice_Group_Id" Type="int" />
+    <Property Name="Cust_Transaction_Detail_id" Type="int" />
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="QTY" Type="real" />
+  </EntityType>
+  <EntityType Name="tblJournal">
+    <Key>
+      <PropertyRef Name="Journal_id" />
+    </Key>
+    <Property Name="Journal_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Journal_Date" Type="date" Nullable="false" />
+    <Property Name="Period" Type="int" Nullable="false" />
+    <Property Name="TYear" Type="int" Nullable="false" />
+    <Property Name="Tran_Nbr" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Description" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="UserID" Type="int" Nullable="false" />
+    <Property Name="Status" Type="nvarchar" MaxLength="20" Nullable="false" />
+    <Property Name="Tran_Type" Type="nvarchar" MaxLength="30" />
+    <Property Name="Journal_Type" Type="varchar" MaxLength="2" />
+  </EntityType>
+  <EntityType Name="tblJournal_Details">
+    <Key>
+      <PropertyRef Name="Journal_Detail_id" />
+    </Key>
+    <Property Name="Journal_Detail_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Journal_id" Type="int" Nullable="false" />
+    <Property Name="Account_Number" Type="int" Nullable="false" />
+    <Property Name="Debit" Type="real" />
+    <Property Name="Credit" Type="real" />
+    <Property Name="Status" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="TblLog">
+    <Key>
+      <PropertyRef Name="Log_id" />
+    </Key>
+    <Property Name="Log_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Title" Type="varchar" MaxLength="50" />
+    <Property Name="Details" Type="varchar(max)" />
+    <Property Name="LogDate" Type="datetime" />
+    <Property Name="UserID" Type="int" />
+  </EntityType>
+  <EntityType Name="tblMonths">
+    <Key>
+      <PropertyRef Name="Month_ID" />
+    </Key>
+    <Property Name="Month_ID" Type="int" Nullable="false" />
+    <Property Name="Month_Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="tblPayment_Voucher">
+    <Key>
+      <PropertyRef Name="Voucher_ID" />
+    </Key>
+    <Property Name="Voucher_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Payment_Date" Type="date" Nullable="false" />
+    <Property Name="Amount" Type="real" Nullable="false" />
+    <Property Name="Payee" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="In_Word" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="UserID" Type="int" Nullable="false" />
+    <Property Name="Company_ID" Type="int" Nullable="false" />
+    <Property Name="Description" Type="nvarchar" MaxLength="50" />
+    <Property Name="Tran_Nbr" Type="nvarchar" MaxLength="30" />
+  </EntityType>
+  <EntityType Name="tblPaymentMethods">
+    <Key>
+      <PropertyRef Name="Payment_Type_id" />
+    </Key>
+    <Property Name="Payment_Type_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Payment_Method" Type="nvarchar(max)" />
+  </EntityType>
+  <EntityType Name="tblProblems">
+    <Key>
+      <PropertyRef Name="Problem_ID" />
+    </Key>
+    <Property Name="Problem_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Customer_ID" Type="int" />
+    <Property Name="Title" Type="varchar(max)" />
+    <Property Name="Description" Type="varchar(max)" />
+    <Property Name="UserID" Type="int" />
+    <Property Name="Status" Type="varchar" MaxLength="50" />
+    <Property Name="Solution_Note" Type="varchar(max)" />
+    <Property Name="ErrorDate" Type="datetime" />
+    <Property Name="Application_ID" Type="int" />
+    <Property Name="User" Type="varchar(max)" />
+    <Property Name="Type" Type="varchar" MaxLength="50" />
+    <Property Name="Priority" Type="int" />
+    <Property Name="SolvedDate" Type="date" />
+  </EntityType>
+  <EntityType Name="tblProjects">
+    <Key>
+      <PropertyRef Name="Project_ID" />
+    </Key>
+    <Property Name="Project_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Customer_Name" Type="nvarchar" MaxLength="500" />
+    <Property Name="Creation_Date" Type="datetime" />
+    <Property Name="Application" Type="varchar" MaxLength="500" />
+    <Property Name="Total_Cost" Type="real" />
+    <Property Name="Status" Type="varchar" MaxLength="50" />
+    <Property Name="Quotation_Link" Type="nvarchar(max)" />
+    <Property Name="PaymentAgreement_Link" Type="nvarchar(max)" />
+    <Property Name="Priority" Type="varchar" MaxLength="50" />
+    <Property Name="Created_by" Type="int" />
+    <Property Name="Payments" Type="real" />
+    <Property Name="Agreement_Status" Type="varchar" MaxLength="50" />
+    <Property Name="Project_Title" Type="varchar" MaxLength="500" />
+  </EntityType>
+  <EntityType Name="tblPurchase_Order">
+    <Key>
+      <PropertyRef Name="Purchase_ID" />
+    </Key>
+    <Property Name="Purchase_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Tran_Date" Type="datetime" Nullable="false" />
+    <Property Name="Total" Type="real" Nullable="false" />
+    <Property Name="Status" Type="nchar" MaxLength="10" Nullable="false" />
+    <Property Name="UserID" Type="int" Nullable="false" />
+    <Property Name="Business_Division_Id" Type="int" Nullable="false" />
+    <Property Name="Note" Type="varchar(max)" />
+    <Property Name="Vendor_Id" Type="int" />
+    <Property Name="Invoice_no" Type="int" />
+  </EntityType>
+  <EntityType Name="tblPurchase_Order_Details">
+    <Key>
+      <PropertyRef Name="Purchase_order_detail_id" />
+    </Key>
+    <Property Name="Purchase_order_detail_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Item_id" Type="int" />
+    <Property Name="Qty" Type="real" />
+    <Property Name="Unit_Cost" Type="real" />
+    <Property Name="Purchase_ID" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="tblQuotations">
+    <Key>
+      <PropertyRef Name="Quotation_ID" />
+    </Key>
+    <Property Name="Quotation_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Tran_Date" Type="datetime" Nullable="false" />
+    <Property Name="Tran_Nbr" Type="nvarchar" MaxLength="20" Nullable="false" />
+    <Property Name="Total" Type="real" Nullable="false" />
+    <Property Name="Status" Type="nchar" MaxLength="10" Nullable="false" />
+    <Property Name="UserID" Type="int" Nullable="false" />
+    <Property Name="Business_Division_Id" Type="int" Nullable="false" />
+    <Property Name="Discount" Type="real" Nullable="false" />
+    <Property Name="Customer_ID" Type="int" />
+    <Property Name="Marketer_id" Type="int" />
+  </EntityType>
+  <EntityType Name="tblReceipt_Voucher">
+    <Key>
+      <PropertyRef Name="Voucher_ID" />
+    </Key>
+    <Property Name="Voucher_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Receipt_Date" Type="date" Nullable="false" />
+    <Property Name="Amount" Type="real" Nullable="false" />
+    <Property Name="Payee" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="In_Word" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="UserID" Type="int" Nullable="false" />
+    <Property Name="Company_ID" Type="int" Nullable="false" />
+    <Property Name="Description" Type="nvarchar" MaxLength="50" />
+    <Property Name="Tran_Nbr" Type="nvarchar" MaxLength="30" />
+    <Property Name="Balance" Type="real" />
+  </EntityType>
+  <EntityType Name="tblSetting">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" Nullable="false" />
+    <Property Name="Description" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Value" Type="varchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="tblSetting2">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" Nullable="false" />
+    <Property Name="Description" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Value" Type="varchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="tblSMS_API_DATA">
+    <Key>
+      <PropertyRef Name="SMS_SENT_ID" />
+    </Key>
+    <Property Name="SMS_SENT_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="DateTime" Type="datetime" Nullable="false" />
+    <Property Name="Short_Name" Type="varchar(max)" />
+    <Property Name="Phone" Type="varchar" MaxLength="50" />
+    <Property Name="SMS_Body" Type="nvarchar(max)" />
+    <Property Name="Request_Url" Type="varchar(max)" />
+  </EntityType>
+  <EntityType Name="tblTasks">
+    <Key>
+      <PropertyRef Name="TaskID" />
+    </Key>
+    <Property Name="TaskID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Title" Type="varchar" MaxLength="500" />
+    <Property Name="Description" Type="varchar(max)" />
+    <Property Name="Creation_Date" Type="datetime" />
+    <Property Name="Project_id" Type="int" />
+    <Property Name="Priority" Type="varchar" MaxLength="50" />
+    <Property Name="Assigned_for" Type="int" />
+    <Property Name="Status" Type="varchar" MaxLength="50" />
+    <Property Name="Last_Update" Type="datetime" />
+    <Property Name="Start_Date" Type="varchar" MaxLength="50" />
+    <Property Name="End_Date" Type="varchar" MaxLength="50" />
+    <Property Name="Created_by" Type="int" />
+    <Property Name="Notes" Type="varchar(max)" />
+    <Property Name="Customer_id" Type="int" />
+    <Property Name="Department" Type="varchar(max)" />
+  </EntityType>
+  <EntityType Name="tblUsers">
+    <Key>
+      <PropertyRef Name="UserID" />
+    </Key>
+    <Property Name="UserID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="FullName" Type="varchar(max)" />
+    <Property Name="Customer_ID" Type="int" />
+    <Property Name="Role" Type="varchar" MaxLength="50" />
+    <Property Name="UserName" Type="varchar" MaxLength="50" />
+    <Property Name="Password" Type="varchar" MaxLength="50" />
+    <Property Name="Email" Type="varchar" MaxLength="50" />
+    <Property Name="Status" Type="varchar" MaxLength="50" />
+    <Property Name="App_ID" Type="int" />
+  </EntityType>
+  <EntityType Name="tblVendor_Documents">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Vendor_ID" Type="int" />
+    <Property Name="Document_Description" Type="varchar(max)" />
+    <Property Name="Path" Type="varchar(max)" />
+    <Property Name="Document_Date" Type="date" />
+  </EntityType>
+  <EntityType Name="tblVendor_Invoice">
+    <Key>
+      <PropertyRef Name="Invoice_Nbr" />
+    </Key>
+    <Property Name="Invoice_Nbr" Type="int" Nullable="false" />
+    <Property Name="Invoice_Date" Type="date" Nullable="false" />
+    <Property Name="Payment_Date" Type="date" />
+    <Property Name="Payment_Method" Type="nvarchar" MaxLength="20" />
+    <Property Name="UserID" Type="int" Nullable="false" />
+    <Property Name="Check_Number" Type="nvarchar" MaxLength="30" />
+    <Property Name="Received_by" Type="nvarchar" MaxLength="30" />
+    <Property Name="Status" Type="nchar" MaxLength="10" />
+    <Property Name="Amount" Type="real" />
+    <Property Name="VendorID" Type="int" Nullable="false" />
+    <Property Name="Payment_type" Type="nchar" MaxLength="10" />
+  </EntityType>
+  <EntityType Name="tblVendor_Tran_Type">
+    <Key>
+      <PropertyRef Name="Vendor_Tran_Type_ID" />
+    </Key>
+    <Property Name="Vendor_Tran_Type_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Tran_Type" Type="nvarchar" MaxLength="20" Nullable="false" />
+  </EntityType>
+  <EntityType Name="tblVendor_Transaction">
+    <Key>
+      <PropertyRef Name="Vendor_Tran_ID" />
+    </Key>
+    <Property Name="Vendor_Tran_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Tran_Date" Type="date" Nullable="false" />
+    <Property Name="Amount" Type="real" Nullable="false" />
+    <Property Name="Status" Type="nvarchar" MaxLength="20" />
+    <Property Name="UserID" Type="int" Nullable="false" />
+    <Property Name="VendorID" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="tblVendor_Transaction_Detail">
+    <Key>
+      <PropertyRef Name="Vendor_Transaction_Detail_id" />
+    </Key>
+    <Property Name="Vendor_Transaction_Detail_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Vendor_Tran_ID" Type="int" Nullable="false" />
+    <Property Name="Debit" Type="real" Nullable="false" />
+    <Property Name="Credit" Type="real" Nullable="false" />
+    <Property Name="Description" Type="varchar(max)" Nullable="false" />
+    <Property Name="UserID" Type="int" Nullable="false" />
+    <Property Name="Trans_Date" Type="date" Nullable="false" />
+    <Property Name="Vendor_Tran_Type_ID" Type="int" />
+    <Property Name="Tran_Nbr" Type="nvarchar" MaxLength="30" />
+    <Property Name="Inventory_Tran_ID" Type="int" />
+    <Property Name="Invoice_No" Type="int" />
+    <Property Name="Qty" Type="real" />
+    <Property Name="Unit_price" Type="real" />
+    <Property Name="Balance" Type="real" />
+  </EntityType>
+  <EntityType Name="tblVendors">
+    <Key>
+      <PropertyRef Name="Vendor_ID" />
+    </Key>
+    <Property Name="Vendor_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Vendor_Name" Type="varchar" MaxLength="50" />
+    <Property Name="Address" Type="varchar" MaxLength="50" />
+    <Property Name="Tel" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="tblWebLog">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Log_Date" Type="datetime" Nullable="false" />
+    <Property Name="Type" Type="varchar(max)" />
+    <Property Name="Details" Type="varchar(max)" />
+  </EntityType>
+  <EntityType Name="VendorInstallmentPlans">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Vendor_Id" Type="int" />
+    <Property Name="OrderId" Type="int" />
+    <Property Name="payment_persent" Type="float" />
+    <Property Name="Payment_total" Type="float" />
+    <Property Name="status" Type="varchar" MaxLength="50" />
+    <Property Name="payment_date" Type="date" />
+    <Property Name="userid" Type="int" />
+    <Property Name="paid" Type="float" />
+    <Property Name="Trans_Detail_ID" Type="int" />
+  </EntityType>
+  <Association Name="FK_tblConnection_Data_tblUsers">
+    <End Role="tblUsers" Type="Self.tblUsers" Multiplicity="0..1" />
+    <End Role="tblConnection_Data" Type="Self.tblConnection_Data" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tblUsers">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="tblConnection_Data">
+        <PropertyRef Name="Generated_by" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tblDialyTasks_tblCustomers">
+    <End Role="tblCustomers" Type="Self.tblCustomers" Multiplicity="0..1" />
+    <End Role="tblDialyTasks" Type="Self.tblDialyTasks" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tblCustomers">
+        <PropertyRef Name="CustomerID" />
+      </Principal>
+      <Dependent Role="tblDialyTasks">
+        <PropertyRef Name="CustomerID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tblInventory_Transaction_Details_tblInventory_Transactions">
+    <End Role="tblInventory_Transactions" Type="Self.tblInventory_Transactions" Multiplicity="1" />
+    <End Role="tblInventory_Transaction_Details" Type="Self.tblInventory_Transaction_Details" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tblInventory_Transactions">
+        <PropertyRef Name="Inventory_Tran_ID" />
+      </Principal>
+      <Dependent Role="tblInventory_Transaction_Details">
+        <PropertyRef Name="Inventory_Tran_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tblInventory_Transactions_dbo_Business_Division">
+    <End Role="Business_Division" Type="Self.Business_Division" Multiplicity="1" />
+    <End Role="tblInventory_Transactions" Type="Self.tblInventory_Transactions" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Business_Division">
+        <PropertyRef Name="Business_Division_Id" />
+      </Principal>
+      <Dependent Role="tblInventory_Transactions">
+        <PropertyRef Name="Business_Division_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Function Name="Acc_Update_Journal_Status_Rev_Expense_by_Date" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="Var1" Type="nvarchar" Mode="In" />
+    <Parameter Name="Var2" Type="date" Mode="In" />
+    <Parameter Name="Var3" Type="int" Mode="In" />
+  </Function>
+  <Function Name="Add_Journal_Details" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="Var1" Type="int" Mode="In" />
+    <Parameter Name="Var2" Type="int" Mode="In" />
+    <Parameter Name="Var3" Type="real" Mode="In" />
+    <Parameter Name="Var4" Type="real" Mode="In" />
+  </Function>
+  <Function Name="Add_Payment_Voucher" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="VAR1" Type="date" Mode="In" />
+    <Parameter Name="VAR2" Type="real" Mode="In" />
+    <Parameter Name="VAR3" Type="nvarchar" Mode="In" />
+    <Parameter Name="VAR4" Type="nvarchar" Mode="In" />
+    <Parameter Name="VAR5" Type="int" Mode="In" />
+    <Parameter Name="VAR6" Type="int" Mode="In" />
+    <Parameter Name="VAR7" Type="nvarchar" Mode="In" />
+    <Parameter Name="VAR8" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="Add_Vendor_Transaction" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="VAR1" Type="date" Mode="In" />
+    <Parameter Name="VAR2" Type="real" Mode="In" />
+    <Parameter Name="VAR3" Type="nvarchar" Mode="In" />
+    <Parameter Name="VAR4" Type="int" Mode="In" />
+    <Parameter Name="VAR5" Type="int" Mode="In" />
+  </Function>
+  <Function Name="Add_Vendor_Transaction_Detail" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="VAR1" Type="int" Mode="In" />
+    <Parameter Name="VAR2" Type="real" Mode="In" />
+    <Parameter Name="VAR3" Type="real" Mode="In" />
+    <Parameter Name="VAR4" Type="nvarchar" Mode="In" />
+    <Parameter Name="VAR5" Type="int" Mode="In" />
+    <Parameter Name="VAR6" Type="date" Mode="In" />
+    <Parameter Name="VAR7" Type="int" Mode="In" />
+    <Parameter Name="VAR8" Type="nvarchar" Mode="In" />
+    <Parameter Name="VAR9" Type="nchar" Mode="In" />
+  </Function>
+  <Function Name="AddCashFlow" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="VAR1" Type="nvarchar" Mode="In" />
+    <Parameter Name="VAR2" Type="nvarchar" Mode="In" />
+    <Parameter Name="VAR3" Type="int" Mode="In" />
+    <Parameter Name="VAR4" Type="nvarchar" Mode="In" />
+    <Parameter Name="VAR5" Type="real" Mode="In" />
+    <Parameter Name="VAR6" Type="real" Mode="In" />
+  </Function>
+  <Function Name="fn_diagramobjects" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int" />
+  <Function Name="Get_Journal_Balance_By_Account" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="Var1" Type="int" Mode="In" />
+  </Function>
+  <Function Name="Get_Max_Journal_id_by_User" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="Var1" Type="int" Mode="In" />
+  </Function>
+  <Function Name="Get_Max_VoucherID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="Get_Total_Customer_Transaction_Detail_by_TranID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="VAR1" Type="int" Mode="In" />
+  </Function>
+  <Function Name="Get_Total_Vendor_Tranaction_Detial_by_Vendor_TranID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="VAR1" Type="int" Mode="In" />
+  </Function>
+  <Function Name="Get_Vendor_Tran_Type_By_Tran_Type" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="VAR1" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="Get_Vendor_TransactionID_By_Status_VendorID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="VAR1" Type="nvarchar" Mode="In" />
+    <Parameter Name="VAR2" Type="int" Mode="In" />
+  </Function>
+  <Function Name="GetCompanyInfo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="Inv_Get_Qty_Available_by_ProductID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="Var1" Type="int" Mode="In" />
+  </Function>
+  <Function Name="pro_Get_Invoice" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="var1" Type="int" Mode="In" />
+  </Function>
+  <Function Name="pro_Get_Invoice_By_Group" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="var1" Type="int" Mode="In" />
+  </Function>
+  <Function Name="Pro_Get_Invoice_Group_Details" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="var1" Type="int" Mode="In" />
+  </Function>
+  <Function Name="pro_Get_Vendor_Invoice" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="var1" Type="int" Mode="In" />
+  </Function>
+  <Function Name="Pro_Tasks_List" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="var1" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="Search_Customer_By_Name" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="Var1" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="Sp_Add_Journal" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="VAR1" Type="date" Mode="In" />
+    <Parameter Name="VAR2" Type="int" Mode="In" />
+    <Parameter Name="VAR3" Type="int" Mode="In" />
+    <Parameter Name="VAR4" Type="nvarchar" Mode="In" />
+    <Parameter Name="VAR5" Type="nvarchar(max)" Mode="In" />
+    <Parameter Name="VAR6" Type="int" Mode="In" />
+    <Parameter Name="VAR7" Type="nvarchar" Mode="In" />
+    <Parameter Name="VAR8" Type="nvarchar" Mode="In" />
+    <Parameter Name="VAR9" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="Sp_Add_Journal_Details" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="VAR1" Type="int" Mode="In" />
+    <Parameter Name="VAR2" Type="int" Mode="In" />
+    <Parameter Name="VAR3" Type="real" Mode="In" />
+    <Parameter Name="VAR4" Type="real" Mode="In" />
+  </Function>
+  <Function Name="sp_alterdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+    <Parameter Name="owner_id" Type="int" Mode="In" />
+    <Parameter Name="version" Type="int" Mode="In" />
+    <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
+  </Function>
+  <Function Name="sp_check_item_batch" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="var1" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_creatediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+    <Parameter Name="owner_id" Type="int" Mode="In" />
+    <Parameter Name="version" Type="int" Mode="In" />
+    <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
+  </Function>
+  <Function Name="Sp_Delete_Cash_Flow_by_Journal_id" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="VAR1" Type="int" Mode="In" />
+  </Function>
+  <Function Name="Sp_Delete_Journal_by_Tran_Nbr" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="VAR1" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="Sp_Delete_Journal_Detail_by_ID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="Var1" Type="int" Mode="In" />
+  </Function>
+  <Function Name="Sp_Delete_Journal_Details_by_ID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="VAR1" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_dropdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+    <Parameter Name="owner_id" Type="int" Mode="In" />
+  </Function>
+  <Function Name="Sp_Get_Cash_Bank_Account" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="Sp_Get_Cash_Flow_Details_by_Date" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="VAR1" Type="date" Mode="In" />
+    <Parameter Name="VAR2" Type="date" Mode="In" />
+    <Parameter Name="var3" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_get_Customer_Balanace" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="sp_get_customer_transactions_by_id" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="var1" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_get_customer_transactions_by_id_Date_Tran_Type" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="var1" Type="int" Mode="In" />
+    <Parameter Name="var2" Type="int" Mode="In" />
+    <Parameter Name="var3" Type="date" Mode="In" />
+    <Parameter Name="var4" Type="date" Mode="In" />
+  </Function>
+  <Function Name="sp_Get_Customer_with_Balance" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="var1" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Get_Customer_with_Balance2" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="var1" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_get_items_with_batch_qty" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="var1" Type="int" Mode="In" />
+  </Function>
+  <Function Name="Sp_Get_List_of_Cash_Bank" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="Sp_Get_Max_Journal_Detail_by_UserID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="VAR1" Type="int" Mode="In" />
+  </Function>
+  <Function Name="SP_Get_Max_Journal_id_by_User" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="VAR1" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Get_Purchase_Receipt_by_ID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="var1" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Get_Purchase_request_letter_by_ID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="var1" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_get_qty_available_by_division" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="var1" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_get_qty_available_by_division_date" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="var1" Type="int" Mode="In" />
+    <Parameter Name="var2" Type="date" Mode="In" />
+  </Function>
+  <Function Name="sp_get_qty_available_by_division_date_Details" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="var1" Type="int" Mode="In" />
+    <Parameter Name="var2" Type="date" Mode="In" />
+  </Function>
+  <Function Name="sp_Get_Sales_Receipt_by_ID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="var1" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_get_vendor_transactions_by_id" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="var1" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_get_vendor_transactions_by_id_Date_Tran_Type" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="var1" Type="int" Mode="In" />
+    <Parameter Name="var2" Type="int" Mode="In" />
+    <Parameter Name="var3" Type="date" Mode="In" />
+    <Parameter Name="var4" Type="date" Mode="In" />
+  </Function>
+  <Function Name="Sp_Get_Vendor_with_Balance" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="sp_helpdiagramdefinition" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+    <Parameter Name="owner_id" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_helpdiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+    <Parameter Name="owner_id" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_renamediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+    <Parameter Name="owner_id" Type="int" Mode="In" />
+    <Parameter Name="new_diagramname" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="sp_resset" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="Sp_Update_Customer_Trans_Total" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="var1" Type="int" Mode="In" />
+  </Function>
+  <Function Name="Sp_Update_Vendor_Trans_Total" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="var1" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_upgraddiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="sp_view_fee_collection" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="var1" Type="date" Mode="In" />
+    <Parameter Name="var2" Type="int" Mode="In" />
+  </Function>
+  <Function Name="Update_Customer_Tranaction_Amount_By_Cust_tran_id" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="VAR1" Type="real" Mode="In" />
+    <Parameter Name="VAR2" Type="int" Mode="In" />
+  </Function>
+  <Function Name="Update_Vendor_Transaction_Amount_By_Vendor_transid" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="VAR1" Type="real" Mode="In" />
+    <Parameter Name="VAR2" Type="int" Mode="In" />
+  </Function>
+  <Function Name="View_All_Customers" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="var1" Type="varchar" Mode="In" />
+    <Parameter Name="var2" Type="varchar" Mode="In" />
+    <Parameter Name="var3" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="View_All_Customers_By_Name_Type_Status" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="var1" Type="varchar" Mode="In" />
+    <Parameter Name="var2" Type="varchar" Mode="In" />
+    <Parameter Name="var3" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="View_Customer_Maintainance" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="var1" Type="int" Mode="In" />
+    <Parameter Name="var2" Type="int" Mode="In" />
+  </Function>
+  <Function Name="View_Item_Sales" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <EntityContainer Name="SameSoftwareWebModelStoreContainer">
+    <EntitySet Name="Business_Division" EntityType="Self.Business_Division" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="CustomerTasks" EntityType="Self.CustomerTasks" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="InstallmentPlans" EntityType="Self.InstallmentPlans" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Inventory_Types" EntityType="Self.Inventory_Types" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="IssueTypes" EntityType="Self.IssueTypes" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Item" EntityType="Self.Item" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Manufacturer" EntityType="Self.Manufacturer" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Measurement" EntityType="Self.Measurement" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Quotation_Details" EntityType="Self.Quotation_Details" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblApplications" EntityType="Self.tblApplications" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblAppVersions" EntityType="Self.tblAppVersions" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblBatch" EntityType="Self.tblBatch" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblCash_Flow" EntityType="Self.tblCash_Flow" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblCashFlow" EntityType="Self.tblCashFlow" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblChart_Of_Account_Assignment" EntityType="Self.tblChart_Of_Account_Assignment" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblChart_Of_Accounts" EntityType="Self.tblChart_Of_Accounts" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblCompanyInfo" EntityType="Self.tblCompanyInfo" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblConnection_Data" EntityType="Self.tblConnection_Data" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblCustomer_Tran_Type" EntityType="Self.tblCustomer_Tran_Type" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblCustomer_Transaction" EntityType="Self.tblCustomer_Transaction" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblCustomer_Transaction_Detail" EntityType="Self.tblCustomer_Transaction_Detail" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblCustomerInvoiceGroups" EntityType="Self.tblCustomerInvoiceGroups" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblCustomers" EntityType="Self.tblCustomers" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblCustomerTranactionType" EntityType="Self.tblCustomerTranactionType" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="TblCustomerTransactions" EntityType="Self.TblCustomerTransactions" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblCustomerTypes" EntityType="Self.tblCustomerTypes" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblDepartments" EntityType="Self.tblDepartments" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblDialyTasks" EntityType="Self.tblDialyTasks" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="TblDocuments" EntityType="Self.TblDocuments" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblExpense" EntityType="Self.tblExpense" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblExpenseType" EntityType="Self.tblExpenseType" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblFeatureRequests" EntityType="Self.tblFeatureRequests" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblInventory_Transaction_Details" EntityType="Self.tblInventory_Transaction_Details" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblInventory_Transactions" EntityType="Self.tblInventory_Transactions" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblInvoice" EntityType="Self.tblInvoice" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblInvoiceGroupDetails" EntityType="Self.tblInvoiceGroupDetails" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblJournal" EntityType="Self.tblJournal" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblJournal_Details" EntityType="Self.tblJournal_Details" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="TblLog" EntityType="Self.TblLog" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblMonths" EntityType="Self.tblMonths" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblPayment_Voucher" EntityType="Self.tblPayment_Voucher" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblPaymentMethods" EntityType="Self.tblPaymentMethods" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblProblems" EntityType="Self.tblProblems" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblProjects" EntityType="Self.tblProjects" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblPurchase_Order" EntityType="Self.tblPurchase_Order" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblPurchase_Order_Details" EntityType="Self.tblPurchase_Order_Details" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblQuotations" EntityType="Self.tblQuotations" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblReceipt_Voucher" EntityType="Self.tblReceipt_Voucher" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblSetting" EntityType="Self.tblSetting" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblSetting2" EntityType="Self.tblSetting2" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblSMS_API_DATA" EntityType="Self.tblSMS_API_DATA" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblTasks" EntityType="Self.tblTasks" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblUsers" EntityType="Self.tblUsers" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblVendor_Documents" EntityType="Self.tblVendor_Documents" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblVendor_Invoice" EntityType="Self.tblVendor_Invoice" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblVendor_Tran_Type" EntityType="Self.tblVendor_Tran_Type" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblVendor_Transaction" EntityType="Self.tblVendor_Transaction" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblVendor_Transaction_Detail" EntityType="Self.tblVendor_Transaction_Detail" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblVendors" EntityType="Self.tblVendors" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblWebLog" EntityType="Self.tblWebLog" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="VendorInstallmentPlans" EntityType="Self.VendorInstallmentPlans" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_tblConnection_Data_tblUsers" Association="Self.FK_tblConnection_Data_tblUsers">
+      <End Role="tblUsers" EntitySet="tblUsers" />
+      <End Role="tblConnection_Data" EntitySet="tblConnection_Data" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tblDialyTasks_tblCustomers" Association="Self.FK_tblDialyTasks_tblCustomers">
+      <End Role="tblCustomers" EntitySet="tblCustomers" />
+      <End Role="tblDialyTasks" EntitySet="tblDialyTasks" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tblInventory_Transaction_Details_tblInventory_Transactions" Association="Self.FK_tblInventory_Transaction_Details_tblInventory_Transactions">
+      <End Role="tblInventory_Transactions" EntitySet="tblInventory_Transactions" />
+      <End Role="tblInventory_Transaction_Details" EntitySet="tblInventory_Transaction_Details" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tblInventory_Transactions_dbo_Business_Division" Association="Self.FK_tblInventory_Transactions_dbo_Business_Division">
+      <End Role="Business_Division" EntitySet="Business_Division" />
+      <End Role="tblInventory_Transactions" EntitySet="tblInventory_Transactions" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

@@ -1,0 +1,364 @@
+
+@{
+    ViewBag.Title = "Accounting  &rarr; Customer Transactions";
+
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    SameSoftWeb.Models.SameSoftwareWebEntities db = new SameSoftWeb.Models.SameSoftwareWebEntities();
+
+
+
+
+    int id = (int)ViewBag.id;
+
+
+    var p_methods = db.tblPaymentMethods.Select(a => new
+    {
+        id = a.Payment_Method,
+        name = a.Payment_Method
+    }).OrderBy(a => a.name).ToList();
+
+
+    var items = db.sp_get_customer_transactions_by_id(id).Select(x => new
+    {
+        CustomerID = x.CustomerID,
+        CustomerName = x.Customer_Name,
+        Phone = x.Contact_Numbers,
+        Contact = x.Address,
+
+
+        debit = x.Debit,
+        credit = x.Credit,
+        description = x.Description,
+        trandate = x.Trans_Date.ToShortDateString(),
+        invoiceid = x.Cust_Tran_ID,
+        tranid = x.Cust_Transaction_Detail_id,
+        user = x.FullName,
+        
+    }).ToList();
+
+    string custname = "";
+    int custid = 0;
+    if (items.Count > 0)
+    {
+        custname = items[0].CustomerName;
+        custid = items[0].CustomerID;
+    }
+    float totald = 0;
+    float totalc = 0;
+
+
+    var acc = db.tblChart_Of_Accounts.Where(a => a.Cash_Or_Bank == "C").ToList();
+    ViewBag.cashacc = new SelectList(acc, "Account_Number", "Account_Name");
+
+    var aracc = db.tblChart_Of_Accounts.Where(a => a.Account_Class_Id == 1).ToList();
+    ViewBag.aracc = new SelectList(aracc, "Account_Number", "Account_Name");
+
+    var discountacc = db.tblChart_Of_Accounts.Where(a => a.Account_Class_Id == 4).ToList();
+    ViewBag.discountacc = new SelectList(discountacc, "Account_Number", "Account_Name");
+
+}
+
+<style>
+    td {
+        padding: 4px;
+        text-align: center;
+    }
+
+    th {
+        padding: 4px;
+        text-align: center;
+    }
+</style>
+
+
+@*@if ((int)Session["RoleID"] == 4)
+    {
+
+        int customer = (int)Session["customerid"];
+        int curcust = int.Parse(Request.QueryString["id"]);
+
+        if (customer !=curcust)
+        {
+            Response.Redirect("\\Users\\Login");
+        }
+
+    }
+    else
+    {*@
+<div class="content-body">
+    <!-- Basic Tables start -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title"><b>New Customer Transaction ( @custname )</b></h3>
+                    <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                    <div class="heading-elements">
+                        <ul class="list-inline mb-0">
+                            <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                            <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
+                            <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                            <li><a data-action="close"><i class="ft-x"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card-content collapse show">
+                    <div class="card-body">
+                        <br />
+                        <div style="width:90%;padding:17px;border:1px #61D6F1;margin:auto;border:1px solid #fff; border-radius:4px;padding:5px;border-top:5px solid #61D6F1;margin-bottom:10px; background-color:white;">
+                            <text>
+                             
+
+                                @if (Request.QueryString["msg"] != null)
+            {
+                                    <h4 style="color:blue;">* @Request.QueryString["msg"] </h4>
+                                }
+
+                                <form method="post" action="\Cust\CustomerPayment">
+
+
+
+                                    <div class="row">
+                                        <div class="col-md-4">
+
+                                            <label for="email">Transaction Type</label> <br />
+
+                                            <select name="trantype" id="trantype" onchange="ViewCash();" class="form-control" style="display:inline;width:200px;" required>
+                                                <option value=""> Select Type</option>
+                                                <option value="1"> Customer Payment</option>
+                                                <option value="2"> Customer Discount</option>
+                                                <option value="3"> Customer Refund</option>
+                                            </select>
+                                            <input type="hidden" name="customerid" value="@custid" />
+                                        </div>
+                                        <div class="col-md-4">
+
+                                            <label for="pwd">Amount</label> <br />
+                                            <input type="text" name="amount" class="form-control" style="display:inline;width:150px;" />
+                                        </div><div class="col-md-4">
+
+                                            <label for="pwd">Description</label> <br />
+                                            <input type="text" name="desc" class="form-control" style="display:inline;width:250px;" />
+                                            &nbsp; &nbsp; &nbsp;
+
+                                        </div>
+                                    </div>
+                                    <hr />
+                                    <div class="row">
+                                        <div class="col-md-4" style="">
+                                            @Html.DropDownList("aracc", null, "Select Receivable Acc", new { @class = "form-control", @style = "display:inline;width:250px;", @id = "payableacc" })
+                                        </div>
+
+                                        <div class="col-md-4" style="">
+                                            @Html.DropDownList("discountacc", null, "Select Discount Account", new { @class = "form-control", @style = "width:250px;font-weight:bold;", @id = "discountacc" })
+                                        </div>
+
+                                        <div class="col-md-4" style="">
+                                            @Html.DropDownList("cashacc", null, "Select Cash Account", new { @class = "form-control", @style = "width:250px;", @id = "cashaccx" })
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <br />Transaction Date
+                                            <input type="date" class="form-control" name="trans_Date" placeholder="yyyy/MM/dd" />
+                                        </div>
+
+
+                                        <div class="col-md-4">
+                                            <br />
+                                            Payment Method
+                                            @Html.DropDownList("Payment_Method", new SelectList(p_methods, "id", "name"), "Select P. Method", new { @class = "form-control", @style = "width:250px;", @id = "cashaccxxxx" })
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <br />
+                                            Cashier Name
+                                            <input type="text" class="form-control" name="cashier_name" />
+                                        </div>
+                                        <div class="col-md-4">
+                                            <br />
+                                            Check No.
+                                            <input type="text" class="form-control" name="check_number" />
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <br /><br />
+                                            <input type="submit" value="Submit" class="btn btn-primary" style="display:inline;width:150px;" onclick="return validate();" />
+
+                                        </div>
+                                    </div>
+                                    <br /><br /><br />
+                                </form>
+
+                            </text>
+                        </div>
+                        <br />
+
+
+
+
+
+                        <br /><br />
+
+                        @if (items.Count == 0)
+                        {
+
+                            <br />    <br />    <br />    <br />    <br />    <br /> <center>
+                                <hr />
+                                <h3> No Balance For This Customer</h3>
+                                <hr />
+                            </center>
+
+                            return;
+                        }
+
+
+
+
+                        @*<div class="row" style="width:90%;padding:7px;border:1px #f6ecec;margin:auto;">
+                                <br /><button class="btn btn-primary" onclick="PrintElem();">  <i class="fa fa-print"></i> Print    </button>
+                            </div>
+
+                            <div style="width:90%;padding:7px;border:1px #f6ecec;margin:auto;background-color:#fff;border:1px solid #a6fcfc" id="invoice">
+
+
+                                <center style="font-size:13pt;font-weight:unset;">
+                                    <img src="@items[0].pic" style="width:240px;height:90px;" />   <br />
+
+                                    <b>
+                                        @items[0].divname  <br />
+
+                                    </b>
+                                    <hr />
+                                    <b> Customer Statement </b>
+                                    <hr />
+                                </center>
+                                <table style="width:98%;padding:3px;">
+
+                                    <tr><td>Cusomer No.  </td> <td> <b>@custid</b> </td>  <td>Cusomer Name.  </td> <td> <b>@items[0].CustomerName</b> </td> <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td> </tr>
+
+                                    <tr><td>Custome Phone.</td> <td><b>@items[0].Phone</b></td>     <td></td></tr>
+                                    <tr> <td>Contact</td> <td><b>@items[0].Contact</b></td> <td>Transaction ID</td> <td><b>@items[0].invoiceid</b></td><td></td></tr>
+
+
+
+                                </table>
+                                <hr />
+
+                                <table class="tb table-bordered" style="width:98%;padding:3px;">
+                                    <thead>
+                                    <th> TransID </th>
+                                    <th> Transaction Date </th>
+
+                                    <th>Description </th>
+                                    <th>Invoice </th>
+                                    <th>User </th>
+                                    <th> Debit </th>
+                                    <th>Credit </th>
+                                    </thead>
+
+                                    @foreach (var x in items)
+                                    {
+                                        totald = totald + @x.debit;
+                                        totalc = totalc + @x.credit;
+                                        var inv = db.tblInventory_Transactions.Where(a => a.Inventory_Tran_ID == x.sid).Select(a => a.Invoice_No).FirstOrDefault();
+
+                                        string purid = (x.sid == null) ? "N/A" : "<a href='/Sales/Receipt/?id=" + @x.sid + "' class='fa fa-print'> Inv.<text></text>" + @inv;
+
+                                        <text>
+                                            <tr>
+                                                <td>@x.tranid  &nbsp; <a href="/Customers/DeleteTransction/?id=@x.tranid" onclick="return confirm('Sure to Delete Customer Transction');"><i class="fa fa-trash-o" style="color:red;font-size:13pt"></i></a></td>
+                                                <td>@x.trandate</td>
+                                                <td>@x.description</td>
+                                                <td> @Html.Raw(purid)</td>
+                                                <td>@x.user</td>
+                                                <td>@x.debit</td>
+                                                <td>@x.credit</td>
+
+                                            </tr>
+                                        </text>
+                                    }
+                                    <tr> <td></td>  <td></td> <td></td><td></td>  <td> Total </td> <td><b>$@totald  </b></td><td><b>$@totalc  </b></td></tr>
+                                    <tr> <td></td>  <td></td><td></td> <td></td>  <td> Balance </td> <td colspan="2"><b style="border-bottom:1px double blue;"><b>$ @{ Write(totald - totalc); } </b></td>  </b></td></tr>
+                                </table>
+
+
+
+                            </div>*@
+
+
+                        <br /><br />
+
+
+                        <script>
+                            function PrintElem() {
+
+
+
+                                var mywindow = window.open('', 'PRINT', 'height=400,width=600');
+
+
+                                var st = '<style type="text/css">' +
+                                '.tb th, .tb td {' +
+                                'border:1px solid #ccc;padding:3px;border-collapse:collapse;text-align:center;' +
+                                'padding;0.5em;' +
+                                '}  .tb th{border-bottom:3px solid #ccc;} table{border-collapse:collapse;}' +
+                                '</style>'
+
+                                mywindow.document.write('<html><head>' + st + '<link ref="stylesheet" href="~\Content\bootstrap.min.css">  <title>' + '' + '</title>');
+                                mywindow.document.write('</head><body >');
+
+                                mywindow.document.write(document.getElementById("invoice").innerHTML);
+                                mywindow.document.write('</body></html>');
+
+                                mywindow.document.close(); // necessary for IE >= 10
+                                mywindow.focus(); // necessary for IE >= 10*/
+
+                                mywindow.print();
+                                mywindow.close();
+
+                                return true;
+                            }
+
+                            function ViewCash() {
+
+                                var va = $("#trantype").val();
+                                if (va == 2) {
+                                    $("#cashaccx").prop("disabled", true);
+
+                                    $("#discountacc").prop("disabled", false);
+                                }
+                                else {
+                                    $("#cashaccx").prop("disabled", false);
+
+                                    $("#discountacc").prop("disabled", true);
+                                }
+                            }
+
+                            function validate() {
+
+                                var t = $("#trantype").val();
+                                var c = $("#cashacc").val();
+
+                                if (t == "") {
+                                    alert("Please Select Transaction Type");
+                                    return false;
+                                }
+
+                                if (t == 1 && c == "") {
+
+                                    alert("Please Select Cash Account");
+                                    return false;
+                                }
+
+                            }
+
+
+                        </script>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Basic Tables end -->
+</div>

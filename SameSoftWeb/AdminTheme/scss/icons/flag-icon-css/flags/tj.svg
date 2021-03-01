@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="svg3446"
+   height="480"
+   width="640"
+   version="1.1"
+   inkscape:version="0.91 r13726"
+   sodipodi:docname="tj.svg">
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1389"
+     inkscape:window-height="866"
+     id="namedview3778"
+     showgrid="false"
+     inkscape:zoom="0.48097993"
+     inkscape:cx="320"
+     inkscape:cy="240"
+     inkscape:window-x="61"
+     inkscape:window-y="181"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg3446" />
+  <metadata
+     id="metadata3760">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs3448">
+    <clipPath
+       id="clipPath7362"
+       clipPathUnits="userSpaceOnUse">
+      <rect
+         id="rect7364"
+         fill-opacity="0.67"
+         height="612"
+         width="682.67"
+         y=".000023337"
+         x="-86.648" />
+    </clipPath>
+  </defs>
+  <rect
+     style="fill:#006600"
+     y="-1.6000001e-06"
+     x="0"
+     width="640"
+     height="480"
+     id="rect3880" />
+  <rect
+     style="fill:#ffffff"
+     y="-1.6000001e-06"
+     x="0"
+     width="640"
+     height="342.86716"
+     id="rect3882" />
+  <rect
+     style="fill:#cc0000"
+     y="-1.6000001e-06"
+     x="0"
+     width="640"
+     height="137.14286"
+     id="rect3884" />
+  <g
+     style="fill:#f8c300"
+     id="g3886"
+     transform="matrix(0.68671429,0,0,0.68671429,-160,-1.6e-6)">
+    <path
+       inkscape:connector-curvature="0"
+       d="m 672,340.7 a 12.6,12.6 0 0 1 23.3,6.9 l 0,60 9.4,0 0,-60 a 12.6,12.6 0 0 1 23.3,-6.9 29.6,29.6 0 1 0 -66,0"
+       id="path3888" />
+    <path
+       style="fill:#ffffff"
+       inkscape:connector-curvature="0"
+       d="m 678.7,327.66 a 20,20 0 0 1 21.3,9.66 20,20 0 0 1 21.3,-9.66 21.6,21.6 0 0 0 -42.6,0"
+       id="path3890" />
+    <path
+       inkscape:connector-curvature="0"
+       id="w"
+       d="m 696.3,376.627 a 38,38 0 0 1 -63.846,24.316 39.6,39.6 0 0 1 -69.734,17.467 c 3.6496,36.426 68.262,28.989 62.32,-6.4288 17.164,30.116 64.873,21.49 66.91,-16.4 z" />
+    <use
+       height="100%"
+       width="100%"
+       y="0"
+       x="0"
+       xlink:href="#w"
+       transform="matrix(-1,0,0,1,1400,0)"
+       id="use3893" />
+    <path
+       inkscape:connector-curvature="0"
+       id="r"
+       d="m 668.84,441.31 c -7.6181,16.446 -22.846,19.271 -36.164,6.9963 0,0 6.3639,-3.7831 11.086,-4.826 -1.0748,-4.6744 1.1291,-10.902 4.2364,-14.324 3.2676,2.2264 7.8036,6.6886 8.9698,11.874 8.0291,-1.0394 11.883,1.2816 11.883,1.2816 z" />
+    <use
+       height="100%"
+       width="100%"
+       y="0"
+       x="0"
+       xlink:href="#r"
+       transform="matrix(0.98666764,0.16280937,-0.16280937,0.98666764,140.23846,-103.23923)"
+       id="use3896" />
+    <use
+       height="100%"
+       width="100%"
+       y="0"
+       x="0"
+       xlink:href="#r"
+       transform="matrix(0.94698622,0.32127419,-0.32127419,0.94698622,296.4141,-182.26886)"
+       id="use3898" />
+    <path
+       style="fill:none;stroke:#f8c300;stroke-width:16"
+       inkscape:connector-curvature="0"
+       d="m 603,478 a 340,340 0 0 1 194,0"
+       id="path3900" />
+    <g
+       transform="translate(700,380)"
+       id="g3902">
+      <g
+         transform="translate(0,-140)"
+         id="g3904">
+        <polygon
+           id="s"
+           points="-488633,-168734 488633,-168734 -301930,416671 0,-613674 301930,416671 "
+           transform="scale(4.8669e-6,4.8669e-6)" />
+      </g>
+      <g
+         id="h">
+        <use
+           height="100%"
+           width="100%"
+           y="0"
+           x="0"
+           xlink:href="#s"
+           transform="translate(-70,-121.24366)"
+           id="use3908" />
+        <use
+           height="100%"
+           width="100%"
+           y="0"
+           x="0"
+           xlink:href="#s"
+           transform="translate(-121.24366,-70)"
+           id="use3910" />
+        <use
+           height="100%"
+           width="100%"
+           y="0"
+           x="0"
+           xlink:href="#s"
+           transform="translate(-140,0)"
+           id="use3912" />
+      </g>
+      <use
+         height="100%"
+         width="100%"
+         y="0"
+         x="0"
+         xlink:href="#h"
+         transform="scale(-1,1)"
+         id="use3914" />
+    </g>
+  </g>
+</svg>

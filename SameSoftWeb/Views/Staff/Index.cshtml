@@ -1,0 +1,62 @@
+﻿
+
+
+
+@{
+    ViewBag.Title = "Staff Page";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    if (Session["Role"] != null)
+    {
+        if (Session["Role"].ToString() == "Staff")
+        {
+
+        }
+        else
+        {
+
+            <b>  authorized Access Only</b>
+
+            return;
+        }
+    }
+    else
+    {
+
+        <b>  authorized Access Only</b>
+        return;
+    }
+
+
+}
+
+<h2>Staff Panel</h2>
+
+
+
+<div class="row" style="width:60%;margin:auto;">
+
+    <hr />
+
+    <div class="col-md-6" style="">
+
+        <a href="/Customers" class="btn btn-primary btn-lg" style="width:260px;"> Customers @{  }</a>
+        <hr />
+        <a href="/Applications" class="btn btn-primary btn-lg" style="width:260px;"> Systems & Applications @{  }</a>
+
+    </div>
+
+    <div class="col-md-6">
+        <a href="#" class="btn btn-primary btn-lg" style="width:260px;">  Customer Payment  @{  }</a>
+        <hr />
+        <a href="/Users" class="btn btn-primary btn-lg" style="width:260px;"> Users @{  }</a>
+
+
+    </div>
+
+
+
+
+
+    </hr>
+</div>

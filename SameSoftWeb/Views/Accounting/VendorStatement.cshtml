@@ -1,0 +1,270 @@
+﻿@{
+    ViewBag.Title = "Vendor Transactions";
+
+    SameSoftWeb.Models.SameSoftwareWebEntities db = new SameSoftWeb.Models.SameSoftwareWebEntities();
+
+
+    //var p_methods = db.tblPaymentMethods.Select(a => new
+    //{
+    //    id = a.Payment_Method,
+    //    name = a.Payment_Method
+    //}).OrderBy(a => a.name).ToList();
+
+
+
+    int id = (int)ViewBag.id;
+
+
+    var items = db.sp_get_vendor_transactions_by_id(id).Select(x => new
+    {
+        vendorid = x.VendorID,
+        vendorname = x.Vendor_Name,
+        phone = x.Tel,
+        address = x.Address,
+        debit = x.Debit,
+        credit = x.Credit,
+        description = x.Description,
+        trandate = x.Trans_Date.ToShortDateString(),
+        invoiceid = x.Vendor_Tran_ID,
+        tranid = x.Vendor_Transaction_Detail_id,
+        user = x.FullName,
+        type = x.Vendor_Tran_Type_ID
+
+
+
+    }).ToList();
+
+    float totald = 0;
+    float totalc = 0;
+
+
+
+    int vendorid = 0;
+    string vendorname = "";
+    string phone = "";
+    string address = "";
+    int invoiceid = 0;
+    if (items.Count > 0)
+    {
+        vendorname = items[0].vendorname;
+        vendorid = items[0].vendorid;
+        phone = items[0].phone;
+        address = items[0].address;
+        invoiceid = items[0].invoiceid;
+    }
+
+}
+
+<style>
+    td {
+        padding: 4px;
+        text-align: center;
+    }
+
+    th {
+        padding: 4px;
+        text-align: center;
+    }
+</style>
+
+
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="content-body">
+    <!-- Basic Tables start -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title"><b>Add Transactions to Invoice </b></h3>
+                    <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                    <div class="heading-elements">
+                        <ul class="list-inline mb-0">
+                            <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                            <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
+                            <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                            <li><a data-action="close"><i class="ft-x"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card-content collapse show">
+                    <div class="card-body">
+                        <div style="width:90%;padding:7px;border:1px #f6ecec;margin:auto;border:1px solid #ccc; border-radius:4px;padding:5px;border-top:5px solid #ccc;margin-bottom:10px;">
+                            <h4> New Vendor Transaction (@vendorname)</h4>
+
+                            @if (Request.QueryString["msg"] != null)
+                            {
+                                <h4 style="color:blue;">* @Request.QueryString["msg"] </h4>
+                            }
+
+                            <div style="width:90%;padding:7px;border:1px #f6ecec;margin:auto;">
+                                <button class="btn btn-primary" onclick="PrintElem();">  <i class="fa fa-print"></i> Print    </button>
+                            </div>
+
+                            <div style="width:90%;padding:7px;border:1px #f6ecec;margin:auto;background-color:#F6FBFF;border:1px solid #a6fcfc" id="invoice">
+
+
+                                <center style="font-size:13pt;font-weight:unset;">
+                                 
+                                    <hr />
+                                    <b> Vendor Transactions </b>
+                                    <hr />
+                                </center>
+                                <table style="width:98%;padding:3px;">
+
+                                    <tr><td>Vendor No.  </td> <td> <b>@vendorid</b> </td>  <td>Vendor Name.  </td> <td> <b>@vendorname</b> </td> <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td> </tr>
+
+                                        <tr><td>Vendor Phone.</td> <td><b>@phone</b></td>     <td></td></tr>
+                                        <tr> <td>Address</td> <td><b>@address</b></td> <td>Transaction ID</td> <td><b>@invoiceid</b></td><td></td></tr>
+
+
+                                </table>
+                                <hr />
+
+                                <table class="tb table-bordered" style="width:98%;padding:3px;">
+                                    <thead>
+                                    <th> Trans_ID </th>
+                                    <th> Transaction Date </th>
+                                    <th>Description </th>
+                                    <th>Invoice </th>
+                                    <th>User </th>
+                                    <th> Debit </th>
+                                    <th>Credit </th>
+                                    <th>Balance</th>
+                                    </thead>
+
+                                    @foreach (var x in items)
+                                    {
+
+                                        //var inv = db.tblInventory_Transactions.Where(a => a.Inventory_Tran_ID == x.pid).Select(a => a.Invoice_No).FirstOrDefault();
+
+                                        //string purid = (x.pid == null) ? "N/A" : "<a href='/Purchasing/Receipt/?id=" + @x.pid + "' class='fa fa-print'> Inv.<text></text>" + @inv;
+
+                                        totald = totald + @x.debit;
+                                        totalc = totalc + @x.credit;
+                                        float balance = 0;
+                                        balance = totalc - totald;
+
+                                        <tr>
+                                            @if (x.credit > 0 && x.debit == 0)
+                {
+                                                <td>
+                                                    <a href="\Vendors\InstallmentPlan\?id=0&vendor=@id&total=@x.credit&trans_detail_id=@x.tranid"><i class="fa fa-calendar" alt="Create Installment Plan"></i> @x.tranid</a>
+                                                    @*<a href="/Vendors/DeleteTransction/?id=@x.tranid" onclick="return confirm('Sure to Delete Vendor Transction');" alt="Delete Transaction"><i class="fa fa-trash-o" style="color:red;font-size:13pt"></i></a>*@
+
+                                                </td>
+
+                                            }
+                                            else
+                                            {
+                                                <td>
+                                                    @x.tranid
+
+                                                    @*<a href="/Vendors/DeleteTransction/?id=@x.tranid" onclick="return confirm('Sure to Delete Vendor Transction');"><i class="fa fa-trash-o" style="color:red;font-size:13pt"></i></a>*@
+
+                                                </td>
+
+                                            }
+
+                                            &nbsp;
+
+
+
+                                            <td>@x.trandate</td>
+                                            <td>@x.description</td>
+                                            @*<td> @Html.Raw(purid)</td>*@
+
+                                            <td>@x.user</td>
+                                            <td>@x.debit</td>
+                                            <td>@x.credit</td>
+                                            <th>@balance</th>
+
+                                        </tr>
+
+                                    }
+                                    <tr> <td></td>  <td></td> <td></td><td></td>  <td> Total </td> <td><b>$@totald  </b></td><td><b>$@totalc  </b></td> <td><b style="border-bottom:1px double blue;"><b>$ @{ Write(totalc - totald); } </b></td>  </b></tr>
+                                    <tr> <td></td>  <td></td><td></td> <td></td> <td></td>  <td> Balance </td> <td colspan="2"><b style="border-bottom:1px double blue;"><b>$ @{ Write(totalc - totald); } </b></td>  </b></td></tr>
+                                </table>
+
+
+
+                            </div>
+
+
+                            <br /><br />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Basic Tables end -->
+    </div>
+
+    <script>
+        function PrintElem() {
+
+
+
+            var mywindow = window.open('', 'PRINT', 'height=400,width=600');
+
+
+            var st = '<style type="text/css">' +
+            '.tb th, .tb td {' +
+            'border:1px solid #ccc;padding:3px;border-collapse:collapse;text-align:center;' +
+            'padding;0.5em;' +
+            '}  .tb th{border-bottom:3px solid #ccc;} table{border-collapse:collapse;}' +
+            '</style>'
+
+            mywindow.document.write('<html><head>' + st + '<link ref="stylesheet" href="~\Content\bootstrap.min.css">  <title>' + '' + '</title>');
+            mywindow.document.write('</head><body >');
+
+            mywindow.document.write(document.getElementById("invoice").innerHTML);
+            mywindow.document.write('</body></html>');
+
+            mywindow.document.close(); // necessary for IE >= 10
+            mywindow.focus(); // necessary for IE >= 10*/
+
+            mywindow.print();
+            mywindow.close();
+
+            return true;
+        }
+        function ViewCash() {
+
+            var va = $("#trantype").val();
+            if (va == 3) {
+                $("#cashaccx").prop("disabled", true);
+
+                $("#discountacc").prop("disabled", false);
+            }
+            else {
+                $("#cashaccx").prop("disabled", false);
+
+                $("#discountacc").prop("disabled", true);
+            }
+        }
+
+        function validate() {
+
+            var t = $("#trantype").val();
+            var c = $("#cashacc").val();
+
+            if (t == "") {
+                alert("Please Select Transaction Type");
+                return false;
+            }
+
+            if (t == 1 && c == "") {
+
+                alert("Please Select Cash Account");
+                return false;
+            }
+
+        }
+
+
+    </script>
+
+

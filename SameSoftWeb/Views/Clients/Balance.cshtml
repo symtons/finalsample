@@ -1,0 +1,67 @@
+﻿
+@{
+    ViewBag.Title = "Balance";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+    var db = new SameSoftWeb.Models.SameSoftwareWebEntities();
+    var list = db.sp_get_Customer_Balanace().Select(a => new
+    {
+        a.Balance,
+        a.Contact_Numbers,
+        a.CustomerID,
+        a.Cutomer_Type,
+        a.Customer_Name
+    }).ToList();
+}
+
+<br /><br />
+<div class="card" style="padding:6px;">
+ <h2>Client Balance</h2>
+</div>
+
+<div class="card" style="padding:6px;">
+<table class="table-bordered" style="width:100%;" >
+    <thead class="btn-success">
+        <th>Client ID</th>
+        <th>Client Name</th>
+        <th>Contact</th>
+        <th>Balance</th>
+    </thead>
+    @{ 
+        float total = 0;
+    }
+    @foreach(var x in list)
+    {
+        total += (float)x.Balance;
+        <tr>
+            <td>@x.CustomerID</td>
+            <td><a href="/Clients/statement/@x.CustomerID"> @x.Customer_Name </a></td>
+            <td>@x.Contact_Numbers</td>
+            <td>@x.Balance</td>
+        </tr>
+    }
+    <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td><b>@total</b></td>
+    </tr>
+</table>
+
+    </div>
+
+
+
+<style>
+
+    td,th{
+        
+        padding:4px;
+    }
+</style>
+
+              </div>
+            </div>
+        </div>
+    </div>
+</section>

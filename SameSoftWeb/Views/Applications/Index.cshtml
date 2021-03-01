@@ -1,0 +1,62 @@
+﻿@if (Session["Role"].ToString() == "Customer")
+{
+    <b>For Authorized Access Only</b>
+    return;
+}
+@model IEnumerable<SameSoftWeb.Models.tblApplication>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<!--Start Sercice Details Area -->
+<section class="service_details_area section_padding">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-9 col-lg-9 col-sm-12 col-xs-12">
+                <div class="service_details_page_content">
+                    <h2>SAMESOFT APPLICATIONS</h2>
+
+                    <p>
+                        @Html.ActionLink("Create New", "Create")
+                    </p>
+                    <table class="table table-bordered">
+                        <tr class="btn-success">
+                            <th>
+                                @Html.DisplayNameFor(model => model.Application_Name)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Type)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Description)
+                            </th>
+                            <th></th>
+                        </tr>
+
+                        @foreach (var item in Model)
+                        {
+                            <tr class="btn-default">
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Application_Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Type)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Description)
+                                </td>
+                                <td>
+                                    @Html.ActionLink("Edit", "Edit", new { id = item.Application_ID }) |
+                                    @Html.ActionLink("Details", "Details", new { id = item.Application_ID }) |
+                                    @*@Html.ActionLink("Delete", "Delete", new { id=item.Application_ID })*@
+                                </td>
+                            </tr>
+                        }
+
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

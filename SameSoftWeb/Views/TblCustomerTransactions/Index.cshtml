@@ -1,0 +1,106 @@
+﻿@model IEnumerable<SameSoftWeb.Models.TblCustomerTransaction>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<!--Start Sercice Details Area -->
+<section class="service_details_area section_padding">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-9 col-lg-9 col-sm-12 col-xs-12">
+                <div class="service_details_page_content">
+                    <h2>Index</h2>
+
+                    <p>
+                        @Html.ActionLink("Create New", "Create")
+                    </p>
+                    <table class="table">
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Transaction_Date)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Transaction_type_id)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Debit)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Credit)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Customer_ID)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.UserID)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Description)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Due_Date)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Status)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Note)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.User_ID)
+                            </th>
+                            <th></th>
+                        </tr>
+
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Transaction_Date)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Transaction_type_id)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Debit)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Credit)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Customer_ID)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.UserID)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Description)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Due_Date)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Status)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Note)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.User_ID)
+                                </td>
+                                <td>
+                                    @Html.ActionLink("Edit", "Edit", new { id = item.Transction_ID }) |
+                                    @Html.ActionLink("Details", "Details", new { id = item.Transction_ID }) |
+                                    @Html.ActionLink("Delete", "Delete", new { id = item.Transction_ID })
+                                </td>
+                            </tr>
+                        }
+
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

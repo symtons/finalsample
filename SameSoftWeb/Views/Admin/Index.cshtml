@@ -1,0 +1,138 @@
+﻿
+
+<div class="content-body">
+    <!-- Basic Tables start -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title"><b>Adminisration Panels</b></h3>
+                    <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                    <div class="heading-elements">
+                        <ul class="list-inline mb-0">
+                            <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                            <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
+                            <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                            <li><a data-action="close"><i class="ft-x"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card-content collapse show">
+                    <div class="card-body">
+
+                        @{
+                            ViewBag.Title = "Index";
+                            Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+                            if (Session["Role"] != null)
+                            {
+                                if (Session["Role"].ToString() == "Admin")
+                                {
+
+                                }
+                                else
+                                {
+
+                                    <b>
+                                        <br /><br />
+                                        <br />
+
+
+                                        <center>
+
+                                            <h3> Welcome @Session["Fullname"]</h3>
+                                        </center>
+                                    </b>
+
+
+
+                                    <div class="row card-block" style="width:60%;margin:auto;">
+
+
+                                        <div class="col-md-6" style="">
+                                            <a href="/DailyTasks" class="btn btn-primary btn-lg" style="width:260px;"> Daily Tasks @{  }</a>
+                                            <hr />
+                                            <a href="/DailyTasks/Create" class="btn btn-primary btn-lg" style="width:260px;"> Add Daily Tasks @{  }</a>
+                                            <hr />
+                                            <a href="/Sales/NewOrder" class="btn btn-primary btn-lg" style="width:260px;"> Sales @{  }</a>
+                                            <hr />
+                                            <a href="/Clients" class="btn btn-primary btn-lg" style="width:260px;"> Customers @{  }</a>
+                                            <hr />
+                                            <a href="/Accounting/CreateCustomerInvoice" class="btn btn-primary btn-lg" style="width:260px;"> Create Cust Invoice @{  }</a>
+                                            <hr />
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <a href="/Connections" class="btn btn-primary btn-lg" style="width:260px;"> Manage Connections</a>
+                                            <hr />
+                                            <a href="/Security/GetConnectionString" class="btn btn-primary btn-lg" style="width:260px;"> Generate Connection @{  }</a>
+                                        </div>
+
+
+
+                                    </div>
+
+
+
+                                                        return;
+                                                    }
+                                                }
+                                                else
+                                                {
+
+                                                    <b>  authorized Access Only</b>
+                                                    return;
+                                                }
+
+
+                        }
+
+                   
+
+                        <div class="row card-block" style="width:60%;">
+
+                            <hr />
+
+                            <div class="col-md-5" style="">
+                                <a href="/DailyTasks/Create" class="btn btn-primary btn-lg" style="width:260px;"> Add Daily Tasks @{  }</a>
+                                <hr />
+                                <a href="/DailyTasks" class="btn btn-primary btn-lg" style="width:260px;"> Daily Tasks @{  }</a>
+                                <hr />
+                                <a href="/Sales/NewOrder" class="btn btn-primary btn-lg" style="width:260px;">Sales @{  }</a>
+                                <hr />
+                                <a href="/Clients" class="btn btn-primary btn-lg" style="width:260px;"> Customers @{  }</a>
+                                <hr />
+                                <a href="/Applications" class="btn btn-primary btn-lg" style="width:260px;"> Applications @{  }</a>
+                                <hr />
+                                <a href="/Tasks" class="btn btn-primary btn-lg" style="width:260px;"> Tasks @{  }</a>
+                          </div>
+                            <hr />
+                            <br />
+                            <div class="col-md-5" style="">
+                                <a href="/Accounting/CreateCustomerInvoice" class="btn btn-primary btn-lg" style="width:260px;"> Create Cust Invoice @{  }</a>
+                                <hr />
+                                <a href="/Issues" class="btn btn-primary btn-lg" style="width:260px;"> Reported Issues @{  }</a>
+                                <hr />
+                                <a href="/Users" class="btn btn-primary btn-lg" style="width:260px;"> Users @{  }</a>
+
+                                <hr />
+                                <a href="/Security/GetConnectionString" class="btn btn-primary btn-lg" style="width:260px;"> Generate Connection @{  }</a>
+                                <hr />
+                                <a href="/Connections" class="btn btn-primary btn-lg" style="width:260px;"> Manage Connections  @{  }</a>
+                               
+                                <hr />
+                                <a href="/Customers/CustomerPost" class="btn btn-primary btn-lg" style="width:260px;"> Post Mantainance  @{  }</a>
+                              
+                                @*<hr />
+                                    <a href="/FeatureRequests" class="btn btn-primary btn-lg" style="width:260px;"> Requested Features @{  }</a>*@
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Basic Tables end -->
+</div>

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" height="480" width="640" version="1">
+  <path fill="#006233" d="M0 0h640v480H0z"/>
+  <circle cx="320" cy="180" r="166" fill="#ffc400"/>
+  <path d="M243.426 11.216A160 160 0 0 0 170 140a160 160 0 0 0 160 160 160 160 0 0 0 160-160 160 160 0 0 0-73.433-128.784H243.426z" fill="#006233"/>
+  <g id="b" transform="matrix(6 0 0 6 320 140)">
+    <path id="a" d="M0-12L-3.708-.687l6.706 1.864" fill="#ffc400"/>
+    <use height="100%" width="100%" xlink:href="#a" transform="scale(-1 1)"/>
+  </g>
+  <use height="100%" width="100%" xlink:href="#b" transform="rotate(72 320 140)"/>
+  <use height="100%" width="100%" xlink:href="#b" transform="rotate(144 320 140)"/>
+  <use height="100%" width="100%" xlink:href="#b" transform="rotate(-144 320 140)"/>
+  <use height="100%" width="100%" xlink:href="#b" transform="rotate(-72 320 140)"/>
+</svg>

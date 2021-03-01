@@ -1,0 +1,150 @@
+﻿
+@{
+    ViewBag.Title = "Multi Post Charges";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var db = new SameSoftWeb.Models.SameSoftwareWebEntities();
+
+    var customers = db.tblCustomers.Select(a => new
+    {
+        a.CustomerID,
+        a.Customer_Name,
+        a.Cutomer_Type,
+        a.Maintainance,
+        a.Status
+    }).Where(a => a.Status == "Active").OrderBy(a => a.Cutomer_Type).ToList();
+
+    var trantypes = db.tblCustomerTranactionTypes.Select(a => new
+    {
+        a.Transaction_type_id,
+        a.Transaction_type
+    }).ToList();
+
+
+}
+
+                    <form method="get" action="/Clients/PostMultiTrans" class="xform-horizontal xform-material">
+
+
+                        <div class="row card" style="padding:10px;">
+
+                            <div class="col-md-3">
+
+                                Transaction Type
+                                <select name="trantype" class="form-control">
+                                    @foreach (var x in trantypes)
+            {
+                                        <option value="@x.Transaction_type_id">@x.Transaction_type</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                Amount
+                                <input type="text" class="form-control" name="fee" id="topost" />
+                            </div>
+                            <div class="col-md-3">
+                                Description
+                                <input type="text" class="form-control" name="desc" />
+                            </div>
+
+                            <div class="col-md-3">
+                                Due Date (Collection Date)
+                                <input type="date" class="form-control" name="duedate" />
+                            </div>
+                            <div class="col-md-3">
+                                Tran Date
+                                <input type="date" class="form-control" name="trandate" />
+                            </div>
+                            <div class="col-md-3">
+
+                                Total to Post
+                                <input type="text" readonly="" id="total" class="form-control" name="" />
+                            </div>
+                            <div class="col-md-3">
+                                <br />
+                                <input type="submit" class="btn btn-primary" value="Post Charges" />
+                            </div>
+                        </div>
+
+
+                        <div class="card" style="padding:60px;padding-left:160px;padding-right:160px;">
+                            <table class="table-bordered">
+                                <thead>
+                                <th>No.</th>
+                                <th>Customer Name</th>
+                                <th>Customer Type</th>
+                                <th>Maintainance</th>
+                                <th>Select</th>
+                                </thead>
+                                @{
+                                    int i = 0;
+                                }
+                                @foreach (var x in customers)
+                                {
+                                    i += 1;
+                                    <tr>
+                                        <td>@i</td>
+                                        <td>@x.Customer_Name</td>
+                                        <td>@x.Cutomer_Type</td>
+                                        <td>@x.Maintainance</td>
+                                        <td style="">
+                                            <input type="hidden" id="@x.CustomerID" name="id" />
+                                            <input type="checkbox" class="chk" onchange="check(@x.CustomerID)" id="chk_@x.CustomerID" />
+
+
+                                        </td>
+                                    </tr>
+                                }
+
+                            </table>
+
+                        </div>
+
+
+                    </form>
+
+
+
+                    <script>
+
+
+                        function check(id) {
+
+
+                            var topost = $("#topost").val();
+                            var isc = $("#chk_" + id).is(":checked");
+
+                            if (isc) {
+                                $("#" + id).val(id);
+                            }
+                            else {
+                                $("#" + id).val("");
+                            }
+
+                            var cnt = 0;
+
+                            $(".chk").each(function () {
+
+                                if (this.checked) {
+
+                                    cnt = cnt + 1;
+                                }
+                            });
+
+
+                            var t = cnt * topost;
+
+                            $("#total").val(t);
+                        }
+
+                    </script>
+
+
+                    <style>
+                        th, td {
+                            padding: 6px;
+                        }
+                    </style>
+
+
+

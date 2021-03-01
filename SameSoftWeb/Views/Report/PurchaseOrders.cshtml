@@ -1,0 +1,261 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+
+}
+<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+<style type="text/css">
+    .col-md-4 {
+        padding-top: 5px;
+    }
+
+    td {
+        border: 1px solid black;
+    }
+</style>
+
+<section class="content-header">
+    <h1>
+        Accounting
+        <small>Expense Payment</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-th-list"></i>Accounting</a></li>
+        <li class="active">Expense Payment</li>
+    </ol>
+</section>
+<section class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <!-- general form elements -->
+            <div class="box box-primary">
+
+
+
+
+                <div class="box-body ">
+
+
+                    <br />
+                    <div id="tabletitle">
+                        <h3>Expense Report</h3>
+                        <hr />
+                        From <input type="date" id="fromdate" class="form-control" style="width:200px;display:inline-block" /> &nbsp; &nbsp; &nbsp;
+                        To <input style="width:200px;display:inline-block" type="date" class="form-control" id="todate" />
+
+
+
+
+                        @{
+                            using (var db = new SameSoftWeb.Models.SameSoftwareWebEntities())
+                            {
+                                if (Session["UserID"] != null && ((int)Session["UserRole"] == 6))
+                                {
+                                    var userid = (int?)Session["UserID"];
+
+                                    <text><input type="hidden" value="@userid" name="user" id="user" /> </text>
+                                }
+                                else
+                                {
+                                    var user = db.tblUsers.Select(x => new
+                                    {
+                                        user = x.UserID,
+                                        roleid = x.Role_id,
+                                        name = x.Login_Name,
+                                    }).Where(i => i.roleid == 6).ToList();
+
+                                    ViewBag.user = new SelectList(user, "user", "name", 0);
+                                    @Html.DropDownList("user", null, "Select User", new { @class = "form-control", onchange = "", @style = "display:inline;width:150px;", @id = "user" })
+
+
+                                }
+                            }
+                        }
+
+
+
+
+
+                        &nbsp; &nbsp; &nbsp;
+                        @{
+                            using (var db = new SOSMSE_SYS.Models.SosmeDbEntities())
+                            {
+                                var deposit = db.Business_Division.Select(x => new
+                                {
+                                    NameOfAccount = x.Business_Division_Id,
+                                    AccountNumber = x.Name,
+                                }).ToList();
+                                ViewBag.exps = new SelectList(deposit, "AccountNumber", "NameOfAccount", "");
+                                @Html.DropDownList("exps", null, "Filter by Type", new { @class = "form-control", onchange = "", @style = "width:150px;display:inline;", @id = "exps" })
+                            }
+
+                        }
+
+
+
+
+
+
+
+
+                        <input type="submit" id="btnview" style="display:inline-block;" class="btn btn-primary" value="View" onclick="view();" />
+                        &nbsp;&nbsp;  <input type="submit" value="Print" class="btn btn-primary" id="btnprint" onclick="print();" style="height:33px;width:67px;display:inline-block;">
+
+                        <hr />
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12" id="divpaymentlist">
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+            <!-- /.box -->
+        </div>
+        <!--/.col (left) -->
+    </div>
+</section>
+
+@section scripts{
+    <script type="text/javascript">
+
+
+        $(document).ready(function () {
+            $('#datepicker').datepicker({
+                startDate: '+0d',
+
+            }).on('change', function () {
+                $('.datepicker').hide();
+            });
+
+            getexpenses();
+        });
+
+
+
+    </script>
+
+
+    <script type="text/javascript">
+
+        function view()
+        {
+            idx = $("#user").val();
+          var  exptype = $("#exps").val();
+
+            $.ajax({
+                type: "POST",
+                global: false,
+                data: { id: idx, fromdate: $("#fromdate").val(), todate: $("#todate").val(), exps: exptype },
+                url: url = "/Accounting/ExpenseReport",
+                success: function (data) {
+
+                    $("#tabletitle").show("fade");
+                    $("#divpaymentlist").show("fade");
+                    var str = "";
+
+                    str += '<table  class="table table-bordered" id="tabledivpaymentlist"><thead><tr class="alert-info">';
+                    str += '<th style="width: 15vw; text-align: center;">Expense Type</th>';
+                    str += '<th style="width: 15vw; text-align: center;">Expense Date</th>';
+
+                    str += '<th style="width: 15vw; text-align: center;">Amount</th>';
+                    str += '<th style="width: 15vw; text-align: center;">Note</th>';
+                    str += '<th style="width: 15vw; text-align: center;">Cheque No. / Note</th>';
+                    str += '<th style="width: 15vw; text-align: center;">Payment Method</th>';
+                    str += '<th style="width: 15vw; text-align: center;">User</th>';
+                    str += '</tr></thead><tbody>';
+                    if (!IsEmpty(data)) {
+                        var total = 0;
+                        $.each(data, function (i, rec) {
+                            var d = new Date(parseInt(rec.date.substr(6)));
+                            str += '<tr>';
+                            str += '<td style="text-align: center;">' + rec.type + '</td>';
+                            str += '<td style="text-align: center;">' + d.getDate() + "/" + d.getMonth() + 1 + "/" + d.getFullYear() + '</td>';
+                            str += '<td style="text-align: center;">' + rec.amount + '</td>';
+                            str += '<td style="text-align: center;">' + rec.note + '</td>';
+                            str += '<td style="text-align: center;">' + rec.voucher + '</td>';
+                            str += '<td style="text-align: center;">' + rec.payment + '</td>';
+                            str += '<td style="text-align: center;">' + rec.user + '</td>';
+                            total += rec.amount;
+
+                        });
+
+                        str += '</tr><tr><td></td> <td style="text-align: right;">Sub Total</td> <td style="text-align: center;"><b> ' + total + '</b></td><td></td><td></td><td></td><td></td></tr>';
+                    }
+                    str += '</tbody></table>';
+                    $("#divpaymentlist").html(str);
+
+                    $("#tabledivpaymentlist").dataTable({
+                        "bPaginate": false,
+                        "bLengthChange": false,
+                        "bFilter": false,
+                        "bSort": false,
+                        "bInfo": false,
+                        "bAutoWidth": false,
+                        "bDestroy": true,
+                        "bRetrieve": false
+                    });
+
+                    if (response.status == false) {
+                        if (!IsEmpty(response.output)) {
+                            new PNotify({
+                                title: 'Error!',
+                                text: "" + response.output + "",
+                                type: 'error',
+                                addclass: 'notification-success',
+                                icon: 'fa fa-check',
+                                delay: '1000'
+
+                            });
+                        }
+                    }
+
+                },
+                error: function (response) {
+                    if (console) {
+                        console.log("Error", response);
+                        new PNotify({
+                            title: 'Error!',
+                            text: "Please Select Valid Date",  // + response.responseText + "",
+                            type: 'error',
+                            addclass: 'notification-success',
+                            icon: 'fa fa-check',
+                            delay: '1000'
+                        });
+                    }
+                },
+                dataType: "json"
+            });
+        }
+
+
+
+
+        function print() {
+            debugger;
+            var mywindow = window.open('', 'PRINT', 'height=800,width=1200');
+
+
+            mywindow.document.write('<html><style> #divpaymentlist{border:1px solid grey;border-collapse:collapse;} table{cell-spacing:0;border-collapse:collapse;} td{border:1px solid grey;border-collapse:collapse;} th{font-weight:bold;border:1px solid grey;border-collapse:collapse;background-color:gery;} </style>');
+            var fr = "From " + $("#fromdate").val() + "   To " + $("#todate").val();
+
+            mywindow.document.write('<body > <center> <h2>Expense Report </h2>' + fr + "</center> <br>");
+            //   mywindow.document.write('<h1>' + document.title + '</h1>');
+            mywindow.document.write(document.getElementById("divpaymentlist").innerHTML);
+            mywindow.document.write('</body></html>');
+
+            mywindow.document.close(); // necessary for IE >= 10
+            mywindow.focus(); // necessary for IE >= 10*/
+
+            mywindow.print();
+            mywindow.close();
+
+            return true;
+
+        }
+    </script>
+
+
+}

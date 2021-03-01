@@ -1,0 +1,414 @@
+﻿<script>
+    $(document).ready(function () {
+
+
+        $("#from").datepicker({
+            autoClose: true,
+            format: "yyyy/mm/dd"
+        });
+        $("#to").datepicker({
+            autoClose: true,
+            format: "yyyy/mm/dd"
+        });
+    });
+
+
+
+
+</script>
+@if (ViewBag.msg != null)
+
+{
+    <text>
+        <script>
+            bootbox.alert("<b>@ViewBag.msg</b> ");
+        </script>
+    </text>
+}
+@{
+    ViewBag.Title = "InvoiceGroups";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    SameSoftWeb.Models.SameSoftwareWebEntities db = new SameSoftWeb.Models.SameSoftwareWebEntities();
+    int customerid = 0;
+    if (ViewBag.id != null)
+    { customerid = (int)ViewBag.id; }
+
+    var invoices = db.tblCustomerInvoiceGroups.Where(a => a.Customer_ID == customerid).Select(a => new
+    {
+
+        a.Invoice_Group_Id,
+        a.Invoice_Number,
+        a.Invoice_Date,
+        a.Title,
+        a.Description,
+        a.UserID
+        ,
+        a.Customer_ID
+
+    }).ToList();
+
+    var customer = db.tblCustomers.Where(a => a.Status == "Active").Select(a => new
+    {
+        id = a.CustomerID,
+        name = a.Customer_Name
+
+    }).ToList();
+
+
+    int? invid = 0;
+    try
+    {
+        invid = db.tblCustomerInvoiceGroups.Select(a => a.Invoice_Number).Max();
+    }
+    catch (Exception e) { }
+    int intvoice_aut_id = invid == null ? 0 : (int)invid + 1;
+
+
+
+}
+
+
+<div class="content-body">
+    <!-- Basic Tables start -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title"><b> Customer Statement </b></h3>
+                    <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                    <div class="heading-elements">
+                        <ul class="list-inline mb-0">
+                            <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                            <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
+                            <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                            <li><a data-action="close"><i class="ft-x"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card-content collapse show">
+                    <div class="card-body">
+
+                        <div class="row" style="width:;margin:auto;">
+                            <h3>Customer Invoices for @db.tblCustomers.Where(a => a.CustomerID == customerid).Select(a => a.Customer_Name).FirstOrDefault()</h3>
+                        </div>
+
+                        <div class="row">
+
+
+
+                            @if (customerid == 0)
+                            {
+                                <div class="row" style="width:40%;margin:auto;">
+                                    <form method="post" action="/Cust/InvoiceGroups">
+                                        <center>
+
+                                            <hr />
+
+                                            @Html.DropDownList("customer", new SelectList(customer, "id", "name"), "Select Customer", new { @class = "form-control" })
+                                            <br />
+                                            <input type="submit" class="btn btn-primary" value="Next" />
+
+                                            <hr />
+                                        </center>
+                                    </form>
+                                </div>
+                                return;
+                            }
+
+
+
+
+
+                            @if (ViewBag.invoice_id == null)
+                            {
+
+
+                                <div class="col-md-4" style="">
+
+                                    <form method="post" action="/Cust/CreateInvoiceGroup" style="font-weight:bold; border:1px solid grey;border-top:4px solid grey;border-radius:5pt;width:80%;padding:15px;background-image:url(/img/page.png)">
+                                        <h3>Create New Invoice</h3>
+                                        <input type="hidden" name="customer_id" required="" value="@customerid" />
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <input type="text" name="invoice_number" required="" value="@intvoice_aut_id" class="form-control" placeholder="Invoice No." />
+                                            </div>
+                                            <div class="col-md-8">
+                                                <input type="text" name="title" class="form-control" required="" placeholder="Invoice Name" />
+                                            </div>
+                                        </div>
+                                        <br />
+                                        <input type="text" name="desc" class="form-control" required="" placeholder="Invoice Description" />
+                                        <br />
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <input type="text" name="date" id="from" required="" class="form-control" placeholder="" value="@DateTime.UtcNow.AddHours(3).Date.ToString("yyyy-MM-dd")" />
+
+                                            </div>
+                                            <div class="col-md-2">
+                                                <input type="submit" class="btn btn-primary" value="Create" />
+                                            </div>
+                                        </div>
+
+
+                                    </form>
+
+                                    <br /><br /><br /><br />
+                                </div>
+                                <div class="col-md-7" style="margin-left:-100px" >
+                                    <b> Invoices List/</b>
+                                    <hr />
+                                    <table class="table table-bordered">
+                                        <thead>
+                                        <th>ID</th>
+                                        <th>No.</th>
+                                        <th> Date</th>
+                                        <th>Title</th>
+                                        <th>User</th>
+                                        <th>Note</th>
+                                        <th colspan="3">...</th>
+
+
+                                        @foreach (var x in invoices)
+                {
+                                            <tr>
+                                                <td>@x.Invoice_Group_Id</td>
+                                                <td>@x.Invoice_Number</td>
+                                                <td>
+                                                    @{ Write(DateTime.Parse(x.Invoice_Date.ToString()).ToString("dd/MM/yyyy"));
+                                                }
+                                            </td>
+                                            <td>@x.Title</td>
+                                            <td>@x.Description</td>
+                                            <td>@{Write(db.tblUsers.Where(a => a.UserID == x.UserID).Select(a => a.FullName).FirstOrDefault());}</td>
+                                            <td>
+                                                <a href="/Cust/InvoiceGroups/?customer=@x.Customer_ID&invoice_id=@x.Invoice_Group_Id" class="btn btn-success"> View </a>
+
+                                            </td>
+                                            <td>
+                                                <a href="/Cust/PrintInvoice/?id=@x.Invoice_Group_Id" class="btn btn-default"><i class="fa fa-print"></i> &nbsp; Print </a>
+
+                                            </td>
+
+                                            <td>
+                                                <a href="/Cust/DeleteInvoiceGroup/?id=@x.Invoice_Group_Id" class="btn btn-danger" onclick="return confirm('Sure to Delete this Invoice?');"><i class="fa fa-print"></i> &nbsp; Del </a>
+
+                                            </td>
+
+                                        </tr>
+                                                }
+
+                                    </table>
+                                </div>
+
+                                
+
+                                                }
+
+
+
+
+
+
+
+                            @if (ViewBag.invoice_id != null)
+                            {
+                                <div class="col-md-12" style="margin:auto;">
+
+                                    @{
+                                        int id = (int)ViewBag.invoice_id;
+
+                                        var dr = db.tblCustomerInvoiceGroups.Where(a => a.Invoice_Group_Id == id).FirstOrDefault();
+                                        if (dr != null)
+                                        {
+
+
+                                            <div class="row">
+                                                <text>
+                                                    <div class="col-md-12">
+
+                                                        <div class="list-group" style="display:none;" id="update">
+
+                                                            <form method="get" action="/Customers/UpdateInvoice">
+                                                                <input type="hidden" name="id" value="@dr.Invoice_Group_Id" />
+                                                                <input type="hidden" name="customer" value="@dr.Customer_ID" />
+                                                                <a href="#" class="list-group-item " style="background-color:#67B0D1;color:white;">
+                                                                    Invoice #@dr.Invoice_Number
+                                                                </a>
+                                                                <a href="#" class="list-group-item"> Invoice Number <b><input type="text" class="form-control" name="invoice_num" value="@dr.Invoice_Number" /></b></a>
+                                                                <a href="#" class="list-group-item">Title <b><input type="text" class="form-control" name="title" value="@dr.Title" /></b></a>
+                                                                <a href="#" class="list-group-item">
+                                                                    Invoice Date <b>
+                                                                        <input type="text" class="form-control" name="date" id="to" value="@{Write(DateTime.Parse(dr.Invoice_Date.ToString()).ToString("yyyy/MM/dd")); }" />
+                                                                    </b>
+                                                                </a>
+                                                                <a href="#" class="list-group-item"> Description <b><input type="text" class="form-control" name="desc" value="@dr.Description" /></b></a>
+                                                                <a href="#" class="list-group-item"> Created by <b>@db.tblUsers.Where(a => a.UserID == dr.UserID).Select(a => a.FullName).FirstOrDefault() </b></a>
+
+
+                                                                <j href="#" class="list-group-item">
+
+                                                                    <input type="submit" value="Update" class="btn btn-primary">
+                                                                </j>
+                                                            </form>
+                                                        </div>
+
+
+                                                        <script>
+
+                                                            var update = $("#update").html();
+                                                            function u() {
+
+                                                                var dialog = bootbox.dialog({
+                                                                    title: 'Update Invoice',
+                                                                    message: update
+                                                                });
+
+
+                                                                return false;
+                                                            }
+                                                        </script>
+
+                                                        <div class="list-group">
+                                                            <a href="#" class="list-group-item " style="background-color:#67B0D1;color:white;">
+                                                                Invoice #@dr.Invoice_Number
+                                                            </a>
+                                                            <a href="#" class="list-group-item"> Invoice Number <b>@dr.Invoice_Number</b></a>
+                                                            <a href="#" class="list-group-item">Title <b>@dr.Title</b></a>
+                                                            <a href="#" class="list-group-item">
+                                                                Invoice Date <b>
+                                                                    @{Write(DateTime.Parse(dr.Invoice_Date.ToString()).ToString("dd/MM/yyyy"));
+                                                                    }
+                                                                </b>
+                                                            </a>
+                                                            <a href="#" class="list-group-item"> Description <b>@dr.Description</b></a>
+                                                            <a href="#" class="list-group-item"> Created by <b>@db.tblUsers.Where(a => a.UserID == dr.UserID).Select(a => a.FullName).FirstOrDefault() </b></a>
+
+                                                            <a href="#" class="list-group-item">
+                                                                Last Update <b>
+                                                                    @{Write(DateTime.Parse(dr.Last_Update.ToString()).ToString("dd/MM/yyyy"));}
+                                                                </b>
+
+                                                                <a href="#" class="list-group-item"> Updated by <b>@db.tblUsers.Where(a => a.UserID == dr.Updated_by).Select(a => a.FullName).FirstOrDefault() </b></a>
+
+
+                                                                <j href="#" class="list-group-item">
+
+                                                                    <a href="/Cust/AddInvoiceTransctions/?customer=@customerid&invoice_id=@id" class="btn btn-success"><i class="fa fa-angle-down"></i> Add Transactions </a>
+                                                                    <a href="#" onclick="u()" class="btn btn-primary"><i class="fa fa-angle-down"></i> Update </a>
+
+                                                                    <a href="/Cust/PrintInvoice/?id=@id" class="btn btn-default"><i class="fa fa-print"></i> &nbsp; Print  &nbsp; </a>
+
+                                                                </j>
+                                                        </div>
+
+
+                                                        <br />
+
+                                                        <span>
+
+
+
+                                                        </span>
+
+
+                                                    </div>
+                                                </text>
+                                                @{
+                                                    var trans = db.Pro_Get_Invoice_Group_Details(id).Select(a => new
+                                                    {
+                                                        a.Invoice_Group_Id,
+                                                        a.Cust_Transaction_Detail_id,
+                                                        a.Cust_Tran_ID,
+                                                        a.Dept_Date,
+                                                        a.Tran_Type,
+                                                        a.FullName,
+                                                        a.UserID,
+                                                        a.Airline,
+                                                        a.Debit,
+                                                        a.Credit,
+                                                        a.Status,
+                                                        a.Description
+
+                                                          ,
+                                                        a.Trans_Date
+
+                                                    }).ToList();
+
+                                                }
+                                                <div class="col-md-8">
+                                                    <table class="mnctable" style="width:100%;">
+                                                        <thead class="btn-info">
+                                                        <th>Tran_id</th>
+                                                        <th>Trans_Date</th>
+                                                        <th>Type</th>
+                                                        <th>Description</th>
+                                                        <th>QTY</th>
+                                                        <th>Debit</th>
+                                                        <th>Credit</th>
+                                                        <th>User</th>
+                                                        <th>Remove</th>
+                                                        </thead>
+                                                        @foreach (var y in trans)
+                                                        {
+                                                            <tr>
+                                                                <td>@y.Cust_Transaction_Detail_id</td>
+                                                                <td>@y.Trans_Date.ToString("dd/MM/yyyy")</td>
+                                                                <td>@y.Tran_Type</td>
+                                                                <td>@y.Description</td>
+
+                                                                <td>@db.tblInvoiceGroupDetails.Where(a => a.Cust_Transaction_Detail_id == y.Cust_Transaction_Detail_id).Select(a => a.QTY).FirstOrDefault()</td>
+
+                                                                <td>@y.Debit</td>
+                                                                <td>@y.Credit</td>
+                                                                <td>@y.FullName</td>
+                                                                <td><a href="/Cust/RemoveTranFromInvoice/?id=@y.Invoice_Group_Id&tranid=@y.Cust_Transaction_Detail_id" class="btn btn-info" style="background-color:#ad0707;" onclick="return confirm('Sure to Remove Transaction form this Invoice');"> Remove</a></td>
+                                                            </tr>
+                                                        }
+                                                    </table>
+                                                    @if (trans.Count < 1)
+                                                    {
+                                                        <center>
+                                                            <b>
+                                                                <br /><br /><br />
+                                                                No Transaction in this Invoice <a href="/Cust/AddInvoiceTransctions/?customer=@customerid&invoice_id=@id" class=""><i class="fa fa-angle-down"></i> Add Transactions </a> Now.
+
+                                                            </b>
+                                                        </center>
+                                                    }
+
+                                                </div>
+                                            </div>
+
+                                                    }
+
+
+
+
+
+
+                                    }
+
+                                </div>
+
+                                                    }
+
+
+
+
+
+
+
+
+
+
+
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Basic Tables end -->
+</div>

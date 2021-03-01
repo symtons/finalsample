@@ -1,0 +1,328 @@
+
+@{
+    ViewBag.Title = "Inventory Transactions";
+}
+
+@{
+
+    SameSoftWeb.Models.SameSoftwareWebEntities db = new SameSoftWeb.Models.SameSoftwareWebEntities();
+
+
+
+    DateTime from = DateTime.Now;
+    DateTime to = DateTime.Now;
+    int divid = 0;
+    int marketer = 0;
+
+    if (ViewBag.form != null && ViewBag.divid != null)
+    {
+        from = ViewBag.form;
+        to = ViewBag.to;
+        divid = ViewBag.divid;
+        marketer = ViewBag.marketer;
+    }
+
+    int marketer_id = 0;
+
+    var list = db.tblInventory_Transactions.Where(a => a.Tran_Date >= from && a.Tran_Date <= to && a.Business_Division_Id == divid && a.Marketer_id== marketer && a.Status != "Cancelled" && a.Status != "Refunded" && a.Inventory_type_id == 2).Select(a => new
+    {
+        a.Inventory_Tran_ID,
+        a.Inventory_type_id,
+        a.Payment_Method,
+        a.Payment_Status,
+        a.Customer_ID,
+        a.Discount,
+        a.Total,
+        a.Marketer_id,
+        a.UserID,
+        a.Tran_Date,
+        a.Status
+
+
+
+    }).ToList();
+
+
+    var marketers = db.Marketers.Select(x => new
+    {
+        ID = x.Marketer_id,
+        Name = x.FullName
+    }).ToList();
+
+
+
+
+    var ar = db.Accounts.Where(a => a.Business_Division_Id == divid && a.Account_Class_Id == 5 && a.IsCash == "E").ToList();
+    ViewBag.expense = new SelectList(ar, "AccountCode", "AccountName");
+
+
+
+
+    var cashaccount = db.Accounts.Where(a => a.Business_Division_Id == divid && a.Account_Class_Id == 1 && a.IsCash == "C").ToList();
+    ViewBag.cash = new SelectList(cashaccount, "AccountCode", "AccountName");
+
+}
+
+
+
+
+
+
+
+
+
+
+<h2>Marketer Sales</h2>
+
+
+
+<form method="get" action="\Sales\MarketerSales">
+
+    <div class="row">
+        <div class="col-md-1">
+             Date
+        </div>
+        <div class="col-md-3">
+            <input type="date" name="from" class="form-control" required="" />
+        </div>
+        <div class="col-md-3">
+            <input type="date" name="to" class="form-control" required="" />
+        </div>
+
+        @{
+
+
+            if ((int)Session["RoleID"] == 3)
+            {
+                <input type="hidden" name="divid" id="userid" value="@1" />
+            }
+            else {
+
+                var dividlist = db.Business_Division.Select(x => new
+                {
+                    name = x.Name,
+                    id = x.Business_Division_Id,
+                }).ToList();
+                ViewBag.divid = new SelectList(dividlist, "id", "name", "");
+                <div class="col-md-3">
+                    @Html.DropDownList("divid", null, "Select Business Division", new { @class = "form-control", onchange = "", @style = "width:250px;display:inline;", @id = "exps", @required = "" })
+                </div>
+            }
+        }
+        <div class="col-md-3">
+             @Html.DropDownList("marketer", new SelectList(marketers, "ID", "Name"), "Select Marketer", new { @class = "form-control", @style = "width:250px;font-weight:bold;", @required = "" })
+        </div>
+        <div class="col-md-1">
+            <input type="submit" class="btn btn-primary" />
+        </div>
+        <div class="col-md-1">
+            <button class="btn btn-primary" onclick="PrintElem();">  <i class="fa fa-print"></i> Print    </button>
+        </div>
+
+    </div>
+
+
+
+</form>
+
+<hr />
+
+
+
+<div id="invoice">
+
+
+
+
+
+    <table class="table table-bordered table-hover">
+        <thead>
+        <th> Tran_ID </th>
+        <th>Type </th>
+        <th>Date</th>
+        <th>User</th>
+        <th>Total</th>
+        <th>Discount</th>
+        <th>Customer</th>
+        <th>Marketer</th>
+        <th>Status</th>
+        @*<th>Cancel</th>*@
+
+
+        </thead>
+        @{
+            float total = 0;
+            float discount = 0;
+        }
+        @foreach (var x in list)
+        {
+            total += x.Total;
+            discount += x.Discount;
+            <tr>
+                <td>
+                    @x.Inventory_Tran_ID
+                </td>
+                <td>
+                    @{
+                        var id = @x.Inventory_type_id;
+                        Write(db.Inventory_Types.Where(a => a.Inventory_type_id == id).Select(a => a.Inventory_Type).FirstOrDefault());
+                    }
+
+                <td>
+                    @x.Tran_Date
+                </td>
+                <td>
+
+                    @{
+                        var id2 = @x.UserID;
+                        Write(db.tblUsers.Where(a => a.UserID == id2).Select(a => a.Login_Name).FirstOrDefault());
+                    }
+                </td>
+                <td>
+                    @x.Total
+                </td>
+                <td>
+                    @x.Discount
+                </td>
+                <td>
+                    @{
+                        var id3 = @x.Customer_ID;
+                        Write(db.tblCustomers.Where(a => a.Customer_ID == id3).Select(a => a.Name).FirstOrDefault());
+                    }
+                </td>
+
+                <td>
+                    @{
+                        var id4 = @x.Marketer_id;
+                        marketer_id = (int)x.Marketer_id;
+                        Write(db.Marketers.Where(a => a.Marketer_id == id4).Select(a => a.FullName).FirstOrDefault());
+                    }
+                </td>
+
+                <td>
+                    @x.Status
+                </td>
+
+                @*<td>
+                        <a href="\Accounting\CancelTransaction?id=@x.Inventory_Tran_ID" class="btn btn-danger" onclick="return confirm('Sure to Cancel this Transaction?');">Cancel</a>
+                    </td>*@
+            </tr>
+
+
+
+                        }
+
+
+
+        @{
+            if (ViewBag.marketer == null || list.Count == 0)
+            {
+                return;
+            }
+        }
+
+
+        <tr>
+
+
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>Sub Total</td>
+
+            <td> <b> $@total  </b></td>
+            <td><b> $@discount </b></td>
+            <td>
+                Net : $<b>
+                    @{
+
+                        var j = 99;
+
+                        double? rate = (double)db.Marketers.Where(a => a.Marketer_id == marketer_id).Select(a => a.Rate).FirstOrDefault();
+
+                        double? pay = rate * (total - discount);
+                        Write(total - discount);
+
+
+                    }
+
+                </b>
+
+            </td>
+
+            <td></td>
+
+
+            <td></td>
+
+        </tr>
+
+    </table>
+</div>
+
+    <hr />
+    <h3> Pay Marketer</h3>
+    <div class="col-md-6">
+
+
+        <form method="get" action="\Accounting\PayMarketer">
+
+            <input type="hidden" name="marketer" value="@marketer_id" />
+            <input type="text" class="form-control" name="desc" value="Marketer Payment" />
+
+            Rate : <input type="text" class="form-control" value="@rate" />  Pay <input type="text" name="amount" class="form-control" value="@pay" />
+
+            <br />
+            Asset Account
+            @Html.DropDownList("expense", null, "Select Expense Account", new { @class = "form-control", @required = "" })
+            <br />Cash Account
+            @Html.DropDownList("cash", null, "Select Cash Account", new { @class = "form-control", @required = "" })
+
+
+            <br />
+
+
+
+            <input type="submit" class="btn btn-primary" value="Pay" / >
+        </form>
+
+    </div>
+
+
+
+
+
+
+
+
+
+<script>
+    function PrintElem() {
+
+
+
+        var mywindow = window.open('', 'PRINT', 'height=400,width=600');
+
+
+        var st='<style type="text/css">table{width:100%;}' +
+        ' th, td {' +
+        'border:1px solid #ccc;padding:3px;border-collapse:collapse;text-align:center;' +
+        'padding;0.5em;' +
+        '}  .tb th{border-bottom:3px solid #ccc;} table{border-collapse:collapse;}' +
+        '</style>'
+
+        mywindow.document.write('<html><head>'+st+'<link ref="stylesheet" href="~\Content\bootstrap.min.css">  <title>' + '' + '</title>');
+        mywindow.document.write('</head><body >');
+
+        mywindow.document.write(document.getElementById("invoice").innerHTML);
+        mywindow.document.write('</body></html>');
+
+        mywindow.document.close(); // necessary for IE >= 10
+        mywindow.focus(); // necessary for IE >= 10*/
+
+        mywindow.print();
+        mywindow.close();
+
+        return true;
+    }
+</script>

@@ -1,0 +1,190 @@
+﻿
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+    if (Session["Role"].ToString() != "Admin")
+    {
+        return;
+    }
+
+
+    var db = new SameSoftWeb.Models.SameSoftwareWebEntities();
+
+    var projects = db.tblProjects.Select(a => new
+    {
+        name = a.Project_Title,
+        id = a.Project_ID
+    }).ToList();
+
+    var customers = db.CustomerTasks.Select(a => new
+    {
+        name = a.Name,
+        id = a.Customer_id
+    }).ToList();
+
+
+    var users = db.tblUsers.Select(a => new
+    {
+        name = a.UserName,
+        id = a.UserID
+    }).ToList();
+
+
+}
+
+<h2> Create New Task </h2>
+
+
+
+<div class="content-body">
+    <!-- Basic Tables start -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title"><b>New Task Check-In</b></h3>
+                    <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                    <div class="heading-elements">
+                        <div class="col-md-6 col-8 align-self-center">
+                      
+                                <a href="/CustomerTasks/Create/" class="btn waves-effect waves-light btn-primary pull-right hidden-sm-down"> + Create New Customer</a>
+
+                        </div>
+
+                    </div>
+                </div>
+                <div class="card-content collapse show">
+                    <div class="card-body">
+                        <!--Start Sercice Details Area -->
+                        <section class="service_details_area section_padding">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-md-9 col-lg-9 col-sm-12 col-xs-12">
+                                        <div class="service_details_page_content">
+
+
+                                            <form method="post" action="/Tasks/Create" class="form-horizontal form-material">
+                                                <input type="hidden" name="status" value="Pending" />
+
+                                                <div class="row"  style="width:80%">
+                                                    <br /><br />
+                                                    <div class="col-md-6">
+
+                                                        <div class="form-group">
+                                                            <label class="col-md-12">Task Title</label>
+                                                            <div class="col-md-12">
+                                                                <input type="text" name="title" placeholder="Title" class="form-control">
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="col-md-12">Department</label>
+                                                            <div class="col-md-12">
+                                                                <input type="text" name="Dep" placeholder="Department" class="form-control">
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="example-email" class="col-md-12">Task Description</label>
+                                                            <div class="col-md-12">
+                                                                <input type="text" name="desc" placeholder="Description" class="form-control" id="example-email">
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label class="col-md-12">Customer</label>
+                                                            <div class="col-md-12">
+                                                                @Html.DropDownList("customer_id", new SelectList(customers, "id", "name"), "Select Customer", new { @class = "form-control" })
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="col-md-12">Project</label>
+                                                            <div class="col-md-12">
+
+                                                                @Html.DropDownList("project_id", new SelectList(projects, "id", "name"), "Select Project", new { @class = "form-control" })
+                          
+
+                                                            </div>
+                                                        </div>
+                                                
+
+                                                    </div>
+
+                                                    <div class="col-md-6">
+
+                                                        <div class="form-group">
+                                                            <label class="col-md-12">Start Date/Time</label>
+                                                            <div class="col-md-12">
+                                                                <input type="datetime" value="" placeholder="..." id="from" name="from" class="form-control">
+
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label class="col-md-12">End Date/Time</label>
+                                                            <div class="col-md-12">
+                                                                <input type="datetime" value="" placeholder="..." id="to" name="to" class="form-control">
+                                                            </div>
+                                                        </div>
+
+
+                                                        <div class="form-group">
+                                                            <label class="col-sm-12">Priority</label>
+                                                            <div class="col-sm-12">
+                                                                <select name="priority" class="form-control">
+                                                                    <option>Highest</option>
+                                                                    <option>High</option>
+                                                                    <option>Normal</option>
+                                                                    <option>Low</option>
+                                                                    <option>Very Low</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="col-md-12">Assigned For</label>
+                                                            <div class="col-md-12">
+
+                                                                @Html.DropDownList("user_id", new SelectList(users, "id", "name"), "Select Emplyee", new { @class = "form-control" })
+
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <div class="col-sm-12">
+                                                                <button class="btn btn-success">Create Task</button>
+                                                            </div>
+                                                        </div>
+
+
+                                                    </div>
+                                                </div>
+                                            </form>
+
+                                            <script type="text/javascript">
+                                                try {
+
+                                                    $('#from').bootstrapMaterialDatePicker({ weekStart: 0, format: 'YYYY/MM/DD HH:mm:ss' });
+                                                    $('#to').bootstrapMaterialDatePicker({ weekStart: 0, format: 'YYYY/MM/DD HH:mm:ss' }).on('change', function (e, date) {
+                                                        $('#to').bootstrapMaterialDatePicker('setMinDate', date);
+                                                    });
+                                                }
+                                                catch (e) { alert(e); }
+                                            </script>
+
+                                            <script type="text/javascript">
+
+                                            </script>
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Basic Tables end -->
+</div>

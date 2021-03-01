@@ -1,0 +1,158 @@
+
+@{
+    ViewBag.Title = "Quotation List";
+
+    SameSoftWeb.Models.SameSoftwareWebEntities db = new SameSoftWeb.Models.SameSoftwareWebEntities();
+
+
+
+    int id = (int)1;
+
+
+    var  list = db.tblQuotations.Where(a=>a.Status=="Open" && a.Business_Division_Id==id ).Select(a => new
+    {
+
+        a.Quotation_ID,
+        a.Tran_Date,
+        a.UserID,
+        a.Customer_ID,
+        a.Discount,
+        a.Total,
+        a.Status,
+        a.Business_Division_Id
+
+
+
+    }).ToList();
+
+}
+
+    @*<div class="row">
+        <div class="col-md-2">
+            Select Date
+        </div>
+        <div class="col-md-3">
+            <input type="date" name="date" class="form-control" required="" />
+        </div>
+
+        <div class="col-md-3">
+     @{
+
+
+                if ((int)Session["RoleID"] == 3)
+                {
+                    <input type="hidden" name="divid" id="userid" value="@1" />
+                }
+                else {
+                    var divid = db.Business_Division.Select(x => new
+                    {
+                        name = x.Name,
+                        id = x.Business_Division_Id,
+                    }).ToList();
+                    ViewBag.divid = new SelectList(divid, "id", "name", "");
+                    @Html.DropDownList("divid", null, "Select Business Division", new { @class = "form-control", onchange = "", @style = "width:250px;display:inline;", @id = "exps" })
+                }
+            }
+        </div>
+        <div class="col-md-1">
+            <input type="submit" class="btn btn-primary" />
+        </div>
+        <div class="col-md-1">
+            <button class="btn btn-primary" onclick="PrintElem();">  <i class="fa fa-print"></i> Print    </button>
+        </div>
+
+    </div>*@
+
+
+<br />
+<div class="col-md-1">
+    <button class="btn btn-primary" onclick="PrintElem();">  <i class="fa fa-print"></i> Print    </button>
+</div>
+
+<br />
+    <div id="printarea">
+
+        <h3> Quotation List</h3>
+
+        <hr />
+
+        <text>
+            <table class="table table-bordered">
+                <thead>
+                <th>Quotation Number</th>
+                <th>Date</th>
+                <th>User</th>
+                <th>Customer</th>
+                <th>Total</th>
+                <th>Discount</th>
+                <th>Net Total</th>
+                <th>Status</th>
+                <th>Print</th>
+                <th>Cancel</th>
+                <th>Cash Sale</th>
+                <th>Credit Sale</th>
+               </thead>
+
+
+                @foreach (var a in list)
+                {
+
+                    <tr>
+                        <td>@a.Quotation_ID</td>
+                        <td>@a.Tran_Date</td>
+                        <td>@a.UserID</td>
+                        <td>@a.Customer_ID</td>
+                        <td>@a.Total</td>
+                        <td>@a.Discount</td>
+                        <td>@a.Total-@a.Discount</td>
+                      <td>@a.Status</td>
+
+<td><a href="\Sales\CancelQuotation\?id=@a.Quotation_ID" class="btn btn-danger"> Cancel  </a></td>
+                        <td><a href="\Sales\Quotation\?id=@a.Quotation_ID" class="btn btn-info"> Print  </a></td>
+                        <td><a href="\Sales\SaleCashQuotation\?id=@a.Quotation_ID" class="btn btn-success"> Sale by Cash Now </a></td>
+                        <td><a href="\Sales\SaleCreditQuotation\?id=@a.Quotation_ID" class="btn btn-success"> Sale by Credit Now </a></td>
+
+
+                    </tr>
+
+                }
+
+
+            </table>
+        </text>
+
+
+
+    </div>
+}
+
+<script>
+        function PrintElem() {
+
+
+
+            var mywindow = window.open('', 'PRINT', 'height=600,width=1600');
+
+
+            var st = '<style type="text/css">' +
+            'th, td {' +
+            'border:1px solid #ccc;padding:3px;border-collapse:collapse;text-align:center;' +
+            'padding;0.5em;' +
+            '} th{border-bottom:3px solid #ccc;} table{border-collapse:collapse;}' +
+            '</style>'
+
+            mywindow.document.write('<html><head>' + st + '<link ref="stylesheet" href="~\Content\bootstrap.min.css">  <title>' + '' + '</title>');
+            mywindow.document.write('</head><body style="background-image:url(/img/Letterhead.png); background-size:100% 100%;"><br /><br /><br />');
+
+            mywindow.document.write(document.getElementById("printarea").innerHTML);
+            mywindow.document.write('</body></html>');
+
+            mywindow.document.close(); // necessary for IE >= 10
+            mywindow.focus(); // necessary for IE >= 10*/
+
+            mywindow.print();
+            mywindow.close();
+
+            return true;
+        }
+</script>

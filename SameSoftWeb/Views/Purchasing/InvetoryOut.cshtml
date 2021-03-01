@@ -1,0 +1,305 @@
+﻿
+
+@{
+    ViewBag.Title = "InvetoryOut";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+
+    SameSoftWeb.Models.SameSoftwareWebEntities db = new SameSoftWeb.Models.SameSoftwareWebEntities();
+
+    //var Dept = db.TblDepartments.Select(a => new
+    //{
+
+    //    name = a.Department_Name
+    //});
+
+
+    var items = db.Items.Where(a => a.Business_Division_Id == 1).Select(x => new
+    {
+        Item_id = x.Item_Id,
+        Name = x.Name + "(" + x.ReferenceNo + ")",
+
+    }).OrderBy(a => a.Name).ToList();
+
+    ViewBag.Item_id_list = new SelectList(items, "Item_id", "Name", "");
+
+    int? Item_id = 0;
+
+    if (ViewBag.item != null)
+    {
+        Item_id = (int)ViewBag.item;
+    }
+
+    DateTime to = DateTime.UtcNow.AddHours(3);
+
+    if (ViewBag.to != null)
+    {
+        to = (DateTime)ViewBag.to;
+    }
+
+
+    int divid = 0;
+
+    if (ViewBag.divid != null)
+    {
+
+        divid = ViewBag.divid;
+
+    }
+
+    DateTime VDate = DateTime.UtcNow.AddHours(3).Date;
+
+    var list = db.sp_get_qty_available_by_division_date_Details(1, VDate).Select(a => new
+    {
+
+        item_id = a.Item_Id,
+        item_name = a.Item_Name,
+        catg = a.Category,
+        qtyin = a.QTYIN,
+        qtyout = a.QTY_Out,
+        qtyavailable = a.Available_Qty,
+        total_cost = a.Total_Cost,
+        total_sales = a.Total_Sales_Value,
+        profit = a.Profit,
+        lot = a.Batch,
+
+
+    }).OrderBy(a => a.item_id).Where(a=>a.item_id== Item_id).ToList();
+
+
+
+
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+        <h2>Inventory Out</h2>
+
+
+
+        <form method="get" action="\Purchasing\InvetoryOut">
+
+            <div class="row">
+                <div class="col-md-3">
+                    @Html.DropDownList("Item_id_list", null, "Select Item", new { @class = "form-control", onchange = "", @style = "width:250px;", @id = "item", @onchage = "" })
+
+                    </div>
+
+
+                    <div class="col-md-1">
+                        <input type="submit" class="btn btn-primary" />
+                    </div>
+        
+
+                </div>
+
+
+
+        </form>
+<form method="get" action="\Purchasing\SaveInventoryOut">
+    <hr />
+
+
+    @if (list == null)
+    {
+        <center><br /><br /><hr /> <h3> No Data</h3></center>
+
+        return;
+    }
+
+
+    <div id="invoice">
+
+
+
+        <table class="table table-bordered table-hover">
+            <thead>
+            <th>No.</th>
+            <th>item #</th>
+            <th>item_Name</th>
+            <th>Lot No.</th>
+            <th>Category</th>
+            <th>Qty In</th>
+            <th>Qty Sold</th>
+            <th>Available Qty</th>
+            <th>Unit Cost</th>
+            <th>Enter Quantity Out</th>
+
+
+
+            </thead>
+
+            @{
+
+                float subtotalcost = 0;
+                float totalsales = 0;
+                float totalprofit = 0;
+                float net = 0;
+                int i = 1;
+                int itemid = 0;
+                bool doubleicate = false;
+
+
+                float qin = 0;
+                float qout = 0;
+                float c = 0;
+                float s = 0;
+                float p = 0;
+                float qty = 0;
+                float Totalqtyav = 0;
+
+            }
+
+            @foreach (var a in list)
+            {
+                subtotalcost += (float)a.total_cost;
+                totalsales += (float)a.total_sales;
+                totalprofit += (float)a.profit;
+
+                Totalqtyav = Totalqtyav + (float)a.qtyavailable;
+
+
+
+
+
+
+                if (doubleicate == true && a.item_id != itemid && 1 == 2)
+                {
+                    doubleicate = false;
+                    <tr style="background-color:azure;">
+                        <td>--</td>
+                        <td>--</td>
+                        <td>--</td>
+                        <td>--</td>
+                        <td>--</td>
+                        <td>@qout</td>
+                        <td>@qty</td>
+                        <td>--</td>
+                        <td></td>
+                    </tr>
+                    qin = 0;
+                    qout = 0;
+                    c = 0;
+                    s = 0;
+                    p = 0;
+                    qty = 0;
+                }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                <tr>
+                    @*@if (a.item_id == itemid)*@
+                    @if (1 == 2)
+                {
+                    doubleicate = true;
+
+                    qin += (float)a.qtyin;
+
+                    qout += (float)a.qtyout;
+                    c += (float)a.total_cost;
+                    s += (float)a.total_sales;
+                    p += (float)a.profit;
+                    qty += (float)a.qtyavailable;
+                        <td>--</td>
+                            <td>--</td>
+                            <td>--</td>
+
+                    }
+                    else
+                    {
+                        <td> @i</td>
+                        i += 1;
+                        <td>@a.item_id </td>
+                            <td>@a.item_name</td>
+                    }
+
+
+
+                    <td>@a.lot</td>
+                    <td>@a.catg</td>
+                    <td>@a.qtyin</td>
+                    <td>@a.qtyout</td>
+                    <td>@a.qtyavailable</td>
+                    <td>
+                        @{
+                            var iid = a.item_id;
+                            Write(db.Items.Where(l => l.Item_Id == iid).Select(l => l.Unit_Cost).FirstOrDefault());
+                            <input type="hidden" name="cost" value="@db.Items.Where(l => l.Item_Id == iid).Select(l => l.Unit_Cost).FirstOrDefault()" />
+                        }
+                    </td>
+
+                    <td><input type="text" name="Qty_Out" /></td>
+
+
+
+
+
+                </tr>
+
+                            itemid = a.item_id;
+
+
+                            <input type="hidden" name="name" value="@a.item_name"/>
+                          
+                            <input type="hidden" name="Batch" value="@a.lot" />
+
+
+                            }
+
+            @{
+                if (list.Count == 0)
+                {
+                    return;
+                }
+            }
+
+
+
+
+        </table>
+    </div>
+
+    <hr />
+
+
+
+    <input type="hidden" name="ID" value="@Item_id" />
+    @*<div class="col-md-3">
+
+        @Html.DropDownList("note", new SelectList(Dept, "name", "name"), "--Select Department", new { @class = "form-control", @required = "" })
+
+
+    </div>*@
+    <div class="col-md-3">
+        <input type="submit" class="btn btn-primary" value="Save Data" />
+        </div>
+</form>
+
+
+
+
+

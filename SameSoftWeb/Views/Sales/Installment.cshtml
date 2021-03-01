@@ -1,0 +1,279 @@
+
+@{
+    ViewBag.Title = "Installment";
+}
+@{
+
+    if(ViewBag.id==null || ViewBag.customer==null)
+    {
+        return;
+    }
+
+
+    int id = (int)ViewBag.id;
+
+    int customer = (int)ViewBag.customer;
+    SameSoftWeb.Models.SameSoftwareWebEntities db = new SameSoftWeb.Models.SameSoftwareWebEntities();
+
+    var total = db.tblInventory_Transactions.Where(a => a.Inventory_Tran_ID == id).Select(a => a.Total - a.Discount-a.Cash_Payment).FirstOrDefault();
+
+}
+
+<div class="row" style="width:100%">
+    <div class="col-md-8">
+        <h3>Installment Plan</h3>
+       
+        @{ 
+            var ins = db.InstallmentPlans.Where(a => a.Customer_Id == customer && a.OrderId == id).FirstOrDefault();
+         
+              }
+        
+        @if (ins != null)
+        {
+            var tran = ins.Trans_Detail_ID;
+            <h4 style="color:red;"><a href="/Accounting/InvoicePayment?id=@id&tranid=@tran&customer_id=@customer"><i class="fa fa-exclamation-triangle" style="color:orangered;"></i> Installment for this order has already been processed  (View)</a></h4>
+        }
+
+         
+        
+    
+    
+    </div>
+
+      
+    <div class="col-md-4">
+        @*<a class="btn btn-info" href="\Sales\Receipt\@id"> Skip This Step</a>*@
+
+        <input type="hidden" id="total" value="@total" />
+    </div>
+      
+
+    </div>
+
+
+
+
+
+
+
+
+        <form method="get" action="\Sales\addInstallmentPlan">
+
+            <input type="hidden" name="id" value="@id" />
+            <input type="hidden" name="customer" value="@customer" />
+            <hr />
+
+
+
+            <div class="row" style="width:100%">
+                <div class="col-md-12">
+
+
+                    <div class="field_wrapper">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <a href="javascript:void(0);" onclick="add()" class="btn btn-success"><i class="fa fa-plus"></i> Add Payment Part</a>
+                            </div>
+                            <div class="col-md-6">
+
+                                <button href="javascript:void(0);" type="submit" onclick="return comp()" class="btn btn-primary"><i class="fa fa-check"></i> Complete</button>
+                            </div>
+                        </div>
+
+
+                        <hr />
+
+                        <table class="table table-bordered" style="width:auto;">
+                            <thead>
+                            <th style="padding:4px;width:210px">Persentage</th>
+                            <th style="padding:4px; width:160px;">Total</th>
+                            <th style="padding:4px; width:200px;">Payment Date</th>
+
+                            </thead>
+
+
+
+
+
+
+                    </div>
+                </div>
+
+
+
+
+
+                <div class="col-md-4" style="float:right;">
+
+                    <div class="col-md-12">
+                        <div class="panel panel-primary text-center no-boder bg-color-blue">
+                            <div class="panel-body">
+                                <i class="fa fa-fast-forward fa-3x" style="font-size:17pt"></i> &nbsp;&nbsp;&nbsp; <span style="font-size:21pt">Total : $@total </span>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h4><b></b></h4> Amount <hr />
+                                        <span id="totalamt" style="font-weight:bold;font-size:16pt"></span>
+
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h4></h4> Persentage <hr />
+                                        <span id="totalper" style="font-weight:bold;font-size:16pt"></span>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel-footer back-footer-blue">
+
+
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+        </form>
+
+
+
+
+
+
+        <script>
+            var cnt = 0;
+            function add() {
+                cnt = cnt + 1;
+                var addButton = $('.add_button');
+                var wrapper = $('.field_wrapper');
+                var fieldHTML = '<tr> <td style="padding:4px;">%</td>';
+
+                fieldHTML = fieldHTML + '<td style="padding:4px;"><input type="text" style="width:180px;" name="persents" class="kb form-control" value="" Placeholder="%"  id="per' + cnt + '"  onkeyup="calc(' + cnt + ')" /></td>';
+                fieldHTML = fieldHTML + '<td style="padding:4px;"><input type="text" style="width:160px;font-weight:bold;background-color:white;" class="form-control" value="" id="parttotal' + cnt + '" readonly="" /></td>';
+                fieldHTML = fieldHTML + '<td style="padding:4px;"><input type="Date" style="width:200px;" name="dates" class="d form-control" value="" required="" /></td>';
+                fieldHTML = fieldHTML + '<td style="padding:4px;"><a href="javascript:void(0);" id="remove_button" class="btn btn-danger"> X </a></td></tr>';
+
+
+
+
+
+                $(wrapper).append(fieldHTML);
+            }
+
+
+            function comp() {
+                var totalper = 0;
+
+                $(".kb").each(function () {
+                    var x = $(this).val();
+
+                    if (isNaN(x) == false) {
+                        totalper = totalper + Number(x);
+                    }
+
+                });
+
+                var bool = true;
+
+                $(".d").each(function () {
+                    var x = $(this).val();
+
+                    if (x=="") {
+                        bool= false;
+                    }
+
+                });
+
+
+
+
+                if (totalper < 100)
+                {
+                    alert("Total Persent Should be 100%");
+                    return false;
+                }
+
+                if (bool==false) {
+                    alert("Please Select Payment Dates");
+                    return false;
+                }
+
+
+                return confirm("Sure to Submit Installment Plan?");
+
+
+
+            }
+
+
+            function remove($obj) {
+                this.style.color = '#ff0000';
+
+                //e.preventDefault();
+                //alert(element);
+                //  $(element).remove();
+                //$(element).parent('div').remove();
+
+            }
+
+            $(function () {
+
+                $(".field_wrapper").on('click', '#remove_button', function (e) {
+
+                    e.preventDefault();
+                    $(this).closest('tr').remove();
+                });
+            });
+
+
+
+
+            function calc(id) {
+
+                var totalper = 0;
+
+                $(".kb").each(function () {
+                    var x = $(this).val();
+
+                    if(isNaN(x)==false)
+                    {
+                        totalper = totalper + Number(x);
+                    }
+
+                });
+
+
+                var total = $("#total").val();
+
+
+
+             
+
+                if (totalper > 100)
+                {
+
+                    alert("Total Persentage Could not be Greater than 100%");
+                    $("#per" + id).val(0);
+                    return false;
+                }
+
+                $("#totalper").html("% "+Math.round(Number(totalper)*10/10));
+                $("#totalamt").html("$ " + Number(Math.round ((totalper / 100) * total*10)/10));
+
+
+
+
+                var per = $("#per" + id).val();
+                var p = per / 100;
+                var output = Math.round(p * total*10)/10;
+                $("#parttotal" + id).val(output);
+ }
+
+
+
+
+
+        </script>

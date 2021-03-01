@@ -1,0 +1,263 @@
+
+@{
+    ViewBag.Title = "Top Selling Items";
+}
+
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    SameSoftWeb.Models.SameSoftwareWebEntities db = new SameSoftWeb.Models.SameSoftwareWebEntities();
+
+    string Currency = db.tblSettings.Where(a => a.Description == "Currency").Select(a => a.Value).FirstOrDefault();
+
+
+    DateTime from = DateTime.Now;
+    DateTime to = DateTime.Now;
+    int divid = 0;
+
+
+    if (ViewBag.from != null && ViewBag.divid != null)
+    {
+        from = ViewBag.from;
+        to = ViewBag.to;
+        divid = ViewBag.divid;
+
+    }
+
+
+
+    var list = db.sp_Get_Top_Selling_items_by_Date(from , to , divid).Select(a => new
+    {
+        a.Item_Name,
+        a.ReferenceNo,
+        a.Batch,
+        a.Qty_Sold,
+
+        a.Total_Sales,
+        a.Discounts,
+        a.Net_Sales
+
+
+
+    }).OrderBy(a=>a.Qty_Sold).ToList();
+
+
+
+
+
+
+    var ar = db.Accounts.Where(a => a.Business_Division_Id == divid && a.Account_Class_Id == 5 && a.IsCash == "E").ToList();
+    ViewBag.expense = new SelectList(ar, "AccountCode", "AccountName");
+
+
+
+
+    var cashaccount = db.Accounts.Where(a => a.Business_Division_Id == divid && a.Account_Class_Id == 1 && a.IsCash == "C").ToList();
+    ViewBag.cash = new SelectList(cashaccount, "AccountCode", "AccountName");
+
+}
+
+
+
+
+
+
+
+
+
+
+<h2>Top Selling Items</h2>
+
+
+
+<form method="get" action="\Sales\Topsellingitems">
+
+    <div class="row">
+        <div class="col-md-1">
+            Date
+        </div>
+        <div class="col-md-3">
+            <input type="date" name="from" class="form-control" required="" />
+        </div>
+        <div class="col-md-3">
+            <input type="date" name="to" class="form-control" required="" />
+        </div>
+
+        @{
+
+
+            if ((int)Session["RoleID"] == 3)
+            {
+                <input type="hidden" name="divid" id="userid" value="1" />
+            }
+            else {
+
+                var dividlist = db.Business_Division.Select(x => new
+                {
+                    name = x.Name,
+                    id = x.Business_Division_Id,
+                }).ToList();
+                ViewBag.divid = new SelectList(dividlist, "id", "name", "");
+                <div class="col-md-3">
+                    @Html.DropDownList("divid", null, "Select Business Division", new { @class = "form-control", onchange = "", @style = "width:250px;display:inline;", @id = "exps", @required = "" })
+                </div>
+            }
+        }
+       
+        <div class="col-md-1">
+            <input type="submit" class="btn btn-primary" />
+        </div>
+        <div class="col-md-1">
+            <button class="btn btn-primary" onclick="PrintElem();">  <i class="fa fa-print"></i> Print    </button>
+        </div>
+
+    </div>
+
+
+
+</form>
+
+<hr />
+
+
+
+<div id="invoice">
+
+
+    <h3> Top Selling Items</h3>
+
+
+    <table class="table table-bordered table-hover">
+        <thead>
+        <th>No.</th>
+            <th> Item Name </th>
+        <th>Reference No. </th>
+        <th>Quantity Sold</th>
+     
+        <th>Avg. Total</th>
+        <th>Total Discount</th>
+        <th>Avg. Net Sales</th>
+      
+        @*<th>Cancel</th>*@
+
+
+        </thead>
+        @{
+            float total = 0;
+            float discount = 0;
+            float net = 0;
+            int c = 0;
+        }
+        @foreach (var x in list)
+        {
+            total += (float)x.Total_Sales;
+            discount += (float)x.Discounts;
+            net += (float)x.Net_Sales;
+            c += 1;
+            <tr>
+               <td>@c</td>
+                 <td>
+                    @x.Item_Name
+                </td>
+              <td>
+                    @x.ReferenceNo
+                </td>
+              
+                <td>
+                    @x.Qty_Sold
+                </td>
+                <td>
+                    @x.Total_Sales
+                </td>
+               
+
+                <td>
+                    @x.Discounts
+                </td>
+
+                <td>
+                    @x.Net_Sales
+                </td>
+
+
+
+            </tr>
+
+
+
+                        }
+
+
+
+        @{
+            if (list.Count == 0)
+            {
+                return;
+            }
+        }
+
+
+        <tr>
+
+
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>Sub Total</td>
+
+            <td> <b> @Currency @total  </b></td>
+            <td><b> @Currency @discount </b></td>
+            <td>
+                Net : @Currency @net<b>
+                  
+
+                </b>
+
+            </td>
+
+           
+
+        </tr>
+
+    </table>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+<script>
+    function PrintElem() {
+
+
+
+        var mywindow = window.open('', 'PRINT', 'height=400,width=600');
+
+
+        var st='<style type="text/css">table{width:100%;}' +
+        ' th, td {' +
+        'border:1px solid #ccc;padding:3px;border-collapse:collapse;text-align:center;' +
+        'padding;0.5em;' +
+        '}  .tb th{border-bottom:3px solid #ccc;} table{border-collapse:collapse;}' +
+        '</style>'
+
+        mywindow.document.write('<html><head>'+st+'<link ref="stylesheet" href="~\Content\bootstrap.min.css">  <title>' + '' + '</title>');
+        mywindow.document.write('</head><body >');
+
+        mywindow.document.write(document.getElementById("invoice").innerHTML);
+        mywindow.document.write('</body></html>');
+
+        mywindow.document.close(); // necessary for IE >= 10
+        mywindow.focus(); // necessary for IE >= 10*/
+
+        mywindow.print();
+        mywindow.close();
+
+        return true;
+    }
+</script>

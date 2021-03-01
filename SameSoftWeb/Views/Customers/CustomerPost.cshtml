@@ -1,0 +1,232 @@
+﻿
+@{
+    ViewBag.Title = "CustomerPost";
+}
+<script>
+    $(document).ready(function () {
+        $("#from").datepicker({
+            autoClose: true,
+            format: "yyyy/mm/dd"
+        });
+    })
+</script>
+
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    SameSoftWeb.Models.SameSoftwareWebEntities db = new SameSoftWeb.Models.SameSoftwareWebEntities();
+
+    DateTime date = DateTime.UtcNow.AddHours(3).Date;
+
+
+    int month_id = DateTime.UtcNow.AddHours(3).Month;
+    int year = DateTime.UtcNow.AddHours(3).Year;
+
+    if (ViewBag.month != null)
+    {
+        month_id = (int)ViewBag.month;
+    }
+
+    if (ViewBag.year != null)
+    {
+        year = (int)ViewBag.year;
+    }
+    date = date.AddMonths(-date.Month).AddMonths(month_id);
+
+    var month = db.tblMonths.Select(a => new
+    {
+        id = a.Month_ID,
+        name = a.Month_Name
+    }).ToList();
+
+    int cur = 1;
+    if (ViewBag.cur != null)
+    {
+        cur = (int)ViewBag.cur;
+    }
+
+    var List = db.View_Customer_Maintainance(month_id, year).Select(a => new
+    {
+        a.CustomerID,
+        a.Customer_Name,
+        a.Maintainance,
+        a.Cutomer_Type
+
+    }).ToList();
+
+
+    float? Total = 0;
+
+}
+
+<div class="content-body">
+    <!-- Basic Tables start -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title"><b>Post Customer Maintainance  ( @date.ToShortDateString() )</b></h3>
+                    <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                    <div class="heading-elements">
+                        <ul class="list-inline mb-0">
+                            <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                            <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
+                            <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                            <li><a data-action="close"><i class="ft-x"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card-content collapse show">
+                    <div class="card-body">
+
+                        <div style="width:100%;margin:auto; ">
+
+                            <form method="post" action="\Customers\CustomerPost">
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        Month   @Html.DropDownList("month", new SelectList(month, "id", "name", month_id), new { @class = "form-control", })
+                                    </div>
+
+                                    <div class="col-lg-2">
+                                        Year
+                                        <input type="text" name="year" required="" value="@DateTime.UtcNow.AddHours(3).Year" class="form-control" />
+                                    </div>
+
+                                    <div class="col-md-1">
+                                        <br />
+                                        <input type="submit" value="View" class="btn btn-success" />
+                                    </div>
+                                </div>
+                            </form>
+                            <hr />
+
+
+                            @if (Request.QueryString["msg"] != null)
+                            {
+                                <h4 style="color:blue">@Request.QueryString["msg"]</h4>
+                            }
+
+
+                            @{
+                                if (List.Count < 1 || month_id < 1)
+                                {
+                                    <text> <span style="font-size:14pt">  No Customer To Post on This Month : @month_id - Year:  @year  </span> </text>
+
+
+                                    <br />
+                                    return;
+                                }
+                            }
+
+                            <form method="post" action="/Customers/PostRateNow/">
+
+                                <input type="hidden" name="month" value="@month_id" />
+                                <input type="hidden" name="year" value="@year" />
+
+                                <table class="table table-bordered">
+
+                                    <tr>
+                                        <th>
+                                      <h2>Customers (@List.Count())</h2>
+                                          </th>
+                                        <th>
+                                            <input type="date" required="" name="trandate" class="form-control" @*value="@DateTime.UtcNow.AddHours(3).Date.ToString("yyyy/MM/dd")"*@ style="display:inline;" />
+                                        </th>
+                                        <th><input type="submit" value="Post Customers" class="btn btn-primary" /></th>
+                                    </tr>
+
+                                </table>
+
+                                <table class="table table-bordered">
+
+                                    <tr>
+                                        <th>Customer ID.</th>
+                                        <th>Customer Name </th>
+                                        <th>Cutomer_Type</th>
+                                        <th>Maintainance</th>
+
+                                    </tr>
+
+                                    @foreach (var x in List)
+                                    {
+                                      
+                                        Total += x.Maintainance;
+                                        int empid = x.CustomerID;
+                                        <tr>
+                                            <td>@x.CustomerID </td>
+                                            <td>@x.Customer_Name </td>
+                                            <td>@x.Cutomer_Type </td>
+                                            <td>@x.Maintainance</td>
+
+                                                <input type="hidden" name="Cust_ID" value="@x.CustomerID" />
+                                                <input type="hidden" name="amount" value="@x.Maintainance" />
+
+                                        </tr>
+
+                                    }
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td><b>Total : @Total</b></td>
+                                    </tr>
+                                </table>
+
+                                <hr />
+
+                            </form>
+
+                        </div>
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Basic Tables end -->
+</div>
+
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+
+        var d = new Date();
+        var month = d.getMonth(),
+             year = d.getFullYear();
+
+        // GET THE FIRST AND LAST DATE OF THE MONTH.
+        var FirstDay = new Date(year, month, 1);
+        var LastDay = new Date(year, month + 1, 0);
+
+
+
+
+
+
+        $("#datefrom").datepicker(
+          {
+              'setDate': FirstDay,
+              format: 'yyyy/mm/dd'
+          })
+
+        $("#dateto").datepicker({
+            'setDate': new Date()
+        ,
+            format: 'yyyy/mm/dd'
+        })
+
+        //var firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+        //var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+
+
+
+
+
+        $("#datefrom").show("fade");
+        $("#dateto").show("fade");
+
+    });
+</script>

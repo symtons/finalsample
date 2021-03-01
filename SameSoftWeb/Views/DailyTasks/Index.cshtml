@@ -1,0 +1,147 @@
+﻿@model IEnumerable<SameSoftWeb.Models.tblDialyTask>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    SameSoftWeb.Models.SameSoftwareWebEntities db = new SameSoftWeb.Models.SameSoftwareWebEntities();
+}
+
+<div class="content-body">
+    <!-- Basic Tables start -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title"><b>Daily Tasks</b></h3>
+                    <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                    <div class="heading-elements">
+                        <ul class="list-inline mb-0">
+                            <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                            <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
+                            <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                            <li><a data-action="close"><i class="ft-x"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card-content collapse show">
+                    <div class="card-body">
+                        <!--Start Sercice Details Area -->
+                        <section class="service_details_area section_padding">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-md-9 col-lg-9 col-sm-12 col-xs-12">
+                                        <div class="service_details_page_content">
+                                     
+                                            <p>
+
+                                                <a href="/DailyTasks/Create/" class="btn btn-success">New Task Check-In</a>
+                                            </p>
+                                            <table class="table table-bordered" style="background-color:white">
+                                                <tr>
+                                                    <th>
+                                                        User
+                                                    </th>
+                                                    <th>
+                                                        @Html.DisplayNameFor(model => model.tblCustomer.Customer_Name)
+                                                    </th>
+                                                    <th>
+                                                        @Html.DisplayNameFor(model => model.Task_Decription)
+                                                    </th>
+                                                    <th>
+                                                        @Html.DisplayNameFor(model => model.Transportation_Mode)
+                                                    </th>
+                                                    <th>
+                                                        @Html.DisplayNameFor(model => model.Transportation)
+                                                    </th>
+
+                                                    <th>
+                                                        @Html.DisplayNameFor(model => model.Task_Date)
+                                                    </th>
+                                                    <th>
+                                                        @Html.DisplayNameFor(model => model.From_Time)
+                                                    </th>
+                                                    <th>
+                                                        @Html.DisplayNameFor(model => model.To_Time)
+                                                    </th>
+                                                    <th>
+                                                        @Html.DisplayNameFor(model => model.Record_Date_Time)
+                                                    </th>
+                                                    <th>
+                                                        @Html.DisplayNameFor(model => model.Last_Updated)
+                                                    </th>
+                                                    <th>
+                                                        @Html.DisplayNameFor(model => model.Status)
+                                                    </th>
+
+                                                    <th></th>
+                                                </tr>
+
+                                                @foreach (var item in Model)
+                                                {
+                                                    <tr>
+                                                        <td>
+
+                                                            @db.tblUsers.Where(a => a.UserID == item.UserID).Select(a => a.FullName).FirstOrDefault();
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(modelItem => item.tblCustomer.Customer_Name)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(modelItem => item.Task_Decription)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(modelItem => item.Transportation_Mode)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(modelItem => item.Transportation)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(modelItem => item.Task_Date)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(modelItem => item.From_Time)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(modelItem => item.To_Time)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(modelItem => item.Record_Date_Time)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(modelItem => item.Last_Updated)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(modelItem => item.Status)
+                                                        </td>
+
+                                                        <td>
+
+                                                            @if (item.Status == "Check-In")
+                                                            {
+                                                                <a href="/DailyTasks/Edit/@item.Daily_Task_ID" class="btn btn-primary">Check-Out</a>
+
+
+                                                            }
+
+                                                            @*@Html.ActionLink("Edit", "Edit", new { id=item.Daily_Task_ID }) |
+                                                                @Html.ActionLink("Details", "Details", new { id=item.Daily_Task_ID }) |
+                                                                @Html.ActionLink("Delete", "Delete", new { id=item.Daily_Task_ID })*@
+                                                        </td>
+                                                    </tr>
+                                                }
+
+                                            </table>
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Basic Tables end -->
+</div>

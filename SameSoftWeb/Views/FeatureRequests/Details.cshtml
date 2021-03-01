@@ -1,0 +1,91 @@
+﻿@model SameSoftWeb.Models.tblFeatureRequest
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>tblFeatureRequest</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Application_ID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Application_ID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.User_ID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.User_ID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Customer_ID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Customer_ID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Title)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Title)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Deadline)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Deadline)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Importance)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Importance)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Requested_date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Requested_date)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Status)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Status)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Feature_ID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

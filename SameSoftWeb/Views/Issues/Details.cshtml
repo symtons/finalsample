@@ -1,0 +1,152 @@
+﻿@if (Session["Role"].ToString() == "Customer")
+{
+    <b>For Authorized Access Only</b>
+    return;
+}
+@model SameSoftWeb.Models.tblProblem
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Help Center</h2>
+
+<div class="col-md-8">
+    <h4>Issue Details</h4>
+    <p>
+        @Html.ActionLink("Edit", "Edit", new { id = Model.Problem_ID }) |
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>Issue Type</dt>
+      <dd>
+          @if (Model.Type == "Problem")
+            {
+            <b class="fa fa-exclamation-circle" style="color:red;">&nbsp; Error</b>
+        }
+        else
+        {
+            <b class="fa fa-apple" style="color:green;">&nbsp;New Feature</b>
+        }
+          </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Customer_ID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Customer_ID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Title)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Title)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UserID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UserID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Status)
+        </dt>
+
+        <dd>
+          @if(Model.Status!="Pending")
+          {
+<b class="fa fa-check" style="color:green;"></b>
+          }
+          else
+          {
+            <b class="fa fa-warning" style="color:orangered;"></b>
+          }
+              @Html.DisplayFor(model => model.Status)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Solution_Note)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Solution_Note)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ErrorDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ErrorDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Application_ID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Application_ID)
+        </dd>
+
+    </dl>
+</div>
+
+<div class="col-md-4">
+
+    <h2>Update Status</h2>
+
+    <form method="post" action="/Issues/UpdateStatus">
+        <input type="hidden" name="id" value="@Model.Problem_ID" />
+        
+        <h3>
+            <input type="radio" name="status" required="" value="Pending" /> Pending
+            <input type="radio" name="status" required=""  value="Solved" /> Solved
+        </h3>
+
+        <textarea name="note" class="form-control" cols="6" rows="4">@Model.Solution_Note</textarea>
+     <br />   <input type="submit" class="btn btn-primary" value="Update" onclick="return confirm(' Sure To Update ? ')" />
+
+    </form>
+
+</div>
+
+
+<div class="row">
+    <br /><hr />
+
+  
+
+</div>
+
+
+
+<style>
+
+    dtx{
+        border:1px solid grey;
+        padding:6px;
+        margin:10px;
+    }
+
+    
+    dd{
+        border:1px solid #0094ff;
+        padding:10px;
+        margin:10px;
+    }
+</style>

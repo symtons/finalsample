@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 612 612" height="480" width="640">
+  <g clip-path="url(#a)" fill-rule="evenodd" transform="matrix(1.3333 0 0 1 -86.333 0)">
+    <path fill="red" d="M0 0h192v612H0z"/>
+    <path d="M192 340.06h676V612H192z"/>
+    <path fill="#fff" d="M192 172.7h676v169.66H192z"/>
+    <path fill="#00732f" d="M192 0h676v172.7H192z"/>
+  </g>
+</svg>

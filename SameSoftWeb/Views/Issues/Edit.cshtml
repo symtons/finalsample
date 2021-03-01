@@ -1,0 +1,185 @@
+﻿@model SameSoftWeb.Models.tblProblem
+
+@{
+    ViewBag.Title = "Edit Issue";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+
+    SameSoftWeb.Models.SameSoftwareWebEntities db = new SameSoftWeb.Models.SameSoftwareWebEntities();
+
+    var types = db.IssueTypes.Select(a => new
+    {
+        id = a.IssueType1,
+        name = a.IssueType1
+    }).ToList();
+
+
+
+    //    var t = types.Select(a => new
+    //    {
+    //        type =;
+    //}).ToList();
+
+    var customers = db.tblCustomers.Where(a => a.Status == "Active").Select(a => new
+    {
+        Id = a.CustomerID,
+        Name = a.Customer_Name
+    }).ToList();
+
+    var apps = db.tblApplications.Select(a => new
+    {
+        Id = a.Application_ID,
+        Name = a.Application_Name + "(" + a.Description + ")"
+    }).ToList();
+
+
+
+
+
+}
+
+
+
+<h2>Help Center</h2>
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    @Html.HiddenFor(model => model.Problem_ID)
+    <div class="form-horizontal">
+        <h4>Edit Reported Issue</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="form-group">
+            <span class="control-label col-md-2"><b> Application / Systeme </b></span>
+            <div class="col-md-10">
+               
+                
+                 @Html.DropDownList("Application_ID", new SelectList(apps, "Id", "Name", Model.Application_ID), " Select Application ", new { @class = "form-control" })
+
+                @Html.ValidationMessageFor(model => model.Application_ID, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+
+            <span class="control-label col-md-2"><b> Customer </b></span>
+
+
+
+
+
+
+         
+
+
+            <div class="col-md-10">
+
+                @Html.DropDownList("Customer_ID", new SelectList(customers, "Id", "Name", Model.Customer_ID), " Select Customer ", new { @class = "form-control" })
+
+                @Html.ValidationMessageFor(model => model.Customer_ID, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <span class="control-label col-md-2"><b> Issue Type </b></span>
+            <div class="col-md-10">
+
+
+                @Html.DropDownList("Type", new SelectList(types, "id", "name", Model.Type), " Select Issue Type ", new { @class = "form-control" })
+
+                @Html.ValidationMessageFor(model => model.Type, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+     
+
+
+
+        <div class="form-group">
+            <span class="control-label col-md-2"><b> Problem Type(Error Message)  / Feature Type </b></span>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <span class="control-label col-md-2"><b> Problem Description </b></span>
+            <div class="col-md-10">
+
+                <textarea name="Description" class="form-control" rows="6" cols="10" placeholder="Explain the Problem ">@Model.Description</textarea>
+
+                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+
+            </div>
+        </div>
+
+
+
+        <div class="form-group">
+            <span class="control-label col-md-2"><b>  Priority (1 for most argent )</b></span>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Priority, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Priority, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        @*<div class="form-group">
+                @Html.LabelFor(model => model.UserID, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.UserID, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.UserID, "", new { @class = "text-danger" })
+                </div>
+            </div>*@
+
+        <input type="hidden" name="UserID" value="@Model.UserID" />
+
+        @Html.HiddenFor(model => model.Status, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.HiddenFor(model => model.Solution_Note, htmlAttributes: new { @class = "control-label col-md-2" })
+        @Html.HiddenFor(model => model.ErrorDate, htmlAttributes: new { @class = "control-label col-md-2" })
+
+
+        <input type="hidden" name="User" value="@Session["FullName"]" />
+
+
+
+
+
+             @*<div class="form-group">
+                @Html.LabelFor(model => model.Status, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
+                </div>
+            </div>*@
+
+        @*<div class="form-group">
+                @Html.LabelFor(model => model.Solution_Note, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Solution_Note, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Solution_Note, "", new { @class = "text-danger" })
+                </div>
+            </div>*@
+
+        @*<div class="form-group">
+                @Html.LabelFor(model => model.ErrorDate, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.ErrorDate, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.ErrorDate, "", new { @class = "text-danger" })
+                </div>
+            </div>*@
+
+
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Update" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+

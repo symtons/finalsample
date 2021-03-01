@@ -1,0 +1,47 @@
+﻿@model IEnumerable<SameSoftWeb.Models.tblCustomerTranactionType>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<!--Start Sercice Details Area -->
+<section class="service_details_area section_padding">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-9 col-lg-9 col-sm-12 col-xs-12">
+                <div class="service_details_page_content">
+                    <h2>Customer Tranaction Types</h2>
+
+                    <p>
+                        @Html.ActionLink("Create New", "Create")
+                    </p>
+                    <table class="table">
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Transaction_type)
+                            </th>
+                            <th></th>
+                        </tr>
+
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Transaction_type)
+                                </td>
+                                <td>
+                                    @Html.ActionLink("Edit", "Edit", new { id = item.Transaction_type_id }) |
+                                    @Html.ActionLink("Details", "Details", new { id = item.Transaction_type_id }) |
+                                    @Html.ActionLink("Delete", "Delete", new { id = item.Transaction_type_id })
+                                </td>
+                            </tr>
+                        }
+
+                    </table>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,195 @@
+﻿
+<script>
+    function PrintElem() {
+
+
+
+        var mywindow = window.open('', 'PRINT', 'height=600,width=900');
+
+
+        var st = '<style type="text/css">table{width:100%;}' +
+        ' th, td {' +
+        'border:None;padding:3px;border-collapse:collapse;text-align:left;font-size:9pt;' +
+        'padding;0.5em;' +
+        '}   table{border-collapse:collapse;border:;padding:20px;}' +
+        '</style>'
+
+        mywindow.document.write('<html><head>' + st + '<link ref="stylesheet" href="~\Content\bootstrap.min.css">  <title>' + '' + '</title>');
+        mywindow.document.write('</head><body >');
+
+        mywindow.document.write(document.getElementById("print").innerHTML);
+        mywindow.document.write('</body></html>');
+
+        mywindow.document.close(); // necessary for IE >= 10
+        mywindow.focus(); // necessary for IE >= 10*/
+
+        mywindow.print();
+        mywindow.close();
+
+        return true;
+    }
+</script>
+
+
+@{
+
+    int id = 0;
+
+    ViewBag.Title = "Create Airline Fare";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+    SameSoftWeb.Models.SameSoftwareWebEntities db = new SameSoftWeb.Models.SameSoftwareWebEntities();
+    if (ViewBag.id == null)
+    {
+
+    }
+    else
+    {
+        id = (int)ViewBag.id;
+
+
+
+    }
+
+
+    var voucher = db.tblPayment_Voucher.Where(a => a.Voucher_ID == id).Select(a => new
+    {
+
+        a.Voucher_ID,
+        a.UserID,
+        a.Tran_Nbr,
+        a.Payment_Date,
+        a.Payee,
+        a.In_Word,
+        a.Description,
+        a.Company_ID,
+
+        a.Amount
+    }).ToList();
+
+
+    //var com = db.GetCompanyInfo().Select(a => new
+    //{
+    //    a.Company_Name,
+    //    a.Company_Phone,
+    //    a.Country,
+    //    a.EMAAL
+    //    ,
+    //    a.Email,
+    //    a.Evc,
+    //    a.City
+    //}
+
+    //    ).ToList();
+
+
+
+
+}
+<div class="content-body">
+    <!-- Basic Tables start -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title"><b></b></h3>
+                    <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                    <div class="heading-elements">
+                        <ul class="list-inline mb-0">
+                            <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                            <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
+                            <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                            <li><a data-action="close"><i class="ft-x"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card-content collapse show">
+                    <div class="card-body">
+                        <div class="col-md-12">
+                            <br />
+                            <button class="btn btn-primary" onclick="PrintElem();">  <i class="fa fa-print"></i> Print    </button>
+                        </div>
+
+                        <div id="print">
+                            <center>
+                                <img src="~/img/logo.png" style="height:80px;width:150px" />
+                                <br />Same Soft Inc.
+                                <br />Mogadishu-Somalia
+                                <br />Info@samesoft.co
+                                <br />+252 616 661 844
+                                <h3>Payment Voucher</h3>
+
+                            </center>
+
+                            <table style="">
+                                <tr></tr>
+                                <td style="padding-right:30px;">Voucher ID : </td>
+                                <td>@voucher[0].Voucher_ID</td> </tr>
+                                <tr> <td style="padding-right:30px;"> Payment Date :</td> <td>   @voucher[0].Payment_Date.ToString("ddd dd MMM , yyyy") </td></tr>
+                                <tr> <td style="padding-right:30px;"> Payee : </td> <td> @voucher[0].Payee</td></tr>
+                                <tr>  <td style="padding-right:30px;">Amount Paid :</td> <td> @voucher[0].Amount </td></tr>
+                                <tr>  <td style="padding-right:30px;">In Word :  </td>  <td> @voucher[0].In_Word </td> </tr>
+                                <tr>  <td style="padding-right:30px;">Description : </td> <td> @voucher[0].Description</td></tr>
+
+                                <tr>
+                                    <td style="padding-right:30px;">Cashier : </td>
+                                    <td>
+                                        @{
+                                            int uid = (int)voucher[0].UserID;
+                                            Write(db.tblUsers.Where(a => a.UserID == uid).Select(a => a.UserName).FirstOrDefault());
+
+                                        }
+                                    </td>
+                                </tr>
+                                <tr>   <td style="padding-right:30px;">Cashier Signature : </td> <td>&nbsp;____________________ &nbsp;</td><td> Payee Signature ( @voucher[0].Payee )&nbsp; __________________  </td> </tr>
+                            </table>
+
+
+                            <hr />
+
+                            <center>
+                                <img src="~/img/logo.png" style="height:80px;width:150px" />
+                                <br />Same Soft Inc.
+                                <br />Mogadishu-Somalia
+                                <br />Info@samesoft.co
+                                <br />+252 616 661 844
+                                <h3>Payment Voucher</h3>
+                            </center>
+
+
+                            <table style="">
+                                <tr></tr>
+                                <td style="padding-right:30px;">Voucher ID : </td>
+                                <td>@voucher[0].Voucher_ID</td> </tr>
+                                <tr> <td style="padding-right:30px;"> Payment Date :</td> <td>   @voucher[0].Payment_Date.ToString("ddd dd MMM , yyyy") </td></tr>
+                                <tr> <td style="padding-right:30px;"> Payee : </td> <td> @voucher[0].Payee</td></tr>
+                                <tr>  <td style="padding-right:30px;">Amount Paid :</td> <td> @voucher[0].Amount </td></tr>
+                                <tr>  <td style="padding-right:30px;">In Word :  </td>  <td> @voucher[0].In_Word </td> </tr>
+                                <tr>  <td style="padding-right:30px;">Description : </td> <td> @voucher[0].Description</td></tr>
+
+                                <tr>
+                                    <td style="padding-right:30px;">Cashier: </td>
+                                    <td>
+                                        @{
+                                            uid = (int)voucher[0].UserID;
+                                            Write(db.tblUsers.Where(a => a.UserID == uid).Select(a => a.UserName).FirstOrDefault());
+
+                                        }
+                                    </td>
+                                </tr>
+                                <tr>   <td style="padding-right:30px;">Cashier Signature : </td> <td>&nbsp;____________________ &nbsp;</td><td> Payee Signature ( @voucher[0].Payee )&nbsp; __________________  </td> </tr>
+
+
+
+                            </table>
+                
+
+                            
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Basic Tables end -->
+</div>
+

@@ -1,0 +1,218 @@
+﻿
+@{
+    ViewBag.Title = "Cust Photo";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+
+
+<script type="text/javascript">
+
+    function UploadPic() {
+        $.ajax({
+            type: 'POST',
+            url: ("@Url.Content("~/Documents/Rebind2")/"),
+            dataType: 'json',
+            success: function (data) {
+                $("#show").attr("src", data);
+
+                document.getElementById('Submit1').disabled = false;
+
+                bootbox.hideAll();
+
+                $("#cam").html("<hr>  Try  New Capture <hr> <a href='' class='btn btn-primary'> Try again </a> &nbsp;&nbsp;&nbsp;");
+
+
+
+
+            }
+        });
+    }
+    function Uploadsubmit() {
+        debugger;
+        self.close();
+
+        location.href = "/Documents/DocumentsReport/";
+
+    }
+</script>
+
+
+<script src="@Url.Content("~/jscam/jquery.webcam.js")">
+
+</script>
+<script type="text/javascript">
+
+    $("#Camera").webcam({
+        width: 320,
+        height: 240,
+        mode: "save",
+        swffile: "@Url.Content("~/jscam/jscam.swf")",
+        onTick: function () { },
+        onSave: function () {
+            UploadPic();
+        },
+        onCapture: function () {
+            webcam.save("@Url.Content("~/Documents/EmployeeCapture")/");
+        },
+        debug: function () { },
+        onLoad: function () { }
+    });
+</script>
+
+
+
+<div class="content-body">
+    <!-- Basic Tables start -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title"><b>Update Documents Files</b></h3>
+                    <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                    <div class="heading-elements">
+                        <ul class="list-inline mb-0">
+                            <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                            <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
+                            <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                            <li><a data-action="close"><i class="ft-x"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card-content collapse show">
+                    <div class="card-body">
+
+                        <ul class="nav nav-tabs" role="tablist" style="padding-top:10px;">
+                   
+                        </ul>
+                        <form method="post" action="/Documents/UploadPhoto" enctype="multipart/form-data">
+
+                            <div class="row">
+                                @{
+                                    SameSoftWeb.Models.SameSoftwareWebEntities db = new SameSoftWeb.Models.SameSoftwareWebEntities();
+                                    int? Did = 0;
+                                    Did = db.TblDocuments.Select(a => a.Doc_Id).Max();
+                                    int id = 0;
+                                    id = (int)Did + 1;
+
+                                }
+                                <input type="hidden" name="id" value="@id" />
+                                <div class="col-md-3">
+                                    Customer Name <input type="text" name="name" class="form-control" required="" />
+                                </div>
+                                <div class="col-md-3">
+                                    Ref No. <input type="text" name="refno" class="form-control" required="" />
+                                </div>
+                                <div class="col-md-3">
+                                    Tran Date <input type="date" name="tran_date" class="form-control" required="" />
+                                </div>
+
+
+                            </div>
+                            <br />
+
+
+
+
+
+
+                            @*<div style="float: left; border: 4px solid #ccc; padding: 5px" id="cam">
+                                    <div id="Camera"></div><br>
+
+                                    <a class="btn btn-primary" value="Capture" onclick="shoot();"><i class="fa fa-camera" id="cap"></i> Capture</a>
+
+                                </div>*@
+
+                            <div style="float: left; border: 4px solid #ccc; padding: 5px;height:319px;" id="upload">
+
+                                <h3>Upload Image</h3>
+                                <hr />
+
+                                <center>
+                                    <input type="file" name="file" class="form-control" /><br />
+                                    <br />
+                                    <input type="submit" class="btn btn-info" value="Upload" /><br />
+                                    @if (Session["err"] != null)
+            {
+                                        <i class="fa fa-times-circle" style="color:red;"> @Session["err"] </i>
+                                        Session["err"] = null;
+                                    }
+                                </center>
+
+
+                                <hr />
+                            </div>
+
+                            @*<div style="float: left; margin-left: 20px; border: 4px solid #ccc; padding: 5px">
+                                    @{
+                                        string filename = "~/Photo/Documents/noimage.png";
+                                    }
+
+                                    <img id="show" style="width: 320px; height: 240px;" src="@filename" onerror="this.onerror = null; this.src = '~/Photo/Documents/noimage.png';" />
+                                    <br><br>
+                                    <input id="Submit1" class="btn btn-success" type="submit" onclick="Uploadsubmit();" value="Complete" />
+
+                                    </span>
+
+
+                                </div>*@
+                        </form>
+
+
+
+                        <script type="text/javascript">
+
+                            function shoot() {
+                                $("#cap").css("display", "none");
+                                var dialog = bootbox.dialog({
+                                    message: '<center><p> <i class="fa fa-refresh   fa-spin fa-3x fa-fw" style="color:#00BFF0"></i><br> Please Wait..</center>',
+                                    closeButton: false,
+
+                                    size: 'small'
+                                });
+
+
+                                //var dialog = bootbox.dialog({
+                                //    title: 'Capturing',
+                                //    message: '<p><i class="fa fa-spin fa-spinner"></i> Please wait...</p>'
+                                //});
+
+                                var dialog = bootbox.dialog({
+                                    message: '<center><p> <i class="fa fa-refresh   fa-spin fa-3x fa-fw" style="color:#00BFF0"></i><br> Capturing..</center>',
+                                    closeButton: false,
+
+                                    size: 'small'
+                                });
+
+                                setTimeout(function () {
+
+                                    bootbox.hideAll();
+                                    webcam.capture();
+                                }, 200);
+
+                                //dialog.init(function () {
+                                //    setTimeout(function () {
+                                //       // webcam.capture();
+                                //      dialog.find('.bootbox-body').html('I was loaded after the dialog was shown!');
+                                //    }, 1000);
+                                //});
+
+
+
+                            }
+
+                            window.onload = load();
+                            function load() {
+                                debugger;
+                                //document.getElementById('Submit1').disabled = true;
+                            }
+                        </script>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Basic Tables end -->
+</div>

@@ -1,0 +1,91 @@
+﻿
+
+
+
+@{
+    ViewBag.Title = "Customer Page";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+    if (Session["Role"] != null)
+    {
+        if (Session["Role"].ToString() == "Customer")
+        {
+
+        }
+        else
+        {
+
+            <b>  authorized Access Only</b>
+
+            return;
+        }
+    }
+    else
+    {
+
+        <b>  authorized Access Only</b>
+        return;
+    }
+
+
+}
+<!--Start Sercice Details Area -->
+<section class="service_details_area section_padding">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-9 col-lg-9 col-sm-12 col-xs-12">
+                <div class="service_details_page_content">
+                    <h3>Customer Panel</h3>
+                    <hr />
+                    <h4 style="color:grey">Welcom  &nbsp; <i class="fa fa-user"></i> &nbsp; @Session["FullName"]  From  &nbsp; &nbsp; <i class="fa fa-building-o"></i>  &nbsp; @Session["Customer_Name"]</h4>
+
+
+
+                    @if (Request.QueryString["r"] == "1")
+                    {
+                        <div class="alert alert-success" style="font-size:16pt;">
+                            <strong> <i class="fa fa-check-circle"></i> &nbsp; Thanks &nbsp; @Session["FullName"]  &nbsp; </strong> Your Report was Submitted and we'll Check it as soon as possible.
+                        </div>
+
+                    }
+
+
+                    <hr />
+
+                    <div class="col-md-6" style="">
+
+                        <a href="/Issues/ReportIssue" class="btn btn-primary btn-lg">Report Problem</a>
+                        @*<form id="help" method="post" action="/Problems/ReportProblem" style="display:inline;margin:0px;padding:0px;">
+
+                                @*<input type="hidden" name="Appid" value="@Session["AppID"]" />
+                                <input type="hidden" name="Customer" value="@Session["Customer"]" />
+                                <input type="hidden" name="User" value="@Session["FullName"]" />
+
+                                <input type="submit" class="btn btn-primary btn-lg" style="width:260px;"  value="Report Problem">
+                                <hr />
+
+                            </form>*@
+
+
+
+                    </div>
+
+                    <div class="col-md-6">
+                        @*<a href="#" class="btn btn-primary btn-lg" style="width:260px;">  Customer Payment  @{  }</a>
+                            <hr />
+                            <a href="/Users" class="btn btn-primary btn-lg" style="width:260px;"> Users @{  }</a>*@
+                    </div>
+
+
+
+
+
+                    </hr>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+    </div>
+</section>

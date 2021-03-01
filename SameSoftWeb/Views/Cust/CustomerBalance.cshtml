@@ -1,0 +1,199 @@
+﻿
+@if (ViewBag.msg != null)
+
+{
+    <text>
+        <script>
+    bootbox.alert("<b>@ViewBag.msg</b> ");
+        </script>
+    </text>
+}
+
+@{
+    ViewBag.Title = "Customer Balances";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    SameSoftWeb.Models.SameSoftwareWebEntities db = new SameSoftWeb.Models.SameSoftwareWebEntities();
+
+
+    var items = db.sp_Get_Customer_with_Balance(0).Select(x => new
+    {
+        CustomerID = x.CustomerID,
+        CustomerName = x.Customer_Name,
+        Phone = x.Contact_Numbers,
+        Contact = x.Address,
+        balance = x.Total
+
+
+
+    }).ToList();
+
+    string divname;
+
+    divname = @db.GetCompanyInfo().Select(a => a.Company_Name).FirstOrDefault();
+
+}
+<style>
+    td {
+        padding: 4px;
+        text-align: center;
+    }
+
+    th {
+        padding: 4px;
+        text-align: center;
+    }
+</style>
+
+<div class="content-body">
+    <!-- Basic Tables start -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title"><b> Customer Statement </b></h3>
+                    <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                    <div class="heading-elements">
+                        <ul class="list-inline mb-0">
+                            <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                            <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
+                            <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                            <li><a data-action="close"><i class="ft-x"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card-content collapse show">
+                    <div class="card-body">
+
+                        @if (items.Count == 0)
+                        {
+                            <text><h3><center><br /><br /><br /><br /> No Customer Balances </center></h3></text>
+                            return;
+                        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+                        <div style="width:90%;padding:7px;border:1px #f6ecec;margin:auto;">
+                            <button class="btn btn-primary" onclick="PrintElem();">  <i class="fa fa-print"></i> Print    </button>
+                        </div>
+
+                        <div style="width:90%;padding:7px;border:1px #f6ecec;margin:auto;background-color:#fff;border:1px solid #a6fcfc" id="invoice">
+
+
+                            <table style="width:98%;padding:3px;">
+
+
+
+                                <center style="font-size:13pt;font-weight:unset;">
+                                    <img src="~/img/logo.png" style="width:240px;height:90px;" />   <br />
+
+                                    <b>
+                                        @divname  <br />
+
+                                    </b>
+                                 
+                                </center>
+
+
+                                <table class="tb table-bordered" style="width:98%;padding:3px;">
+                                    <thead>
+                                    <th> Customer_ID </th>
+                                    <th> Customer Name </th>
+                                    <th>Contact Phone </th>
+                                    <th>Address</th>
+                                    <th>Balance</th>
+                                    <th colspan="2">...</th>
+
+                                    <th>...</th>
+
+                                    </thead>
+
+                                    @{
+                                        float total = 0;
+                                    }
+                                    @foreach (var x in items)
+            {
+                total += (float)x.balance;
+
+                                        <text>
+                                            <tr>
+                                                <td>@x.CustomerID</td>
+                                                <td>@x.CustomerName</td>
+                                                <td>@x.Phone</td>
+                                                <td>@x.Contact</td>
+                                                <td>@x.balance</td>
+                                                <td><a href="\Cust\CustomerTrans\?id=@x.CustomerID" class="fa fa-vk"> Pay </a> </td>
+                                                <td><a href="\Cust\CustomerStatement\?id=@x.CustomerID" class="fa fa-vk"> View Statement </a> </td>
+
+                                                @if (x.balance == 0)
+                                                {
+                                                    <td><a href="\Cust\CloseTransaction\?id=@x.CustomerID" class="fa fa-cross"> Close </a> </td>
+
+                                                }
+                                                else
+                                                {
+                                                    <th></th>
+                                                }
+
+
+                                            </tr>
+                                        </text>
+                                    }
+
+                                    <tr><td></td><td></td><td></td><td>Sub Total</td><td><b> $@total</b></td> <td></td></tr>
+                                </table>
+
+
+
+                        </div>
+
+
+                        <br /><br />
+
+
+                        <script>
+    function PrintElem() {
+
+
+
+        var mywindow = window.open('', 'PRINT', 'height=400,width=600');
+
+
+        var st='<style type="text/css">' +
+        '.tb th, .tb td {' +
+        'border:1px solid #ccc;padding:3px;border-collapse:collapse;text-align:center;' +
+        'padding;0.5em;' +
+        '}  .tb th{border-bottom:3px solid #ccc;} table{border-collapse:collapse;}' +
+        '</style>'
+
+        mywindow.document.write('<html><head>'+st+'<link ref="stylesheet" href="~\Content\bootstrap.min.css">  <title>' + '' + '</title>');
+        mywindow.document.write('</head><body >');
+
+        mywindow.document.write(document.getElementById("invoice").innerHTML);
+        mywindow.document.write('</body></html>');
+
+        mywindow.document.close(); // necessary for IE >= 10
+        mywindow.focus(); // necessary for IE >= 10*/
+
+        mywindow.print();
+        mywindow.close();
+
+        return true;
+    }
+                        </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Basic Tables end -->
+</div>

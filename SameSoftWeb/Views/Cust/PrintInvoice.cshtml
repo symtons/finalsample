@@ -1,0 +1,474 @@
+﻿
+@{
+    ViewBag.Title = "PrintInvoice";
+
+    int id = 0;
+    float? qty = 0;
+    if (ViewBag.id != null)
+    {
+        id = (int)ViewBag.id;
+    }
+    else
+    {
+        return;
+    }
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+    SameSoftWeb.Models.SameSoftwareWebEntities db = new SameSoftWeb.Models.SameSoftwareWebEntities();
+
+
+    var invoice = db.pro_Get_Invoice_By_Group(id).Select(a => new
+    {
+
+        a.Credit,
+        a.Debit,
+        a.Description,
+        a.Tran_Type,
+        a.Trans_Date,
+        a.Cust_Transaction_Detail_id,
+        a.Qty,
+        a.Unit_price
+    }).ToList();
+
+    float total = 0;
+
+    var inv = db.tblCustomerInvoiceGroups.Where(a => a.Invoice_Group_Id == id).FirstOrDefault();
+    if (inv == null)
+    {
+        return;
+    }
+
+    var customer = db.tblCustomers.Where(a => a.CustomerID == inv.Customer_ID).FirstOrDefault();
+    var comp = db.tblCompanyInfoes.Where(a => a.Company_ID == 1).FirstOrDefault();
+    int userid = (int)Session["UserID"];
+}
+
+<div class="content-body">
+    <!-- Basic Tables start -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title"><b> Customer Statement </b></h3>
+                    <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                    <div class="heading-elements">
+                        <ul class="list-inline mb-0">
+                            <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                            <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
+                            <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                            <li><a data-action="close"><i class="ft-x"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card-content collapse show">
+                    <div class="card-body">
+
+                        <a class="fab fab-balanced" style="float:right;" onclick="PrintElem()"><i class="fa fa-print"></i></a>
+
+
+
+                        <div class="invoice-box" id="print">
+
+                            <style>
+                                .fab {
+                                    display: inline-block;
+                                    position: relative;
+                                    outline: none;
+                                    -webkit-user-select: none;
+                                    user-select: none;
+                                    cursor: pointer;
+                                    width: 60px;
+                                    height: 60px;
+                                    padding-top: 7px;
+                                    /*  line-height: 60px;*/
+                                    /*text-align: center;*/
+                                    font-size: 32px;
+                                    z-index: 999;
+                                    background: #eee;
+                                    color: #336699;
+                                    border-radius: 50%;
+                                    box-shadow: 0 0 5px rgba(0, 0, 0, 0.15);
+                                    transition: 0.2s opacity ease-in-out;
+                                    -webkit-transition: 0.2s opacity ease-in-out;
+                                    border: 0;
+                                    overflow: hidden;
+                                }
+
+                                    .fab:after {
+                                        content: '';
+                                        display: block;
+                                        position: absolute;
+                                        left: 50%;
+                                        top: 50%;
+                                        width: 120px;
+                                        height: 100px;
+                                        margin-left: -60px;
+                                        margin-top: -60px;
+                                        background: #aaa;
+                                        border-radius: 100%;
+                                        opacity: .6;
+                                        transform: scale(0);
+                                    }
+
+
+
+                                    .fab:not(:active):after {
+                                        animation: ripple 3s ease-out;
+                                    }
+
+                                    /* fixes initial animation run, without user input, on page load.
+                                */
+                                    .fab:after {
+                                        visibility: hidden;
+                                    }
+
+                                    .fab:focus:after {
+                                        visibility: visible;
+                                    }
+
+                                    .fab.fab-light {
+                                        color: #fff;
+                                        background: #fff;
+                                    }
+
+                                    .fab.fab-stable {
+                                        color: #fff;
+                                        background: #f8f8f8;
+                                    }
+
+                                    .fab.fab-positive {
+                                        color: #fff;
+                                        background: #1b69a2;
+                                    }
+
+                                    .fab.fab-calm {
+                                        color: #fff;
+                                        background: #11c1f3;
+                                    }
+
+                                    .fab.fab-assertive {
+                                        color: #fff;
+                                        background: #bf1e2e;
+                                    }
+
+                                    .fab.fab-balanced {
+                                        color: #fff;
+                                        background: #33cd5f;
+                                    }
+
+                                    .fab.fab-energized {
+                                        color: #fff;
+                                        background: #ffc900;
+                                    }
+
+                                    .fab.fab-royal {
+                                        color: #fff;
+                                        background: #886aea;
+                                    }
+
+                                    .fab.fab-dark {
+                                        color: #fff;
+                                        background: #444;
+                                    }
+
+                                    /*----------------*/
+                                    .fab.fab-light:after {
+                                        background: #e6e6e6;
+                                    }
+
+                                    .fab.fab-stable:after {
+                                        background: #dfdfdf;
+                                    }
+
+                                    .fab.fab-positive:after {
+                                        background: #144d76;
+                                    }
+
+                                    .fab.fab-calm:after {
+                                        background: #0a9dc7;
+                                    }
+
+                                    .fab.fab-assertive:after {
+                                        background: #931723;
+                                    }
+
+                                    .fab.fab-balanced:after {
+                                        background: #28a54c;
+                                    }
+
+                                    .fab.fab-energized:after {
+                                        background: #cca100;
+                                    }
+
+                                    .fab.fab-royal:after {
+                                        background: #643de4;
+                                    }
+
+                                    .fab.fab-dark:after {
+                                        background: #2b2b2b;
+                                    }
+
+
+
+
+
+                                .invoice-box {
+                                    max-width: 800px;
+                                    margin: auto;
+                                    padding: 30px;
+                                    border: 1px solid #eee;
+                                    box-shadow: 0 0 10px rgba(0, 0, 0, .15);
+                                    font-size: 16px;
+                                    line-height: 24px;
+                                    font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;
+                                    color: #555;
+                                }
+
+                                    .invoice-box table {
+                                        width: 100%;
+                                        line-height: inherit;
+                                        text-align: left;
+                                    }
+
+                                        .invoice-box table td {
+                                            padding: 5px;
+                                            vertical-align: top;
+                                        }
+
+                                        .invoice-box table tr td:nth-child(2) {
+                                            text-align: right;
+                                        }
+
+                                        .invoice-box table tr.top table td {
+                                            padding-bottom: 20px;
+                                        }
+
+                                            .invoice-box table tr.top table td.title {
+                                                font-size: 45px;
+                                                line-height: 45px;
+                                                color: #333;
+                                            }
+
+                                        .invoice-box table tr.information table td {
+                                            padding-bottom: 40px;
+                                        }
+
+                                        .invoice-box table tr.heading td {
+                                            background: #eee;
+                                            border-bottom: 1px solid #ddd;
+                                            font-weight: bold;
+                                        }
+
+                                        .invoice-box table tr.details td {
+                                            padding-bottom: 20px;
+                                        }
+
+                                        .invoice-box table tr.item td {
+                                            border-bottom: 1px solid #eee;
+                                        }
+
+                                        .invoice-box table tr.item.last td {
+                                            border-bottom: none;
+                                        }
+
+                                        .invoice-box table tr.total td:nth-child(2) {
+                                            border-top: 2px solid #eee;
+                                            font-weight: bold;
+                                        }
+
+                                @@media only screen and (max-width: 600px) {
+                                    .invoice-box table tr.top table td {
+                                        width: 100%;
+                                        display: block;
+                                        /*text-align: center;*/
+                                    }
+
+                                    .invoice-box table tr.information table td {
+                                        width: 100%;
+                                        display: block;
+                                        /*text-align: center;*/
+                                    }
+                                }
+                            </style>
+                            <br />
+                            <table cellpadding="0" cellspacing="0">
+                                <tr class="top">
+                                    <td colspan="5" style="border:none;">
+                                        <table>
+                                            <tr>
+                                                <center>
+                                                    <img src="~/img/logo.png" style="width:100%; height:80px;width:200px;"><br />
+                                                    <b>@comp.Company_Name</b><br>
+                                                    <b>@comp.City-@comp.Country</b><br>
+                                                    <b>Web: @comp.EMAAL</b><br>
+                                                    <b>Email: @comp.Email</b><br />
+                                                    <b>Tel: @comp.Company_Phone</b><br /><br />
+                                                    <h2><b style="color:#11c1f3">Invoice</b></h2>
+                                                </center>
+
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                         
+
+
+                                <tr class="information" style="border: 1px solid #1b69a2;">
+                                    <td colspan="6" style="border-top:3px solid #11c1f3;">
+                                        <table class="br">
+                                            <tr style="font-weight:bold;">
+                                                <td style="border:1px;border-color:white;">
+                                                    Company Name: <b>@customer.Customer_Name</b><br>
+                                                    Contect: <b> @customer.Contact_Numbers</b><br>
+                                                    Address: <b> @customer.Address</b>
+
+                                                </td>
+
+                                                <td style="padding:8px;border:none;">
+                                                  Invoice #: <b>@inv.Invoice_Number</b><br>
+                                                  Date:<b> @inv.Invoice_Date.ToString("MMM dd, yyyy")</b>
+
+                                                </td>
+
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+
+
+
+                            </table>
+                            <br />
+                            <table class="table table-bordered">
+                                <tr style="color:black; border-color:black">
+                                    <td style="font-weight:bold;width:20px;">
+                                        No.
+                                    </td>
+
+
+                                    <td style="font-weight:bold;text-align:left;">
+                                        Description
+                                    </td>
+
+                                    <td style="font-weight:bold;">QTY</td>
+                                    <td style="font-weight:bold;">Unit Price</td>
+
+                                    <td style="font-weight:bold;">
+                                        Total Price
+                                    </td>
+                                    </tr>
+
+                                    @{
+                                        int cnt = 1;
+                                    }
+
+                                    @foreach (var x in invoice)
+            {
+                total += x.Debit - x.Credit;
+                qty = qty + x.Qty;
+
+                                        <tr class="item" style="border:1px black">
+                                            <td style="width:20px;">
+                                                @cnt
+                                            </td>
+
+                                            <td style="text-align:left;">
+                                                @x.Description
+                                            </td>
+                                            <td>
+                                                @x.Qty
+                                                @*@db.tblInvoiceGroupDetails.Where(a => a.Cust_Transaction_Detail_id == x.Cust_Transaction_Detail_id).Select(a => a.QTY).FirstOrDefault()*@
+                                            </td>
+
+                                            <td>
+                                                @x.Unit_price
+                                            </td>
+
+                                            <td>
+                                                @{Write(x.Debit - x.Credit); }
+                                            </td>
+                                        </tr>
+                                                        cnt += 1;
+                                                    }
+
+
+
+                                    <tr class="total">
+                                        <td></td>
+                                        <td></td>
+
+                                        <td><b>@qty</b></td>
+
+
+                                        <td style="text-align:right"> Total</td>
+                                        <td>
+                                            <b> $@total</b>
+                                        </td>
+                                    </tr>
+                            </table>
+                            <br />
+                           <b>NB: Payment Must be immediately</b>
+                         <br />
+                            <table style="margin-top:300px">
+                              
+                                <tr class="information" style="border: 1px solid #1b69a2;">
+                                    <td colspan="6" style="border-top:3px solid #11c1f3;">
+                                        <b>Bank Information</b><br />       <b>Salam bank</b> <b style="color:#11c1f3; font-size:16px">31647953</b> <br />
+                                        <br />
+
+                                        Prapared By : <b>  @db.tblUsers.Where(a=>a.UserID==userid).Select(a=>a.FullName).FirstOrDefault()</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Singnature :_____________________
+
+
+                                    </td>
+                          
+
+                            </table>
+                            <hr />
+                            <center>    <b>Waberi District Tre-Piano, Bnadir Plaza Bullding</b>
+                                            <br />
+                                            <b>Mogadishu-Somalia</b>
+                                          <br />Thank you for your business please come again</center>
+                            <br />
+                        </div>
+                      
+
+
+
+                        <script>
+                            function PrintElem() {
+
+
+
+                                var mywindow = window.open('', 'PRINT', 'height=600,width=900');
+
+
+                                var st = '<style type="text/css">table{width:100%;}' +
+                                ' th, td {' +
+                                'border:1px solid #ccc;padding:3px;border-collapse:collapse;font-size:9pt;' +
+                                'padding;0.5em;' +
+                                '}   table{border-collapse:collapse;}' +
+                                '</style>'
+
+                                mywindow.document.write('<html><head>' + st + '<link ref="stylesheet" href="~\Content\bootstrap.min.css">  <title>' + '' + '</title>');
+                                mywindow.document.write('</head><body >');
+
+                                mywindow.document.write(document.getElementById("print").innerHTML);
+                                mywindow.document.write('</body></html>');
+
+                                mywindow.document.close(); // necessary for IE >= 10
+                                mywindow.focus(); // necessary for IE >= 10*/
+
+                                mywindow.print();
+                                mywindow.close();
+
+                                return true;
+                            }
+                        </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Basic Tables end -->
+</div>
+

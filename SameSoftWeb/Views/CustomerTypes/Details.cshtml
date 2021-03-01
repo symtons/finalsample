@@ -1,0 +1,32 @@
+﻿@if (Session["Role"].ToString() == "Customer")
+{
+    <b>For Authorized Access Only</b>
+    return;
+}
+@model SameSoftWeb.Models.tblCustomerType
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>tblCustomerType</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Customer_Type)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Customer_Type)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

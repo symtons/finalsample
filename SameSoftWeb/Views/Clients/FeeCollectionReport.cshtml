@@ -1,0 +1,145 @@
+﻿
+@{
+    ViewBag.Title = "FeeCollectionReport";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+    var db = new SameSoftWeb.Models.SameSoftwareWebEntities();
+    int uid = 0;
+
+    if (Session["Role"].ToString() == "Admin")
+    {
+        uid = 0;
+    }
+    else
+    {
+        uid = (int)Session["UserID"];
+    }
+
+    DateTime vdate = DateTime.UtcNow.AddHours(3);
+    int all = 1;
+
+    if (ViewBag.vdate != null)
+    {
+        vdate = (DateTime)ViewBag.vdate;
+    }
+
+    if (ViewBag.all != null)
+    {
+        all = (int)ViewBag.all;
+    }
+
+    var list = db.sp_view_fee_collection(vdate, all).Select(a => new
+    {
+        a.Credit,
+        a.CustomerID,
+        a.Debit,
+        a.Due_Date,
+        a.Customer_Name,
+        a.FullName,
+        a.Transaction_type,
+
+        a.Description,
+        a.Transaction_Date,
+        a.UserID
+
+    }).Where(a => a.UserID == uid || uid == 0).ToList();
+
+}
+
+
+                    <h2>Fee Collection Report</h2>
+
+
+                    <div class="card-s">
+                        <form method="post" action="/Clients/FeeCollectionReport">
+                            Select Month
+
+
+                            <input type="date" name="vdate" />
+
+                            <select name="all">
+                                <option value="1">view Selected Month Only</option>
+                                <option value="0">view All Balance</option>
+                            </select>
+
+
+                            <input type="submit" value="Generate Report" class="btn btn-primary" />
+                        </form>
+                    </div>
+
+
+                    <button onclick="printpage()" class="btn btn-success">Print</button>
+
+                    <div class="card" id="card">
+                        <hr />
+                        <center>
+                            <img src="~/img/logo.png" />
+                            @if (ViewBag.all != null)
+                            {
+                                if (all == 0)
+                                {
+                                    <h3>All Client Balance</h3>
+                                }
+                                else
+                                {
+                                    <h3>Fee to Collect on @vdate.ToString("MMMM yyyy")</h3>
+                                }
+                            }
+                            else
+                            {
+                                <h3>Fee to Collect on @vdate.ToString("MMMM yyyy")</h3>
+                            }
+
+                        </center>
+                        <hr />
+                        <table class="table-bordered" style="margin:auto;width:80%;padding:10px;">
+
+                            <thead class="btn-success">
+                            <th>No.</th>
+                            <th>Customer Name</th>
+                            <th>Transaction Type</th>
+                            <th>Description</th>
+                            <th>Due Date</th>
+                            <th>Balance</th>
+
+                            </thead>
+                            @{
+                                int i = 0;
+                                float? total = 0;
+                            }
+                            @foreach (var x in list)
+                            {
+                                total += x.Debit;
+                                i += 1;
+                                <tr>
+                                    <td>@i</td>
+                                    <td>@x.Customer_Name</td>
+                                    <td>@x.Transaction_type</td>
+                                    <td>@x.Description</td>
+                                    <td>@{ Write(DateTime.Parse(x.Due_Date.ToString()).ToString("dd/MM/yyyy"));}</td>
+                                    <td>@x.Debit</td>
+                                </tr>
+                                        }
+
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>@total</td>
+                            </tr>
+                        </table>
+
+                        <br />
+                    </div>
+
+
+                    <style>
+                        th, td {
+                            padding: 4px;
+                        }
+                    </style>
+
+
+ 

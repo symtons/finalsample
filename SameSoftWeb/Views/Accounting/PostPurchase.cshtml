@@ -1,0 +1,93 @@
+@{
+    ViewBag.Title = "Receive_Purchase";
+}
+
+@{
+
+    int divid = 1;
+
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+    SameSoftWeb.Models.SameSoftwareWebEntities db = new SameSoftWeb.Models.SameSoftwareWebEntities();
+    var list = db.tblInventory_Transactions.Where(a => a.Inventory_type_id == 1 && a.Status == "Open" && a.Business_Division_Id == divid).Select(a => new
+    {
+
+        //a => a.Status == "Open" &&
+        id = a.Inventory_Tran_ID,
+        date = a.Tran_Date,
+        total = a.Total,
+        status = a.Status,
+        userid = a.UserID
+   ,
+        a.Invoice_No
+    }).ToList();
+}
+<div class="content-body">
+    <!-- Basic Tables start -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title"><b>List of Pending Purchase Orders</b></h3>
+                    <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                    <div class="heading-elements">
+                        <ul class="list-inline mb-0">
+                            <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                            <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
+                            <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                            <li><a data-action="close"><i class="ft-x"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card-content collapse show">
+                    <div class="card-body">
+                        <table class="table table-bordered" style="background-color:white">
+                            <thead>
+                            <th>Invoice No. </th>
+                            <th>Date </th>
+                            <th>Total</th>
+                            <th>Status</th>
+                            <th>User</th>
+                            <th>Post</th>
+                            <th>Cancel</th>
+                            <th>View</th>
+
+                            </thead>
+                            @foreach (var x in list)
+                            {
+                                <form method="post" action="\Accounting\PostPurchaseorder">
+                                    <tr>
+                                        <td>  <input type="hidden" name="purchase_id" value="@x.id" />       <b>Inv.@x.Invoice_No</b></td>
+
+                                        <td>  @x.date </td>
+                                        <td>  @x.total </td>
+                                        <td>@x.status</td>
+                                        <td>
+                                            @{
+
+                                                int uid = x.userid;
+                                                Write(db.tblUsers.Where(a => a.UserID == uid).Select(a => a.FullName).FirstOrDefault());
+
+
+                                            }
+                                        </td>
+
+
+                                        <td><input type="submit" value="Post" class="btn btn-success" /></td>
+
+                                        <td><a href="\purchasing\CancelPurchase\?id=@x.id" class="btn btn-danger"> Cancel </a></td>
+                                        <td><a href="\purchasing\Receipt\?id=@x.id" class="btn btn-info"> View Purchase </a></td>
+                                    </tr>
+                                </form>
+                                                }
+
+                        </table>
+                        <hr />
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Basic Tables end -->
+</div>

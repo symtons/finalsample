@@ -1,0 +1,81 @@
+﻿
+@{
+    ViewBag.Title = "DocumentsReport";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+    int id = ViewBag.id;
+
+    SameSoftWeb.Models.SameSoftwareWebEntities db = new SameSoftWeb.Models.SameSoftwareWebEntities();
+
+    var IMG = db.TblDocuments.Where(a => a.Doc_Id == id).Select(a => a.Documents).FirstOrDefault();
+
+}
+
+<div class="content-body">
+    <!-- Basic Tables start -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title"><b>Print Document</b></h3>
+                    <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                    <div class="heading-elements">
+                        <ul class="list-inline mb-0">
+                            <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                            <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
+                            <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                            <li><a data-action="close"><i class="ft-x"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card-content collapse show">
+                    <div id="print">
+
+                            <img src="@IMG" style="height:900px; width:800px;" />
+
+                        </div>
+
+
+
+
+                        <script>
+                            function PrintElem() {
+
+
+
+                                var mywindow = window.open('', 'PRINT', 'height=600,width=900');
+
+
+                                var st = '<style type="text/css">table{width:100%;}' +
+                                ' th, td {' +
+                                'border:1px solid #ccc;padding:3px;border-collapse:collapse;text-align:center;font-size:9pt;' +
+                                'padding;0.5em;' +
+                                '}   table{border-collapse:collapse;}' +
+                                '</style>'
+
+                                mywindow.document.write('<html><head>' + st + '<link ref="stylesheet" href="~\Content\bootstrap.min.css">  <title>' + '' + '</title>');
+                                mywindow.document.write('</head><body >');
+
+                                mywindow.document.write(document.getElementById("print").innerHTML);
+                                mywindow.document.write('</body></html>');
+
+                                mywindow.document.close(); // necessary for IE >= 10
+                                mywindow.focus(); // necessary for IE >= 10*/
+
+                                mywindow.print();
+                                mywindow.close();
+
+                                return true;
+                            }
+
+
+
+
+                        </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Basic Tables end -->
+</div>

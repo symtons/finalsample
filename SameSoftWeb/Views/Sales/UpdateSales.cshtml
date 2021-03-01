@@ -1,0 +1,322 @@
+@{ 
+    ViewBag.Title = "Sales Return";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+<style type="text/css">
+    .col-md-4 {
+        padding-top: 5px;
+    }
+
+    td {
+        border: 1px solid black;
+    }
+</style>
+
+<section class="content-header">
+
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-th-list"></i> Sales</a></li>
+        <li class="active">Sales List</li>
+    </ol>
+</section>
+<section class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <!-- general form elements -->
+            <div class="box box-primary">
+
+                @if (Request.QueryString["msg"] != null)
+                {
+                    <text> @Request.QueryString["msg"] </text>
+                }
+
+
+                <div class="box-body ">
+
+                    <div id="tabletitle">
+
+                        @{
+                            using (var db = new SameSoftWeb.Models.SameSoftwareWebEntities())
+                            {
+
+                                //if (1 != null)
+                                //{
+                                int divid = 1;
+                                    <input type="hidden" value="1" id="exps" />
+
+                                    @*if ((int)Session["RoleID"] == 3)
+                                    {
+                                        <input type="hidden" name="userid" id="userid" value="@Session["userid"]" />
+                                    }
+                                    else
+                                    {*@
+                                        var users = db.tblUsers.Select(x => new
+                                        {
+                                            userid = x.UserID,
+                                            loginname = x.FullName,
+                                        }).ToList();
+                                        ViewBag.userid = new SelectList(users, "userid", "loginname", 0);
+                                        @Html.DropDownList("userid", null, "Select User", new { @class = "form-control", onchange = "", @style = "width:250px;display:inline;", @id = "userid" })
+
+                                //}
+                                //}
+                                //else
+                                //{
+                                //    var deposit = db.Business_Division.Select(x => new
+                                //    {
+                                //        NameOfAccount = x.Name,
+                                //        AccountNumber = x.Business_Division_Id,
+                                //    }).ToList();
+                                //    ViewBag.exps = new SelectList(deposit, "AccountNumber", "NameOfAccount", "");
+                                //    @Html.DropDownList("exps", null, "Select Business Division", new { @class = "form-control", onchange = "", @style = "width:450px;display:inline;", @id = "exps" })
+
+                                //}
+                            }
+
+                        }
+
+
+
+
+                        <input type="date" name="from" class="form-control" id="from" style="width:170px;display:inline;" />
+                        <input type="date" name="to" class="form-control" id="to" style="width:170px;display:inline;" />
+
+
+
+                        <input type="submit" id="btnview" style="display:inline-block;" class="btn btn-primary" value="View Sales" onclick="view();" />
+                   
+                        <hr />
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12" id="divpaymentlist">
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+            <!-- /.box -->
+        </div>
+        <!--/.col (left) -->
+    </div>
+</section>
+
+@section scripts{
+    <script type="text/javascript">
+
+
+        $(document).ready(function () {
+            $('#from').datepicker({
+                startDate: '+0d',
+
+            }).on('change', function () {
+                $('.datepicker').hide();
+            });
+
+
+            $('#to').datepicker({
+                startDate: '+0d',
+
+            }).on('change', function () {
+                $('.datepicker').hide();
+            });
+
+            getexpenses();
+        });
+
+
+
+
+
+
+
+
+
+
+
+    </script>
+
+
+    <script type="text/javascript">
+
+        function view()
+        {
+           var idx = $("#exps").val();
+           var user = $("#userid").val();
+           var date1 = $("#from").val();
+           var date2=$("#to").val();
+
+
+
+
+            $.ajax({
+                type: "POST",
+                global: false,
+                data: { divid: idx,userid:user,fromd:date1,tod:date2},
+                url: url = "/Reports/GetSalesReport",
+                success: function (data) {
+
+
+
+                    $("#tabletitle").show("fade");
+                    $("#divpaymentlist").show("fade");
+                    var str = "";
+
+                    str += '<table  class="table table-bordered" id="tabledivpaymentlist"><thead><tr class="alert-info">';
+                    str += '<th style="width: 15vw; text-align: center;">ID</th>';
+                    str += '<th style="width: 15vw; text-align: center;">ReceiptID.</th>';
+                    str += '<th style="width: 15vw; text-align: center;">Date Date</th>';
+
+                    str += '<th style="width: 15vw; text-align: center;">Payment.</th>';
+                    str += '<th style="width: 15vw; text-align: center;">User</th>';
+                    str += '<th style="width: 15vw; text-align: center;">Status</th>';
+                    str += '<th style="width: 15vw; text-align: center;">Customer</th>';
+                    str += '<th style="width: 15vw; text-align: center;">Total</th>';
+                    str += '<th style="width: 15vw; text-align: center;">Discount</th>';
+                    str += '<th style="width: 15vw; text-align: center;">Net</th>';
+                    str += '<th style="width: 15vw; text-align: center;">Update</th>';
+                    str += '<th style="width: 15vw; text-align: center;">Installment</th>';
+
+                    str += '</tr></thead><tbody>';
+
+
+                    try {
+
+                        var total = 0;
+                        var net = 0;
+                        var disc = 0;
+
+
+                        $.each(data, function (i, rec) {
+                            str += '<tr>';
+                            total = total + rec.total;
+                            net = net + rec.net;
+                            disc = disc + rec.discount;
+
+                            str += '<td style="text-align: center;">' + rec.id + '</td>';
+
+                            str += '<td style="text-align: center;"><a href="/Sales/Receipt?id=' + rec.id + '"> <i class="fa fa-print"> inv.' + rec.invoice + '</i> </a>';
+                                
+                                
+                            str += '<form method="post" action="/sales/updateinvoiceNumber"><input type="hidden" name="id" value="' + rec.id + '"> <input type="text" name="invoice" value="' + rec.invoice + '"><input type="submit" value="update"></form>  </td>';
+
+
+
+                            str += '<td style="text-align: center;">' + rec.date + '</td>';
+                            str += '<td style="text-align: center;">' + rec.payment + '</td>';
+                            str += '<td style="text-align: center;">' + rec.user + '</td>';
+                            str += '<td style="text-align: center;">' + rec.status + '</td>';
+                            str += '<td style="text-align: center;">' + rec.customer + '</td>';
+                            str += '<td style="text-align: center;"><b>' + rec.total + '</b></td>';
+                            str += '<td style="text-align: center;"><b>' + rec.discount + '</b></td>';
+                            str += '<td style="text-align: center;"><b>' + rec.net + '</b></td>';
+
+
+                            var xx = rec.status.includes("Open");
+                            var yy = rec.payment.includes("Invo");
+                            if (xx == true)
+                            {
+
+                          
+                                str += '<th style="width: 15vw; text-align: center;"><a href="/Sales/Update_Sales/?id=' + rec.id + '" class="btn btn-success"><i class="fa fa-cross"></i> Update Sales </a> </th>';
+                            }
+                            else
+                            {
+                                str += '<th style="width: 15vw; text-align: center;"></th>';
+                            }
+                            if (yy == true) {
+                                str += '<th style="width: 15vw; text-align: center;"><a href="/Sales/Installment/?id=' + rec.id + '&customer=' + rec.Customer_ID + '" class="btn btn-success"><i class="fa fa-cross"></i>Installment </a> </th>';
+                            }
+                            else {
+                                str += '<th style="width: 15vw; text-align: center;"></th>';
+                            }
+
+                        });
+
+
+                        str += '<tr><td></td><td></td><td></td><td></td><td></td><td></td><td style="text-align: center;"><b>$' + total + '</b></td><td style="text-align: center;"> <b> $' + disc + '</b></td><td  style="text-align: center;"><b >$' + net + '</b></td><td></td>';
+
+                    }
+
+                        catch (e) {
+                            alert(e);
+                        }
+                       // str += '</tr><tr><td></td> <td style="text-align: right;">Sub Total</td> <td style="text-align: center;"><b></b></td><td></td><td></td><td></td><td></td></tr>';
+
+                    str += '</tbody></table>';
+
+                    $("#divpaymentlist").html(str);
+
+                    $("#tabledivpaymentlist").dataTable({
+                        "bPaginate": false,
+                        "bLengthChange": false,
+                        "bFilter": false,
+                        "bSort": false,
+                        "bInfo": false,
+                        "bAutoWidth": false,
+                        "bDestroy": true,
+                        "bRetrieve": false
+                    });
+
+                    if (response.status == false) {
+                        if (!IsEmpty(response.output)) {
+                            new PNotify({
+                                title: 'Error!',
+                                text: "" + response.output + "",
+                                type: 'error',
+                                addclass: 'notification-success',
+                                icon: 'fa fa-check',
+                                delay: '1000'
+
+                            });
+                        }
+                    }
+
+                },
+                error: function (response) {
+                    if (console) {
+                        console.log("Error", response);
+                        new PNotify({
+                            title: 'Error!',
+                            text: "Please Select Valid Date",  // + response.responseText + "",
+                            type: 'error',
+                            addclass: 'notification-success',
+                            icon: 'fa fa-check',
+                            delay: '1000'
+                        });
+                    }
+                },
+                dataType: "json"
+            });
+        }
+
+
+
+
+        function print() {
+            debugger;
+            var mywindow = window.open('', 'PRINT', 'height=800,width=1200');
+
+
+            mywindow.document.write('<html><style> #divpaymentlist{border:1px solid grey;border-collapse:collapse;} table{cell-spacing:0;border-collapse:collapse;} td{border:1px solid grey;border-collapse:collapse;} th{font-weight:bold;border:1px solid grey;border-collapse:collapse;background-color:gery;} </style>');
+            var fr = "From " + $("#from").val() + "   To " + $("#to").val();
+
+            mywindow.document.write('<body > <center> <h2>Sales Report </h2>' + fr + "</center> <br>");
+            //   mywindow.document.write('<h1>' + document.title + '</h1>');
+            mywindow.document.write(document.getElementById("divpaymentlist").innerHTML);
+            mywindow.document.write('</body></html>');
+
+            mywindow.document.close(); // necessary for IE >= 10
+            mywindow.focus(); // necessary for IE >= 10*/
+
+            mywindow.print();
+            mywindow.close();
+
+            return true;
+
+        }
+    </script>
+}
+
+  

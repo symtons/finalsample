@@ -1,0 +1,117 @@
+﻿@model SameSoftWeb.Models.tblDialyTask
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="content-body">
+    <!-- Basic Tables start -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title"><b>New Task Check-In</b></h3>
+                    <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                    <div class="heading-elements">
+                        <ul class="list-inline mb-0">
+                            <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                            <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
+                            <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                            <li><a data-action="close"><i class="ft-x"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card-content collapse show">
+                    <div class="card-body">
+                        <!--Start Sercice Details Area -->
+                        <section class="service_details_area section_padding">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-md-9 col-lg-9 col-sm-12 col-xs-12">
+                                        <div class="service_details_page_content">
+                                      
+                                            @Html.ActionLink("Back to List", "Index")
+                                            @using (Html.BeginForm())
+                                            {
+                                                @Html.AntiForgeryToken()
+
+                                                <div class="Row">
+
+                                                    <hr />
+                                                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+
+                                                    <div class="col-md-6">
+                                                        <p>Customer Name</p>
+                                                        @Html.DropDownList("CustomerID", null, htmlAttributes: new { @Required = "", @class = "form-control" })
+                                                        @Html.ValidationMessageFor(model => model.CustomerID, "", new { @class = "text-danger" })
+                                                    </div>
+
+                                                    <div class="col-md-6">
+                                                        <p>Task Decription</p>
+                                                        @Html.EditorFor(model => model.Task_Decription, new { htmlAttributes = new { @Required = "", @class = "form-control" } })
+                                                        @Html.ValidationMessageFor(model => model.Task_Decription, "", new { @class = "text-danger" })
+
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <p> Task Date</p>
+                                                        @Html.EditorFor(model => model.Task_Date, new { htmlAttributes = new { @Required = "", @class = "form-control", @Type = "Date" } })
+                                                        @Html.ValidationMessageFor(model => model.Task_Date, "", new { @class = "text-danger" })
+                                                    </div>
+
+                                                    <div class="col-md-6">
+                                                        <p>Check-IN Time(Write for example 13:00 )/24 hour format</p>
+                                                        @Html.EditorFor(model => model.From_Time, new { htmlAttributes = new { @Required = "", @class = "form-control" } })
+                                                        @Html.ValidationMessageFor(model => model.From_Time, "", new { @class = "text-danger" })
+                                                    </div>
+
+
+                                                    @*<div class="form-group">
+                                                            @Html.LabelFor(model => model.To_Time, htmlAttributes: new { @class = "control-label col-md-2" })
+                                                            <div class="col-md-10">
+                                                                @Html.EditorFor(model => model.To_Time, new { htmlAttributes = new { @class = "form-control" } })
+                                                                @Html.ValidationMessageFor(model => model.To_Time, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>*@
+
+                                                    <div class="col-md-6">
+                                                        <p>Transportation</p>
+
+                                                        <select name="Transportation_Mode" required="" class="form-control">
+                                                            <option>No Transportation</option>
+                                                            <option>BL</option>
+                                                            <option>Bajaj</option>
+                                                            <option>BL + Bajaj</option>
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="col-md-6">
+                                                        <p style="font-size:11px;">Transportation -USD (shiling somali ubadal Dollar example : 4,000SHs=$0.2)</p>
+                                                        @Html.EditorFor(model => model.Transportation, new { htmlAttributes = new { @Required = "", @class = "form-control", @value = "0" } })
+                                                        @Html.ValidationMessageFor(model => model.Transportation, "", new { @class = "text-danger" })
+                                                    </div>
+
+                                                    <div class="col-md-6">
+                                                        <br />
+                                                        <input type="submit" value="Check In" class="btn btn-primary" />
+                                                    </div>
+
+                                                </div>
+                                            }
+
+
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Basic Tables end -->
+</div>

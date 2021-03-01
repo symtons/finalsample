@@ -1,0 +1,1427 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="SameSoftwareWebModelStoreContainer" CdmEntityContainer="SameSoftwareWebEntities">
+    <FunctionImportMapping FunctionImportName="sp_get_Customer_Balanace" FunctionName="SameSoftwareWebModel.Store.sp_get_Customer_Balanace">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="SameSoftwareWebModel.sp_get_Customer_Balanace_Result">
+          <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+          <ScalarProperty Name="Customer_Name" ColumnName="Customer_Name" />
+          <ScalarProperty Name="Cutomer_Type" ColumnName="Cutomer_Type" />
+          <ScalarProperty Name="Contact_Numbers" ColumnName="Contact_Numbers" />
+          <ScalarProperty Name="Balance" ColumnName="Balance" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="sp_view_fee_collection" FunctionName="SameSoftwareWebModel.Store.sp_view_fee_collection">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="SameSoftwareWebModel.sp_view_fee_collection_Result">
+          <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+          <ScalarProperty Name="Transction_ID" ColumnName="Transction_ID" />
+          <ScalarProperty Name="Transaction_Date" ColumnName="Transaction_Date" />
+          <ScalarProperty Name="Transaction_type" ColumnName="Transaction_type" />
+          <ScalarProperty Name="Debit" ColumnName="Debit" />
+          <ScalarProperty Name="Credit" ColumnName="Credit" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="Due_Date" ColumnName="Due_Date" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="Note" ColumnName="Note" />
+          <ScalarProperty Name="FullName" ColumnName="FullName" />
+          <ScalarProperty Name="Customer_Name" ColumnName="Customer_Name" />
+          <ScalarProperty Name="Cutomer_Type" ColumnName="Cutomer_Type" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <EntitySetMapping Name="IssueTypes">
+      <EntityTypeMapping TypeName="SameSoftwareWebModel.IssueType">
+        <MappingFragment StoreEntitySet="IssueTypes">
+          <ScalarProperty Name="IssueType1" ColumnName="IssueType" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="sysdiagrams">
+      <EntityTypeMapping TypeName="SameSoftwareWebModel.sysdiagram">
+        <MappingFragment StoreEntitySet="sysdiagrams">
+          <ScalarProperty Name="definition" ColumnName="definition" />
+          <ScalarProperty Name="version" ColumnName="version" />
+          <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+          <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+          <ScalarProperty Name="name" ColumnName="name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblApplications">
+      <EntityTypeMapping TypeName="SameSoftwareWebModel.tblApplication">
+        <MappingFragment StoreEntitySet="tblApplications">
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="Type" ColumnName="Type" />
+          <ScalarProperty Name="Application_Name" ColumnName="Application_Name" />
+          <ScalarProperty Name="Application_ID" ColumnName="Application_ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblAppVersions">
+      <EntityTypeMapping TypeName="SameSoftwareWebModel.tblAppVersion">
+        <MappingFragment StoreEntitySet="tblAppVersions">
+          <ScalarProperty Name="Notes" ColumnName="Notes" />
+          <ScalarProperty Name="Last_Update_Date" ColumnName="Last_Update_Date" />
+          <ScalarProperty Name="Latest_Version" ColumnName="Latest_Version" />
+          <ScalarProperty Name="App_Name" ColumnName="App_Name" />
+          <ScalarProperty Name="App_ID" ColumnName="App_ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblCashFlows">
+      <EntityTypeMapping TypeName="SameSoftwareWebModel.tblCashFlow">
+        <MappingFragment StoreEntitySet="tblCashFlow">
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="Type" ColumnName="Type" />
+          <ScalarProperty Name="Credit" ColumnName="Credit" />
+          <ScalarProperty Name="Debit" ColumnName="Debit" />
+          <ScalarProperty Name="Tran_Date" ColumnName="Tran_Date" />
+          <ScalarProperty Name="CashFlowID" ColumnName="CashFlowID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblCustomerTranactionTypes">
+      <EntityTypeMapping TypeName="SameSoftwareWebModel.tblCustomerTranactionType">
+        <MappingFragment StoreEntitySet="tblCustomerTranactionType">
+          <ScalarProperty Name="Transaction_type" ColumnName="Transaction_type" />
+          <ScalarProperty Name="Transaction_type_id" ColumnName="Transaction_type_id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TblCustomerTransactions">
+      <EntityTypeMapping TypeName="SameSoftwareWebModel.TblCustomerTransaction">
+        <MappingFragment StoreEntitySet="TblCustomerTransactions">
+          <ScalarProperty Name="User_ID" ColumnName="User_ID" />
+          <ScalarProperty Name="Note" ColumnName="Note" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="Due_Date" ColumnName="Due_Date" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="Customer_ID" ColumnName="Customer_ID" />
+          <ScalarProperty Name="Credit" ColumnName="Credit" />
+          <ScalarProperty Name="Debit" ColumnName="Debit" />
+          <ScalarProperty Name="Transaction_type_id" ColumnName="Transaction_type_id" />
+          <ScalarProperty Name="Transaction_Date" ColumnName="Transaction_Date" />
+          <ScalarProperty Name="Transction_ID" ColumnName="Transction_ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblCustomerTypes">
+      <EntityTypeMapping TypeName="SameSoftwareWebModel.tblCustomerType">
+        <MappingFragment StoreEntitySet="tblCustomerTypes">
+          <ScalarProperty Name="Customer_Type" ColumnName="Customer_Type" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblFeatureRequests">
+      <EntityTypeMapping TypeName="SameSoftwareWebModel.tblFeatureRequest">
+        <MappingFragment StoreEntitySet="tblFeatureRequests">
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="Requested_date" ColumnName="Requested_date" />
+          <ScalarProperty Name="Importance" ColumnName="Importance" />
+          <ScalarProperty Name="Deadline" ColumnName="Deadline" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="Title" ColumnName="Title" />
+          <ScalarProperty Name="Customer_ID" ColumnName="Customer_ID" />
+          <ScalarProperty Name="User_ID" ColumnName="User_ID" />
+          <ScalarProperty Name="Application_ID" ColumnName="Application_ID" />
+          <ScalarProperty Name="Feature_ID" ColumnName="Feature_ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblPayment_Voucher">
+      <EntityTypeMapping TypeName="SameSoftwareWebModel.tblPayment_Voucher">
+        <MappingFragment StoreEntitySet="tblPayment_Voucher">
+          <ScalarProperty Name="Tran_Nbr" ColumnName="Tran_Nbr" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="Company_ID" ColumnName="Company_ID" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="In_Word" ColumnName="In_Word" />
+          <ScalarProperty Name="Payee" ColumnName="Payee" />
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="Payment_Date" ColumnName="Payment_Date" />
+          <ScalarProperty Name="Voucher_ID" ColumnName="Voucher_ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblProblems">
+      <EntityTypeMapping TypeName="SameSoftwareWebModel.tblProblem">
+        <MappingFragment StoreEntitySet="tblProblems">
+          <ScalarProperty Name="SolvedDate" ColumnName="SolvedDate" />
+          <ScalarProperty Name="Priority" ColumnName="Priority" />
+          <ScalarProperty Name="Type" ColumnName="Type" />
+          <ScalarProperty Name="User" ColumnName="User" />
+          <ScalarProperty Name="Application_ID" ColumnName="Application_ID" />
+          <ScalarProperty Name="ErrorDate" ColumnName="ErrorDate" />
+          <ScalarProperty Name="Solution_Note" ColumnName="Solution_Note" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="Title" ColumnName="Title" />
+          <ScalarProperty Name="Customer_ID" ColumnName="Customer_ID" />
+          <ScalarProperty Name="Problem_ID" ColumnName="Problem_ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblProjects">
+      <EntityTypeMapping TypeName="SameSoftwareWebModel.tblProject">
+        <MappingFragment StoreEntitySet="tblProjects">
+          <ScalarProperty Name="Project_Title" ColumnName="Project_Title" />
+          <ScalarProperty Name="Agreement_Status" ColumnName="Agreement_Status" />
+          <ScalarProperty Name="Payments" ColumnName="Payments" />
+          <ScalarProperty Name="Created_by" ColumnName="Created_by" />
+          <ScalarProperty Name="Priority" ColumnName="Priority" />
+          <ScalarProperty Name="PaymentAgreement_Link" ColumnName="PaymentAgreement_Link" />
+          <ScalarProperty Name="Quotation_Link" ColumnName="Quotation_Link" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="Total_Cost" ColumnName="Total_Cost" />
+          <ScalarProperty Name="Application" ColumnName="Application" />
+          <ScalarProperty Name="Creation_Date" ColumnName="Creation_Date" />
+          <ScalarProperty Name="Customer_Name" ColumnName="Customer_Name" />
+          <ScalarProperty Name="Project_ID" ColumnName="Project_ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblReceipt_Voucher">
+      <EntityTypeMapping TypeName="SameSoftwareWebModel.tblReceipt_Voucher">
+        <MappingFragment StoreEntitySet="tblReceipt_Voucher">
+          <ScalarProperty Name="Balance" ColumnName="Balance" />
+          <ScalarProperty Name="Tran_Nbr" ColumnName="Tran_Nbr" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="Company_ID" ColumnName="Company_ID" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="In_Word" ColumnName="In_Word" />
+          <ScalarProperty Name="Payee" ColumnName="Payee" />
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="Receipt_Date" ColumnName="Receipt_Date" />
+          <ScalarProperty Name="Voucher_ID" ColumnName="Voucher_ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblUsers">
+      <EntityTypeMapping TypeName="SameSoftwareWebModel.tblUser">
+        <MappingFragment StoreEntitySet="tblUsers">
+          <ScalarProperty Name="App_ID" ColumnName="App_ID" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="Password" ColumnName="Password" />
+          <ScalarProperty Name="UserName" ColumnName="UserName" />
+          <ScalarProperty Name="Role" ColumnName="Role" />
+          <ScalarProperty Name="Customer_ID" ColumnName="Customer_ID" />
+          <ScalarProperty Name="FullName" ColumnName="FullName" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblConnection_Data">
+      <EntityTypeMapping TypeName="SameSoftwareWebModel.tblConnection_Data">
+        <MappingFragment StoreEntitySet="tblConnection_Data">
+          <ScalarProperty Name="Expire_Date" ColumnName="Expire_Date" />
+          <ScalarProperty Name="Database_Name" ColumnName="Database_Name" />
+          <ScalarProperty Name="Database_Password" ColumnName="Database_Password" />
+          <ScalarProperty Name="Database_User" ColumnName="Database_User" />
+          <ScalarProperty Name="Database_Server" ColumnName="Database_Server" />
+          <ScalarProperty Name="Pass_Code" ColumnName="Pass_Code" />
+          <ScalarProperty Name="Generated_Date" ColumnName="Generated_Date" />
+          <ScalarProperty Name="Generated_by" ColumnName="Generated_by" />
+          <ScalarProperty Name="Customer" ColumnName="Customer" />
+          <ScalarProperty Name="Connection_ID" ColumnName="Connection_ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblWebLogs">
+      <EntityTypeMapping TypeName="SameSoftwareWebModel.tblWebLog">
+        <MappingFragment StoreEntitySet="tblWebLog">
+          <ScalarProperty Name="Details" ColumnName="Details" />
+          <ScalarProperty Name="Type" ColumnName="Type" />
+          <ScalarProperty Name="Log_Date" ColumnName="Log_Date" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblExpenseTypes">
+      <EntityTypeMapping TypeName="SameSoftwareWebModel.tblExpenseType">
+        <MappingFragment StoreEntitySet="tblExpenseType">
+          <ScalarProperty Name="Is_Cogs_Item" ColumnName="Is_Cogs_Item" />
+          <ScalarProperty Name="Account_Number" ColumnName="Account_Number" />
+          <ScalarProperty Name="Expense_Type" ColumnName="Expense Type" />
+          <ScalarProperty Name="Expense_Type_ID" ColumnName="Expense_Type_ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblCash_Flow">
+      <EntityTypeMapping TypeName="SameSoftwareWebModel.tblCash_Flow">
+        <MappingFragment StoreEntitySet="tblCash_Flow">
+          <ScalarProperty Name="Credit" ColumnName="Credit" />
+          <ScalarProperty Name="Debit" ColumnName="Debit" />
+          <ScalarProperty Name="Tran_Nbr" ColumnName="Tran_Nbr" />
+          <ScalarProperty Name="Journal_Detail_id" ColumnName="Journal_Detail_id" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="Tran_Type" ColumnName="Tran_Type" />
+          <ScalarProperty Name="Cash_Flow_ID" ColumnName="Cash_Flow_ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblChart_Of_Account_Assignment">
+      <EntityTypeMapping TypeName="SameSoftwareWebModel.tblChart_Of_Account_Assignment">
+        <MappingFragment StoreEntitySet="tblChart_Of_Account_Assignment">
+          <ScalarProperty Name="Account_Name" ColumnName="Account_Name" />
+          <ScalarProperty Name="Account_Nbr" ColumnName="Account_Nbr" />
+          <ScalarProperty Name="Account_ID" ColumnName="Account_ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblChart_Of_Accounts">
+      <EntityTypeMapping TypeName="SameSoftwareWebModel.tblChart_Of_Accounts">
+        <MappingFragment StoreEntitySet="tblChart_Of_Accounts">
+          <ScalarProperty Name="Account_Group" ColumnName="Account_Group" />
+          <ScalarProperty Name="Sub_Type" ColumnName="Sub_Type" />
+          <ScalarProperty Name="level" ColumnName="level" />
+          <ScalarProperty Name="DrOrCrSide" ColumnName="DrOrCrSide" />
+          <ScalarProperty Name="Account_Class_Id" ColumnName="Account_Class_Id" />
+          <ScalarProperty Name="Sort_Rank" ColumnName="Sort_Rank" />
+          <ScalarProperty Name="Parent_id" ColumnName="Parent_id" />
+          <ScalarProperty Name="Affect_Gross_Profit" ColumnName="Affect_Gross_Profit" />
+          <ScalarProperty Name="Cash_Or_Bank" ColumnName="Cash_Or_Bank" />
+          <ScalarProperty Name="Level_SLNO" ColumnName="Level_SLNO" />
+          <ScalarProperty Name="Account_Sub_Group" ColumnName="Account_Sub_Group" />
+          <ScalarProperty Name="Account_Main_Group" ColumnName="Account_Main_Group" />
+          <ScalarProperty Name="Transaction_Type" ColumnName="Transaction_Type" />
+          <ScalarProperty Name="Account_Name" ColumnName="Account_Name" />
+          <ScalarProperty Name="Account_Number" ColumnName="Account_Number" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblJournals">
+      <EntityTypeMapping TypeName="SameSoftwareWebModel.tblJournal">
+        <MappingFragment StoreEntitySet="tblJournal">
+          <ScalarProperty Name="Journal_Type" ColumnName="Journal_Type" />
+          <ScalarProperty Name="Tran_Type" ColumnName="Tran_Type" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="Tran_Nbr" ColumnName="Tran_Nbr" />
+          <ScalarProperty Name="TYear" ColumnName="TYear" />
+          <ScalarProperty Name="Period" ColumnName="Period" />
+          <ScalarProperty Name="Journal_Date" ColumnName="Journal_Date" />
+          <ScalarProperty Name="Journal_id" ColumnName="Journal_id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblJournal_Details">
+      <EntityTypeMapping TypeName="SameSoftwareWebModel.tblJournal_Details">
+        <MappingFragment StoreEntitySet="tblJournal_Details">
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="Credit" ColumnName="Credit" />
+          <ScalarProperty Name="Debit" ColumnName="Debit" />
+          <ScalarProperty Name="Account_Number" ColumnName="Account_Number" />
+          <ScalarProperty Name="Journal_id" ColumnName="Journal_id" />
+          <ScalarProperty Name="Journal_Detail_id" ColumnName="Journal_Detail_id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblSMS_API_DATA">
+      <EntityTypeMapping TypeName="SameSoftwareWebModel.tblSMS_API_DATA">
+        <MappingFragment StoreEntitySet="tblSMS_API_DATA">
+          <ScalarProperty Name="Request_Url" ColumnName="Request_Url" />
+          <ScalarProperty Name="SMS_Body" ColumnName="SMS_Body" />
+          <ScalarProperty Name="Phone" ColumnName="Phone" />
+          <ScalarProperty Name="Short_Name" ColumnName="Short_Name" />
+          <ScalarProperty Name="DateTime" ColumnName="DateTime" />
+          <ScalarProperty Name="SMS_SENT_ID" ColumnName="SMS_SENT_ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="Acc_Update_Journal_Status_Rev_Expense_by_Date" FunctionName="SameSoftwareWebModel.Store.Acc_Update_Journal_Status_Rev_Expense_by_Date" />
+    <FunctionImportMapping FunctionImportName="Add_Journal_Details" FunctionName="SameSoftwareWebModel.Store.Add_Journal_Details" />
+    <FunctionImportMapping FunctionImportName="Get_Journal_Balance_By_Account" FunctionName="SameSoftwareWebModel.Store.Get_Journal_Balance_By_Account" />
+    <FunctionImportMapping FunctionImportName="Get_Max_Journal_id_by_User" FunctionName="SameSoftwareWebModel.Store.Get_Max_Journal_id_by_User" />
+    <FunctionImportMapping FunctionImportName="Sp_Add_Journal" FunctionName="SameSoftwareWebModel.Store.Sp_Add_Journal" />
+    <FunctionImportMapping FunctionImportName="Sp_Add_Journal_Details" FunctionName="SameSoftwareWebModel.Store.Sp_Add_Journal_Details" />
+    <FunctionImportMapping FunctionImportName="sp_alterdiagram" FunctionName="SameSoftwareWebModel.Store.sp_alterdiagram" />
+    <FunctionImportMapping FunctionImportName="sp_creatediagram" FunctionName="SameSoftwareWebModel.Store.sp_creatediagram" />
+    <FunctionImportMapping FunctionImportName="Sp_Delete_Cash_Flow_by_Journal_id" FunctionName="SameSoftwareWebModel.Store.Sp_Delete_Cash_Flow_by_Journal_id" />
+    <FunctionImportMapping FunctionImportName="Sp_Delete_Journal_by_Tran_Nbr" FunctionName="SameSoftwareWebModel.Store.Sp_Delete_Journal_by_Tran_Nbr" />
+    <FunctionImportMapping FunctionImportName="Sp_Delete_Journal_Detail_by_ID" FunctionName="SameSoftwareWebModel.Store.Sp_Delete_Journal_Detail_by_ID" />
+    <FunctionImportMapping FunctionImportName="Sp_Delete_Journal_Details_by_ID" FunctionName="SameSoftwareWebModel.Store.Sp_Delete_Journal_Details_by_ID" />
+    <FunctionImportMapping FunctionImportName="sp_dropdiagram" FunctionName="SameSoftwareWebModel.Store.sp_dropdiagram" />
+    <FunctionImportMapping FunctionImportName="Sp_Get_Max_Journal_Detail_by_UserID" FunctionName="SameSoftwareWebModel.Store.Sp_Get_Max_Journal_Detail_by_UserID" />
+    <FunctionImportMapping FunctionImportName="sp_helpdiagramdefinition" FunctionName="SameSoftwareWebModel.Store.sp_helpdiagramdefinition">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="SameSoftwareWebModel.sp_helpdiagramdefinition_Result">
+          <ScalarProperty Name="version" ColumnName="version" />
+          <ScalarProperty Name="definition" ColumnName="definition" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="sp_helpdiagrams" FunctionName="SameSoftwareWebModel.Store.sp_helpdiagrams">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="SameSoftwareWebModel.sp_helpdiagrams_Result">
+          <ScalarProperty Name="Database" ColumnName="Database" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Owner" ColumnName="Owner" />
+          <ScalarProperty Name="OwnerID" ColumnName="OwnerID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="sp_renamediagram" FunctionName="SameSoftwareWebModel.Store.sp_renamediagram" />
+    <FunctionImportMapping FunctionImportName="sp_upgraddiagrams" FunctionName="SameSoftwareWebModel.Store.sp_upgraddiagrams" />
+    <EntitySetMapping Name="TblLogs">
+      <EntityTypeMapping TypeName="SameSoftwareWebModel.TblLog">
+        <MappingFragment StoreEntitySet="TblLog">
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="LogDate" ColumnName="LogDate" />
+          <ScalarProperty Name="Details" ColumnName="Details" />
+          <ScalarProperty Name="Title" ColumnName="Title" />
+          <ScalarProperty Name="Log_id" ColumnName="Log_id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="Add_Payment_Voucher" FunctionName="SameSoftwareWebModel.Store.Add_Payment_Voucher" />
+    <FunctionImportMapping FunctionImportName="AddCashFlow" FunctionName="SameSoftwareWebModel.Store.AddCashFlow" />
+    <FunctionImportMapping FunctionImportName="Get_Max_VoucherID" FunctionName="SameSoftwareWebModel.Store.Get_Max_VoucherID" />
+    <EntitySetMapping Name="tblVendor_Invoice">
+      <EntityTypeMapping TypeName="SameSoftwareWebModel.tblVendor_Invoice">
+        <MappingFragment StoreEntitySet="tblVendor_Invoice">
+          <ScalarProperty Name="Payment_type" ColumnName="Payment_type" />
+          <ScalarProperty Name="VendorID" ColumnName="VendorID" />
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="Received_by" ColumnName="Received_by" />
+          <ScalarProperty Name="Check_Number" ColumnName="Check_Number" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="Payment_Method" ColumnName="Payment_Method" />
+          <ScalarProperty Name="Payment_Date" ColumnName="Payment_Date" />
+          <ScalarProperty Name="Invoice_Date" ColumnName="Invoice_Date" />
+          <ScalarProperty Name="Invoice_Nbr" ColumnName="Invoice_Nbr" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblVendor_Tran_Type">
+      <EntityTypeMapping TypeName="SameSoftwareWebModel.tblVendor_Tran_Type">
+        <MappingFragment StoreEntitySet="tblVendor_Tran_Type">
+          <ScalarProperty Name="Tran_Type" ColumnName="Tran_Type" />
+          <ScalarProperty Name="Vendor_Tran_Type_ID" ColumnName="Vendor_Tran_Type_ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblVendor_Transaction">
+      <EntityTypeMapping TypeName="SameSoftwareWebModel.tblVendor_Transaction">
+        <MappingFragment StoreEntitySet="tblVendor_Transaction">
+          <ScalarProperty Name="VendorID" ColumnName="VendorID" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="Tran_Date" ColumnName="Tran_Date" />
+          <ScalarProperty Name="Vendor_Tran_ID" ColumnName="Vendor_Tran_ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="Add_Vendor_Transaction" FunctionName="SameSoftwareWebModel.Store.Add_Vendor_Transaction" />
+    <FunctionImportMapping FunctionImportName="Add_Vendor_Transaction_Detail" FunctionName="SameSoftwareWebModel.Store.Add_Vendor_Transaction_Detail" />
+    <FunctionImportMapping FunctionImportName="Get_Total_Vendor_Tranaction_Detial_by_Vendor_TranID" FunctionName="SameSoftwareWebModel.Store.Get_Total_Vendor_Tranaction_Detial_by_Vendor_TranID" />
+    <FunctionImportMapping FunctionImportName="Get_Vendor_Tran_Type_By_Tran_Type" FunctionName="SameSoftwareWebModel.Store.Get_Vendor_Tran_Type_By_Tran_Type" />
+    <FunctionImportMapping FunctionImportName="Get_Vendor_TransactionID_By_Status_VendorID" FunctionName="SameSoftwareWebModel.Store.Get_Vendor_TransactionID_By_Status_VendorID" />
+    <FunctionImportMapping FunctionImportName="Update_Vendor_Transaction_Amount_By_Vendor_transid" FunctionName="SameSoftwareWebModel.Store.Update_Vendor_Transaction_Amount_By_Vendor_transid" />
+    <FunctionImportMapping FunctionImportName="Sp_Get_List_of_Cash_Bank" FunctionName="SameSoftwareWebModel.Store.Sp_Get_List_of_Cash_Bank">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="SameSoftwareWebModel.Sp_Get_List_of_Cash_Bank_Result">
+          <ScalarProperty Name="ACCOUNT_NUMBER" ColumnName="ACCOUNT_NUMBER" />
+          <ScalarProperty Name="ACCOUNT_NAME" ColumnName="ACCOUNT_NAME" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="SP_Get_Max_Journal_id_by_User" FunctionName="SameSoftwareWebModel.Store.SP_Get_Max_Journal_id_by_User" />
+    <EntitySetMapping Name="Categories">
+      <EntityTypeMapping TypeName="SameSoftwareWebModel.Category">
+        <MappingFragment StoreEntitySet="Category">
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          <ScalarProperty Name="Date_Updated" ColumnName="Date_Updated" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Category_Id" ColumnName="Category_Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Inventory_Types">
+      <EntityTypeMapping TypeName="SameSoftwareWebModel.Inventory_Types">
+        <MappingFragment StoreEntitySet="Inventory_Types">
+          <ScalarProperty Name="Inventory_Type" ColumnName="Inventory_Type" />
+          <ScalarProperty Name="Inventory_type_id" ColumnName="Inventory_type_id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Items">
+      <EntityTypeMapping TypeName="SameSoftwareWebModel.Item">
+        <MappingFragment StoreEntitySet="Item">
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="ReferenceNo" ColumnName="ReferenceNo" />
+          <ScalarProperty Name="Business_Division_Id" ColumnName="Business_Division_Id" />
+          <ScalarProperty Name="ManufacturerId" ColumnName="ManufacturerId" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          <ScalarProperty Name="Re_Order_Leval" ColumnName="Re_Order_Leval" />
+          <ScalarProperty Name="Sale_Price" ColumnName="Sale_Price" />
+          <ScalarProperty Name="Unit_Cost" ColumnName="Unit_Cost" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Bar_Code" ColumnName="Bar_Code" />
+          <ScalarProperty Name="InventoryAdjustmentAccountId" ColumnName="InventoryAdjustmentAccountId" />
+          <ScalarProperty Name="CostOfGoodsSoldAccountId" ColumnName="CostOfGoodsSoldAccountId" />
+          <ScalarProperty Name="InventoryAccountId" ColumnName="InventoryAccountId" />
+          <ScalarProperty Name="SalesAccountId" ColumnName="SalesAccountId" />
+          <ScalarProperty Name="Measurement_Id" ColumnName="Measurement_Id" />
+          <ScalarProperty Name="Category_Id" ColumnName="Category_Id" />
+          <ScalarProperty Name="Item_Id" ColumnName="Item_Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Manufacturers">
+      <EntityTypeMapping TypeName="SameSoftwareWebModel.Manufacturer">
+        <MappingFragment StoreEntitySet="Manufacturer">
+          <ScalarProperty Name="Address" ColumnName="Address" />
+          <ScalarProperty Name="Country" ColumnName="Country" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="ManufacturerId" ColumnName="ManufacturerId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Measurements">
+      <EntityTypeMapping TypeName="SameSoftwareWebModel.Measurement">
+        <MappingFragment StoreEntitySet="Measurement">
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="Code" ColumnName="Code" />
+          <ScalarProperty Name="Measurement_Id" ColumnName="Measurement_Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Quotation_Details">
+      <EntityTypeMapping TypeName="SameSoftwareWebModel.Quotation_Details">
+        <MappingFragment StoreEntitySet="Quotation_Details">
+          <ScalarProperty Name="Batch" ColumnName="Batch" />
+          <ScalarProperty Name="Quotation_ID" ColumnName="Quotation_ID" />
+          <ScalarProperty Name="Price" ColumnName="Price" />
+          <ScalarProperty Name="Qty" ColumnName="Qty" />
+          <ScalarProperty Name="Item_id" ColumnName="Item_id" />
+          <ScalarProperty Name="Quotation_detail_id" ColumnName="Quotation_detail_id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblCompanyInfoes">
+      <EntityTypeMapping TypeName="SameSoftwareWebModel.tblCompanyInfo">
+        <MappingFragment StoreEntitySet="tblCompanyInfo">
+          <ScalarProperty Name="Salam_Pay" ColumnName="Salam_Pay" />
+          <ScalarProperty Name="EMAAL" ColumnName="EMAAL" />
+          <ScalarProperty Name="Evc" ColumnName="Evc" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="Country" ColumnName="Country" />
+          <ScalarProperty Name="City" ColumnName="City" />
+          <ScalarProperty Name="Company_Mobile" ColumnName="Company_Mobile" />
+          <ScalarProperty Name="Company_Phone" ColumnName="Company_Phone" />
+          <ScalarProperty Name="Company_Name" ColumnName="Company_Name" />
+          <ScalarProperty Name="Company_ID" ColumnName="Company_ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblPurchase_Order">
+      <EntityTypeMapping TypeName="SameSoftwareWebModel.tblPurchase_Order">
+        <MappingFragment StoreEntitySet="tblPurchase_Order">
+          <ScalarProperty Name="Invoice_no" ColumnName="Invoice_no" />
+          <ScalarProperty Name="Vendor_Id" ColumnName="Vendor_Id" />
+          <ScalarProperty Name="Note" ColumnName="Note" />
+          <ScalarProperty Name="Business_Division_Id" ColumnName="Business_Division_Id" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="Total" ColumnName="Total" />
+          <ScalarProperty Name="Tran_Date" ColumnName="Tran_Date" />
+          <ScalarProperty Name="Purchase_ID" ColumnName="Purchase_ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblPurchase_Order_Details">
+      <EntityTypeMapping TypeName="SameSoftwareWebModel.tblPurchase_Order_Details">
+        <MappingFragment StoreEntitySet="tblPurchase_Order_Details">
+          <ScalarProperty Name="Purchase_ID" ColumnName="Purchase_ID" />
+          <ScalarProperty Name="Unit_Cost" ColumnName="Unit_Cost" />
+          <ScalarProperty Name="Qty" ColumnName="Qty" />
+          <ScalarProperty Name="Item_id" ColumnName="Item_id" />
+          <ScalarProperty Name="Purchase_order_detail_id" ColumnName="Purchase_order_detail_id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblQuotations">
+      <EntityTypeMapping TypeName="SameSoftwareWebModel.tblQuotation">
+        <MappingFragment StoreEntitySet="tblQuotations">
+          <ScalarProperty Name="Marketer_id" ColumnName="Marketer_id" />
+          <ScalarProperty Name="Customer_ID" ColumnName="Customer_ID" />
+          <ScalarProperty Name="Discount" ColumnName="Discount" />
+          <ScalarProperty Name="Business_Division_Id" ColumnName="Business_Division_Id" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="Total" ColumnName="Total" />
+          <ScalarProperty Name="Tran_Nbr" ColumnName="Tran_Nbr" />
+          <ScalarProperty Name="Tran_Date" ColumnName="Tran_Date" />
+          <ScalarProperty Name="Quotation_ID" ColumnName="Quotation_ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblSetting2">
+      <EntityTypeMapping TypeName="SameSoftwareWebModel.tblSetting2">
+        <MappingFragment StoreEntitySet="tblSetting2">
+          <ScalarProperty Name="Value" ColumnName="Value" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblVendor_Documents">
+      <EntityTypeMapping TypeName="SameSoftwareWebModel.tblVendor_Documents">
+        <MappingFragment StoreEntitySet="tblVendor_Documents">
+          <ScalarProperty Name="Document_Date" ColumnName="Document_Date" />
+          <ScalarProperty Name="Path" ColumnName="Path" />
+          <ScalarProperty Name="Document_Description" ColumnName="Document_Description" />
+          <ScalarProperty Name="Vendor_ID" ColumnName="Vendor_ID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="VendorInstallmentPlans">
+      <EntityTypeMapping TypeName="SameSoftwareWebModel.VendorInstallmentPlan">
+        <MappingFragment StoreEntitySet="VendorInstallmentPlans">
+          <ScalarProperty Name="Trans_Detail_ID" ColumnName="Trans_Detail_ID" />
+          <ScalarProperty Name="paid" ColumnName="paid" />
+          <ScalarProperty Name="userid" ColumnName="userid" />
+          <ScalarProperty Name="payment_date" ColumnName="payment_date" />
+          <ScalarProperty Name="status" ColumnName="status" />
+          <ScalarProperty Name="Payment_total" ColumnName="Payment_total" />
+          <ScalarProperty Name="payment_persent" ColumnName="payment_persent" />
+          <ScalarProperty Name="OrderId" ColumnName="OrderId" />
+          <ScalarProperty Name="Vendor_Id" ColumnName="Vendor_Id" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblInventory_Transaction_Details">
+      <EntityTypeMapping TypeName="SameSoftwareWebModel.tblInventory_Transaction_Details">
+        <MappingFragment StoreEntitySet="tblInventory_Transaction_Details">
+          <ScalarProperty Name="Barcode" ColumnName="Barcode" />
+          <ScalarProperty Name="Freight" ColumnName="Freight" />
+          <ScalarProperty Name="Tax" ColumnName="Tax" />
+          <ScalarProperty Name="Batch" ColumnName="Batch" />
+          <ScalarProperty Name="Sales_price" ColumnName="Sales_price" />
+          <ScalarProperty Name="Qty_Out" ColumnName="Qty_Out" />
+          <ScalarProperty Name="Qty_In" ColumnName="Qty_In" />
+          <ScalarProperty Name="Unit_Price" ColumnName="Unit_Price" />
+          <ScalarProperty Name="Item_Id" ColumnName="Item_Id" />
+          <ScalarProperty Name="Inventory_Tran_ID" ColumnName="Inventory_Tran_ID" />
+          <ScalarProperty Name="Inventory_Tran_Detail_ID" ColumnName="Inventory_Tran_Detail_ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblInventory_Transactions">
+      <EntityTypeMapping TypeName="SameSoftwareWebModel.tblInventory_Transactions">
+        <MappingFragment StoreEntitySet="tblInventory_Transactions">
+          <ScalarProperty Name="Cash_Payment" ColumnName="Cash_Payment" />
+          <ScalarProperty Name="Invoice_No" ColumnName="Invoice_No" />
+          <ScalarProperty Name="Marketer_id" ColumnName="Marketer_id" />
+          <ScalarProperty Name="Vendor_ID" ColumnName="Vendor_ID" />
+          <ScalarProperty Name="Customer_ID" ColumnName="Customer_ID" />
+          <ScalarProperty Name="Discount" ColumnName="Discount" />
+          <ScalarProperty Name="Payment_Status" ColumnName="Payment_Status" />
+          <ScalarProperty Name="Business_Division_Id" ColumnName="Business_Division_Id" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="Total" ColumnName="Total" />
+          <ScalarProperty Name="Tran_Nbr" ColumnName="Tran_Nbr" />
+          <ScalarProperty Name="Payment_Method" ColumnName="Payment_Method" />
+          <ScalarProperty Name="Inventory_type_id" ColumnName="Inventory_type_id" />
+          <ScalarProperty Name="Tran_Date" ColumnName="Tran_Date" />
+          <ScalarProperty Name="Inventory_Tran_ID" ColumnName="Inventory_Tran_ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblBatches">
+      <EntityTypeMapping TypeName="SameSoftwareWebModel.tblBatch">
+        <MappingFragment StoreEntitySet="tblBatch">
+          <ScalarProperty Name="Inventory_Detail_id" ColumnName="Inventory_Detail_id" />
+          <ScalarProperty Name="Expire_Date" ColumnName="Expire_Date" />
+          <ScalarProperty Name="Manufacture_Date" ColumnName="Manufacture_Date" />
+          <ScalarProperty Name="Batch" ColumnName="Batch" />
+          <ScalarProperty Name="Batch_id" ColumnName="Batch_id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="Sp_Update_Vendor_Trans_Total" FunctionName="SameSoftwareWebModel.Store.Sp_Update_Vendor_Trans_Total" />
+    <EntitySetMapping Name="Business_Division">
+      <EntityTypeMapping TypeName="SameSoftwareWebModel.Business_Division">
+        <MappingFragment StoreEntitySet="Business_Division">
+          <ScalarProperty Name="ProfilePic" ColumnName="ProfilePic" />
+          <ScalarProperty Name="Company_Id" ColumnName="Company_Id" />
+          <ScalarProperty Name="Address" ColumnName="Address" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="LandLine" ColumnName="LandLine" />
+          <ScalarProperty Name="Mobile" ColumnName="Mobile" />
+          <ScalarProperty Name="ContactPerson" ColumnName="ContactPerson" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Business_Division_Id" ColumnName="Business_Division_Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblVendors">
+      <EntityTypeMapping TypeName="SameSoftwareWebModel.tblVendor">
+        <MappingFragment StoreEntitySet="tblVendors">
+          <ScalarProperty Name="Tel" ColumnName="Tel" />
+          <ScalarProperty Name="Address" ColumnName="Address" />
+          <ScalarProperty Name="Vendor_Name" ColumnName="Vendor_Name" />
+          <ScalarProperty Name="Vendor_ID" ColumnName="Vendor_ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="GetCompanyInfo" FunctionName="SameSoftwareWebModel.Store.GetCompanyInfo">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="SameSoftwareWebModel.GetCompanyInfo_Result">
+          <ScalarProperty Name="Company_ID" ColumnName="Company_ID" />
+          <ScalarProperty Name="Company_Name" ColumnName="Company_Name" />
+          <ScalarProperty Name="Company_Phone" ColumnName="Company_Phone" />
+          <ScalarProperty Name="Company_Mobile" ColumnName="Company_Mobile" />
+          <ScalarProperty Name="City" ColumnName="City" />
+          <ScalarProperty Name="Country" ColumnName="Country" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="Evc" ColumnName="Evc" />
+          <ScalarProperty Name="EMAAL" ColumnName="EMAAL" />
+          <ScalarProperty Name="Salam_Pay" ColumnName="Salam_Pay" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="sp_Get_Purchase_request_letter_by_ID" FunctionName="SameSoftwareWebModel.Store.sp_Get_Purchase_request_letter_by_ID">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="SameSoftwareWebModel.sp_Get_Purchase_request_letter_by_ID_Result">
+          <ScalarProperty Name="Purchase_ID" ColumnName="Purchase_ID" />
+          <ScalarProperty Name="Tran_Date" ColumnName="Tran_Date" />
+          <ScalarProperty Name="Total" ColumnName="Total" />
+          <ScalarProperty Name="Total1" ColumnName="Total1" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="FullName" ColumnName="FullName" />
+          <ScalarProperty Name="Customer_Name" ColumnName="Customer_Name" />
+          <ScalarProperty Name="Customer_Phone" ColumnName="Customer_Phone" />
+          <ScalarProperty Name="Item_Id" ColumnName="Item_Id" />
+          <ScalarProperty Name="Unit_Cost" ColumnName="Unit_Cost" />
+          <ScalarProperty Name="Qty_Out" ColumnName="Qty_Out" />
+          <ScalarProperty Name="Item_Name" ColumnName="Item_Name" />
+          <ScalarProperty Name="DivName" ColumnName="DivName" />
+          <ScalarProperty Name="DivMobile" ColumnName="DivMobile" />
+          <ScalarProperty Name="LandLine" ColumnName="LandLine" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="Address" ColumnName="Address" />
+          <ScalarProperty Name="ProfilePic" ColumnName="ProfilePic" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="Sp_Get_Cash_Flow_Details_by_Date" FunctionName="SameSoftwareWebModel.Store.Sp_Get_Cash_Flow_Details_by_Date">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="SameSoftwareWebModel.Sp_Get_Cash_Flow_Details_by_Date_Result">
+          <ScalarProperty Name="TRAN_TYPE" ColumnName="TRAN_TYPE" />
+          <ScalarProperty Name="DESCRIPTION" ColumnName="DESCRIPTION" />
+          <ScalarProperty Name="DEBIT" ColumnName="DEBIT" />
+          <ScalarProperty Name="CREDIT" ColumnName="CREDIT" />
+          <ScalarProperty Name="JOURNAL_DATE" ColumnName="JOURNAL_DATE" />
+          <ScalarProperty Name="ACCOUNT_NAME" ColumnName="ACCOUNT_NAME" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="sp_get_qty_available_by_division_date_Details" FunctionName="SameSoftwareWebModel.Store.sp_get_qty_available_by_division_date_Details">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="SameSoftwareWebModel.sp_get_qty_available_by_division_date_Details_Result">
+          <ScalarProperty Name="Item_Id" ColumnName="Item_Id" />
+          <ScalarProperty Name="Item_Name" ColumnName="Item_Name" />
+          <ScalarProperty Name="Category" ColumnName="Category" />
+          <ScalarProperty Name="QTYIN" ColumnName="QTYIN" />
+          <ScalarProperty Name="QTY_Out" ColumnName="QTY_Out" />
+          <ScalarProperty Name="Available_Qty" ColumnName="Available_Qty" />
+          <ScalarProperty Name="Total_Cost" ColumnName="Total_Cost" />
+          <ScalarProperty Name="Total_Sales_Value" ColumnName="Total_Sales_Value" />
+          <ScalarProperty Name="Profit" ColumnName="Profit" />
+          <ScalarProperty Name="Business_Division_Id" ColumnName="Business_Division_Id" />
+          <ScalarProperty Name="Batch" ColumnName="Batch" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="sp_get_qty_available_by_division_date" FunctionName="SameSoftwareWebModel.Store.sp_get_qty_available_by_division_date">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="SameSoftwareWebModel.sp_get_qty_available_by_division_date_Result">
+          <ScalarProperty Name="Item_Id" ColumnName="Item_Id" />
+          <ScalarProperty Name="Item_Name" ColumnName="Item_Name" />
+          <ScalarProperty Name="Category" ColumnName="Category" />
+          <ScalarProperty Name="QTYIN" ColumnName="QTYIN" />
+          <ScalarProperty Name="QTY_Out" ColumnName="QTY_Out" />
+          <ScalarProperty Name="Available_Qty" ColumnName="Available_Qty" />
+          <ScalarProperty Name="Total_Cost" ColumnName="Total_Cost" />
+          <ScalarProperty Name="Total_Sales_Value" ColumnName="Total_Sales_Value" />
+          <ScalarProperty Name="Profit" ColumnName="Profit" />
+          <ScalarProperty Name="Business_Division_Id" ColumnName="Business_Division_Id" />
+          <ScalarProperty Name="Unit_Cost" ColumnName="Unit_Cost" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="sp_Get_Purchase_Receipt_by_ID" FunctionName="SameSoftwareWebModel.Store.sp_Get_Purchase_Receipt_by_ID">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="SameSoftwareWebModel.sp_Get_Purchase_Receipt_by_ID_Result">
+          <ScalarProperty Name="Inventory_Tran_ID" ColumnName="Inventory_Tran_ID" />
+          <ScalarProperty Name="Tran_Date" ColumnName="Tran_Date" />
+          <ScalarProperty Name="Payment_Method" ColumnName="Payment_Method" />
+          <ScalarProperty Name="Tran_Nbr" ColumnName="Tran_Nbr" />
+          <ScalarProperty Name="Total" ColumnName="Total" />
+          <ScalarProperty Name="Net" ColumnName="Net" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="FullName" ColumnName="FullName" />
+          <ScalarProperty Name="Payment_Status" ColumnName="Payment_Status" />
+          <ScalarProperty Name="Discount" ColumnName="Discount" />
+          <ScalarProperty Name="Customer_Name" ColumnName="Customer_Name" />
+          <ScalarProperty Name="Customer_Phone" ColumnName="Customer_Phone" />
+          <ScalarProperty Name="Item_Id" ColumnName="Item_Id" />
+          <ScalarProperty Name="Unit_Price" ColumnName="Unit_Price" />
+          <ScalarProperty Name="Batch" ColumnName="Batch" />
+          <ScalarProperty Name="Qty_Out" ColumnName="Qty_Out" />
+          <ScalarProperty Name="Item_Name" ColumnName="Item_Name" />
+          <ScalarProperty Name="DivName" ColumnName="DivName" />
+          <ScalarProperty Name="DivMobile" ColumnName="DivMobile" />
+          <ScalarProperty Name="LandLine" ColumnName="LandLine" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="Address" ColumnName="Address" />
+          <ScalarProperty Name="ProfilePic" ColumnName="ProfilePic" />
+          <ScalarProperty Name="Tax" ColumnName="Tax" />
+          <ScalarProperty Name="Freight" ColumnName="Freight" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <EntitySetMapping Name="tblSettings">
+      <EntityTypeMapping TypeName="SameSoftwareWebModel.tblSetting">
+        <MappingFragment StoreEntitySet="tblSetting">
+          <ScalarProperty Name="Value" ColumnName="Value" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="Inv_Get_Qty_Available_by_ProductID" FunctionName="SameSoftwareWebModel.Store.Inv_Get_Qty_Available_by_ProductID" />
+    <EntitySetMapping Name="tblCustomer_Transaction">
+      <EntityTypeMapping TypeName="SameSoftwareWebModel.tblCustomer_Transaction">
+        <MappingFragment StoreEntitySet="tblCustomer_Transaction">
+          <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="Tran_Date" ColumnName="Tran_Date" />
+          <ScalarProperty Name="Cust_Tran_ID" ColumnName="Cust_Tran_ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblCustomerInvoiceGroups">
+      <EntityTypeMapping TypeName="SameSoftwareWebModel.tblCustomerInvoiceGroup">
+        <MappingFragment StoreEntitySet="tblCustomerInvoiceGroups">
+          <ScalarProperty Name="Updated_by" ColumnName="Updated_by" />
+          <ScalarProperty Name="Last_Update" ColumnName="Last_Update" />
+          <ScalarProperty Name="Invoice_Number" ColumnName="Invoice_Number" />
+          <ScalarProperty Name="Customer_ID" ColumnName="Customer_ID" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="Title" ColumnName="Title" />
+          <ScalarProperty Name="Invoice_Date" ColumnName="Invoice_Date" />
+          <ScalarProperty Name="Invoice_Group_Id" ColumnName="Invoice_Group_Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblInvoiceGroupDetails">
+      <EntityTypeMapping TypeName="SameSoftwareWebModel.tblInvoiceGroupDetail">
+        <MappingFragment StoreEntitySet="tblInvoiceGroupDetails">
+          <ScalarProperty Name="QTY" ColumnName="QTY" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Cust_Transaction_Detail_id" ColumnName="Cust_Transaction_Detail_id" />
+          <ScalarProperty Name="Invoice_Group_Id" ColumnName="Invoice_Group_Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="Get_Total_Customer_Transaction_Detail_by_TranID" FunctionName="SameSoftwareWebModel.Store.Get_Total_Customer_Transaction_Detail_by_TranID" />
+    <FunctionImportMapping FunctionImportName="Update_Customer_Tranaction_Amount_By_Cust_tran_id" FunctionName="SameSoftwareWebModel.Store.Update_Customer_Tranaction_Amount_By_Cust_tran_id" />
+    <FunctionImportMapping FunctionImportName="Sp_Get_Cash_Bank_Account" FunctionName="SameSoftwareWebModel.Store.Sp_Get_Cash_Bank_Account">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="SameSoftwareWebModel.Sp_Get_Cash_Bank_Account_Result">
+          <ScalarProperty Name="ACCOUNT_NUMBER" ColumnName="ACCOUNT_NUMBER" />
+          <ScalarProperty Name="ACCOUNT_NAME" ColumnName="ACCOUNT_NAME" />
+          <ScalarProperty Name="CASH_BANK" ColumnName="CASH_BANK" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="sp_Get_Customer_with_Balance" FunctionName="SameSoftwareWebModel.Store.sp_Get_Customer_with_Balance">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="SameSoftwareWebModel.sp_Get_Customer_with_Balance_Result">
+          <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+          <ScalarProperty Name="Customer_Name" ColumnName="Customer_Name" />
+          <ScalarProperty Name="Contact_Numbers" ColumnName="Contact_Numbers" />
+          <ScalarProperty Name="Address" ColumnName="Address" />
+          <ScalarProperty Name="Total" ColumnName="Total" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <EntitySetMapping Name="tblCustomer_Tran_Type">
+      <EntityTypeMapping TypeName="SameSoftwareWebModel.tblCustomer_Tran_Type">
+        <MappingFragment StoreEntitySet="tblCustomer_Tran_Type">
+          <ScalarProperty Name="Tran_Type" ColumnName="Tran_Type" />
+          <ScalarProperty Name="Cust_Tran_Type_ID" ColumnName="Cust_Tran_Type_ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="Pro_Get_Invoice_Group_Details" FunctionName="SameSoftwareWebModel.Store.Pro_Get_Invoice_Group_Details">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="SameSoftwareWebModel.Pro_Get_Invoice_Group_Details_Result">
+          <ScalarProperty Name="Cust_Transaction_Detail_id" ColumnName="Cust_Transaction_Detail_id" />
+          <ScalarProperty Name="Cust_Tran_ID" ColumnName="Cust_Tran_ID" />
+          <ScalarProperty Name="Debit" ColumnName="Debit" />
+          <ScalarProperty Name="Credit" ColumnName="Credit" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="FullName" ColumnName="FullName" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="Trans_Date" ColumnName="Trans_Date" />
+          <ScalarProperty Name="Tran_Type" ColumnName="Tran_Type" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="Tran_Nbr" ColumnName="Tran_Nbr" />
+          <ScalarProperty Name="Route" ColumnName="Route" />
+          <ScalarProperty Name="Airline" ColumnName="Airline" />
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="Dept_Date" ColumnName="Dept_Date" />
+          <ScalarProperty Name="Invoice_Group_Id" ColumnName="Invoice_Group_Id" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="sp_get_customer_transactions_by_id" FunctionName="SameSoftwareWebModel.Store.sp_get_customer_transactions_by_id">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="SameSoftwareWebModel.sp_get_customer_transactions_by_id_Result">
+          <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+          <ScalarProperty Name="Customer_Name" ColumnName="Customer_Name" />
+          <ScalarProperty Name="Contact_Numbers" ColumnName="Contact_Numbers" />
+          <ScalarProperty Name="Address" ColumnName="Address" />
+          <ScalarProperty Name="Cust_Tran_ID" ColumnName="Cust_Tran_ID" />
+          <ScalarProperty Name="Cust_Transaction_Detail_id" ColumnName="Cust_Transaction_Detail_id" />
+          <ScalarProperty Name="Debit" ColumnName="Debit" />
+          <ScalarProperty Name="Credit" ColumnName="Credit" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="Trans_Date" ColumnName="Trans_Date" />
+          <ScalarProperty Name="Tran_Type" ColumnName="Tran_Type" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="FullName" ColumnName="FullName" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <EntitySetMapping Name="tblPaymentMethods">
+      <EntityTypeMapping TypeName="SameSoftwareWebModel.tblPaymentMethod">
+        <MappingFragment StoreEntitySet="tblPaymentMethods">
+          <ScalarProperty Name="Payment_Method" ColumnName="Payment_Method" />
+          <ScalarProperty Name="Payment_Type_id" ColumnName="Payment_Type_id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="InstallmentPlans">
+      <EntityTypeMapping TypeName="SameSoftwareWebModel.InstallmentPlan">
+        <MappingFragment StoreEntitySet="InstallmentPlans">
+          <ScalarProperty Name="Trans_Detail_ID" ColumnName="Trans_Detail_ID" />
+          <ScalarProperty Name="paid" ColumnName="paid" />
+          <ScalarProperty Name="userid" ColumnName="userid" />
+          <ScalarProperty Name="payment_date" ColumnName="payment_date" />
+          <ScalarProperty Name="status" ColumnName="status" />
+          <ScalarProperty Name="Payment_total" ColumnName="Payment_total" />
+          <ScalarProperty Name="payment_persent" ColumnName="payment_persent" />
+          <ScalarProperty Name="OrderId" ColumnName="OrderId" />
+          <ScalarProperty Name="Customer_Id" ColumnName="Customer_Id" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="sp_check_item_batch" FunctionName="SameSoftwareWebModel.Store.sp_check_item_batch" />
+    <FunctionImportMapping FunctionImportName="sp_get_items_with_batch_qty" FunctionName="SameSoftwareWebModel.Store.sp_get_items_with_batch_qty">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="SameSoftwareWebModel.sp_get_items_with_batch_qty_Result">
+          <ScalarProperty Name="Inventory_Tran_Detail_ID" ColumnName="Inventory_Tran_Detail_ID" />
+          <ScalarProperty Name="Item_Id" ColumnName="Item_Id" />
+          <ScalarProperty Name="Item" ColumnName="Item" />
+          <ScalarProperty Name="QTY" ColumnName="QTY" />
+          <ScalarProperty Name="Expire_Date" ColumnName="Expire_Date" />
+          <ScalarProperty Name="Sales_price" ColumnName="Sales_price" />
+          <ScalarProperty Name="Batch" ColumnName="Batch" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="sp_get_qty_available_by_division" FunctionName="SameSoftwareWebModel.Store.sp_get_qty_available_by_division">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="SameSoftwareWebModel.sp_get_qty_available_by_division_Result">
+          <ScalarProperty Name="Item_Id" ColumnName="Item_Id" />
+          <ScalarProperty Name="Item_Name" ColumnName="Item_Name" />
+          <ScalarProperty Name="Category" ColumnName="Category" />
+          <ScalarProperty Name="QTYIN" ColumnName="QTYIN" />
+          <ScalarProperty Name="QTY_Out" ColumnName="QTY_Out" />
+          <ScalarProperty Name="Available_Qty" ColumnName="Available_Qty" />
+          <ScalarProperty Name="Total_Cost" ColumnName="Total_Cost" />
+          <ScalarProperty Name="Total_Sales_Value" ColumnName="Total_Sales_Value" />
+          <ScalarProperty Name="Profit" ColumnName="Profit" />
+          <ScalarProperty Name="Business_Division_Id" ColumnName="Business_Division_Id" />
+          <ScalarProperty Name="Batch" ColumnName="Batch" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="sp_Get_Sales_Receipt_by_ID" FunctionName="SameSoftwareWebModel.Store.sp_Get_Sales_Receipt_by_ID">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="SameSoftwareWebModel.sp_Get_Sales_Receipt_by_ID_Result">
+          <ScalarProperty Name="Inventory_Tran_ID" ColumnName="Inventory_Tran_ID" />
+          <ScalarProperty Name="Tran_Date" ColumnName="Tran_Date" />
+          <ScalarProperty Name="Payment_Method" ColumnName="Payment_Method" />
+          <ScalarProperty Name="Tran_Nbr" ColumnName="Tran_Nbr" />
+          <ScalarProperty Name="Total" ColumnName="Total" />
+          <ScalarProperty Name="Net" ColumnName="Net" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="FullName" ColumnName="FullName" />
+          <ScalarProperty Name="Payment_Status" ColumnName="Payment_Status" />
+          <ScalarProperty Name="Discount" ColumnName="Discount" />
+          <ScalarProperty Name="Customer_Name" ColumnName="Customer_Name" />
+          <ScalarProperty Name="Customer_Phone" ColumnName="Customer_Phone" />
+          <ScalarProperty Name="Item_Id" ColumnName="Item_Id" />
+          <ScalarProperty Name="Sales_price" ColumnName="Sales_price" />
+          <ScalarProperty Name="Qty_Out" ColumnName="Qty_Out" />
+          <ScalarProperty Name="Item_Name" ColumnName="Item_Name" />
+          <ScalarProperty Name="DivName" ColumnName="DivName" />
+          <ScalarProperty Name="DivMobile" ColumnName="DivMobile" />
+          <ScalarProperty Name="LandLine" ColumnName="LandLine" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="Address" ColumnName="Address" />
+          <ScalarProperty Name="ProfilePic" ColumnName="ProfilePic" />
+          <ScalarProperty Name="Batch" ColumnName="Batch" />
+          <ScalarProperty Name="Expr1" ColumnName="Expr1" />
+          <ScalarProperty Name="Expire_Date" ColumnName="Expire_Date" />
+          <ScalarProperty Name="Manufacture_Date" ColumnName="Manufacture_Date" />
+          <ScalarProperty Name="Code" ColumnName="Code" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="Sp_Update_Customer_Trans_Total" FunctionName="SameSoftwareWebModel.Store.Sp_Update_Customer_Trans_Total" />
+    <FunctionImportMapping FunctionImportName="View_Item_Sales" FunctionName="SameSoftwareWebModel.Store.View_Item_Sales">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="SameSoftwareWebModel.View_Item_Sales_Result">
+          <ScalarProperty Name="Inventory_Tran_ID" ColumnName="Inventory_Tran_ID" />
+          <ScalarProperty Name="Inventory_Tran_Detail_ID" ColumnName="Inventory_Tran_Detail_ID" />
+          <ScalarProperty Name="Item_Id" ColumnName="Item_Id" />
+          <ScalarProperty Name="Qty_In" ColumnName="Qty_In" />
+          <ScalarProperty Name="Qty_Out" ColumnName="Qty_Out" />
+          <ScalarProperty Name="Sales_price" ColumnName="Sales_price" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="Tran_Date" ColumnName="Tran_Date" />
+          <ScalarProperty Name="Inventory_type_id" ColumnName="Inventory_type_id" />
+          <ScalarProperty Name="Payment_Method" ColumnName="Payment_Method" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="Business_Division_Id" ColumnName="Business_Division_Id" />
+          <ScalarProperty Name="Invoice_No" ColumnName="Invoice_No" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Inventory_Type" ColumnName="Inventory_Type" />
+          <ScalarProperty Name="Branch_Name" ColumnName="Branch_Name" />
+          <ScalarProperty Name="Unit_Cost" ColumnName="Unit_Cost" />
+          <ScalarProperty Name="Cost" ColumnName="Cost" />
+          <ScalarProperty Name="Price" ColumnName="Price" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="Search_Customer_By_Name" FunctionName="SameSoftwareWebModel.Store.Search_Customer_By_Name">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="SameSoftwareWebModel.Search_Customer_By_Name_Result">
+          <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+          <ScalarProperty Name="Customer_Name" ColumnName="Customer_Name" />
+          <ScalarProperty Name="Contact_Numbers" ColumnName="Contact_Numbers" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <EntitySetMapping Name="tblInvoices">
+      <EntityTypeMapping TypeName="SameSoftwareWebModel.tblInvoice">
+        <MappingFragment StoreEntitySet="tblInvoice">
+          <ScalarProperty Name="Invoice_No" ColumnName="Invoice_No" />
+          <ScalarProperty Name="Invoice_id" ColumnName="Invoice_id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblCustomer_Transaction_Detail">
+      <EntityTypeMapping TypeName="SameSoftwareWebModel.tblCustomer_Transaction_Detail">
+        <MappingFragment StoreEntitySet="tblCustomer_Transaction_Detail">
+          <ScalarProperty Name="Balance" ColumnName="Balance" />
+          <ScalarProperty Name="Invoice_No" ColumnName="Invoice_No" />
+          <ScalarProperty Name="Inventory_Tran_ID" ColumnName="Inventory_Tran_ID" />
+          <ScalarProperty Name="Booking_ID" ColumnName="Booking_ID" />
+          <ScalarProperty Name="Invoice_Group_Id" ColumnName="Invoice_Group_Id" />
+          <ScalarProperty Name="Dept_Date" ColumnName="Dept_Date" />
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="Airline" ColumnName="Airline" />
+          <ScalarProperty Name="Route" ColumnName="Route" />
+          <ScalarProperty Name="Tran_Nbr" ColumnName="Tran_Nbr" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="Cust_Tran_Type_ID" ColumnName="Cust_Tran_Type_ID" />
+          <ScalarProperty Name="Trans_Date" ColumnName="Trans_Date" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="Unit_price" ColumnName="Unit_price" />
+          <ScalarProperty Name="Qty" ColumnName="Qty" />
+          <ScalarProperty Name="Credit" ColumnName="Credit" />
+          <ScalarProperty Name="Debit" ColumnName="Debit" />
+          <ScalarProperty Name="Cust_Tran_ID" ColumnName="Cust_Tran_ID" />
+          <ScalarProperty Name="Cust_Transaction_Detail_id" ColumnName="Cust_Transaction_Detail_id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="pro_Get_Invoice" FunctionName="SameSoftwareWebModel.Store.pro_Get_Invoice">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="SameSoftwareWebModel.pro_Get_Invoice_Result">
+          <ScalarProperty Name="Cust_Transaction_Detail_id" ColumnName="Cust_Transaction_Detail_id" />
+          <ScalarProperty Name="Cust_Tran_ID" ColumnName="Cust_Tran_ID" />
+          <ScalarProperty Name="Debit" ColumnName="Debit" />
+          <ScalarProperty Name="Credit" ColumnName="Credit" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="Trans_Date" ColumnName="Trans_Date" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="Route" ColumnName="Route" />
+          <ScalarProperty Name="Airline" ColumnName="Airline" />
+          <ScalarProperty Name="Dept_Date" ColumnName="Dept_Date" />
+          <ScalarProperty Name="Invoice_Group_Id" ColumnName="Invoice_Group_Id" />
+          <ScalarProperty Name="Tran_Type" ColumnName="Tran_Type" />
+          <ScalarProperty Name="Qty" ColumnName="Qty" />
+          <ScalarProperty Name="Unit_price" ColumnName="Unit_price" />
+          <ScalarProperty Name="Balance" ColumnName="Balance" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="sp_Get_Customer_with_Balance2" FunctionName="SameSoftwareWebModel.Store.sp_Get_Customer_with_Balance2">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="SameSoftwareWebModel.sp_Get_Customer_with_Balance2_Result">
+          <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+          <ScalarProperty Name="Customer_Name" ColumnName="Customer_Name" />
+          <ScalarProperty Name="Contact_Numbers" ColumnName="Contact_Numbers" />
+          <ScalarProperty Name="Address" ColumnName="Address" />
+          <ScalarProperty Name="Total" ColumnName="Total" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <EntitySetMapping Name="tblDepartments">
+      <EntityTypeMapping TypeName="SameSoftwareWebModel.tblDepartment">
+        <MappingFragment StoreEntitySet="tblDepartments">
+          <ScalarProperty Name="Dept_Name" ColumnName="Dept_Name" />
+          <ScalarProperty Name="Dept_ID" ColumnName="Dept_ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TblDocuments">
+      <EntityTypeMapping TypeName="SameSoftwareWebModel.TblDocument">
+        <MappingFragment StoreEntitySet="TblDocuments">
+          <ScalarProperty Name="Tran_Date" ColumnName="Tran_Date" />
+          <ScalarProperty Name="RefNo" ColumnName="RefNo" />
+          <ScalarProperty Name="Cust_Name" ColumnName="Cust_Name" />
+          <ScalarProperty Name="Documents" ColumnName="Documents" />
+          <ScalarProperty Name="Doc_Id" ColumnName="Doc_Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblExpenses">
+      <EntityTypeMapping TypeName="SameSoftwareWebModel.tblExpense">
+        <MappingFragment StoreEntitySet="tblExpense">
+          <ScalarProperty Name="Tran_Nbr" ColumnName="Tran_Nbr" />
+          <ScalarProperty Name="Quarter" ColumnName="Quarter" />
+          <ScalarProperty Name="Year" ColumnName="Year" />
+          <ScalarProperty Name="Period" ColumnName="Period" />
+          <ScalarProperty Name="Payment_Method" ColumnName="Payment_Method" />
+          <ScalarProperty Name="Voucher" ColumnName="Voucher" />
+          <ScalarProperty Name="Note" ColumnName="Note" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="Balance" ColumnName="Balance" />
+          <ScalarProperty Name="Cr" ColumnName="Cr" />
+          <ScalarProperty Name="Dr" ColumnName="Dr" />
+          <ScalarProperty Name="Expense_Type_ID" ColumnName="Expense_Type_ID" />
+          <ScalarProperty Name="Expense_Date" ColumnName="Expense_Date" />
+          <ScalarProperty Name="Expense_ID" ColumnName="Expense_ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="CustomerTasks">
+      <EntityTypeMapping TypeName="SameSoftwareWebModel.CustomerTask">
+        <MappingFragment StoreEntitySet="CustomerTasks">
+          <ScalarProperty Name="Note" ColumnName="Note" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Customer_id" ColumnName="Customer_id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblTasks">
+      <EntityTypeMapping TypeName="SameSoftwareWebModel.tblTask">
+        <MappingFragment StoreEntitySet="tblTasks">
+          <ScalarProperty Name="Department" ColumnName="Department" />
+          <ScalarProperty Name="Customer_id" ColumnName="Customer_id" />
+          <ScalarProperty Name="Notes" ColumnName="Notes" />
+          <ScalarProperty Name="Created_by" ColumnName="Created_by" />
+          <ScalarProperty Name="End_Date" ColumnName="End_Date" />
+          <ScalarProperty Name="Start_Date" ColumnName="Start_Date" />
+          <ScalarProperty Name="Last_Update" ColumnName="Last_Update" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="Assigned_for" ColumnName="Assigned_for" />
+          <ScalarProperty Name="Priority" ColumnName="Priority" />
+          <ScalarProperty Name="Project_id" ColumnName="Project_id" />
+          <ScalarProperty Name="Creation_Date" ColumnName="Creation_Date" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="Title" ColumnName="Title" />
+          <ScalarProperty Name="TaskID" ColumnName="TaskID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="Pro_Tasks_List" FunctionName="SameSoftwareWebModel.Store.Pro_Tasks_List">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="SameSoftwareWebModel.Pro_Tasks_List_Result">
+          <ScalarProperty Name="TaskID" ColumnName="TaskID" />
+          <ScalarProperty Name="Title" ColumnName="Title" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="Creation_Date" ColumnName="Creation_Date" />
+          <ScalarProperty Name="Priority" ColumnName="Priority" />
+          <ScalarProperty Name="Assigned_for" ColumnName="Assigned_for" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="Last_Update" ColumnName="Last_Update" />
+          <ScalarProperty Name="Start_Date" ColumnName="Start_Date" />
+          <ScalarProperty Name="End_Date" ColumnName="End_Date" />
+          <ScalarProperty Name="Created_by" ColumnName="Created_by" />
+          <ScalarProperty Name="Notes" ColumnName="Notes" />
+          <ScalarProperty Name="Customer_id" ColumnName="Customer_id" />
+          <ScalarProperty Name="assigned_for1" ColumnName="assigned_for1" />
+          <ScalarProperty Name="cusromer_name" ColumnName="cusromer_name" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="Department" ColumnName="Department" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="sp_resset" FunctionName="SameSoftwareWebModel.Store.sp_resset" />
+    <EntitySetMapping Name="tblMonths">
+      <EntityTypeMapping TypeName="SameSoftwareWebModel.tblMonth">
+        <MappingFragment StoreEntitySet="tblMonths">
+          <ScalarProperty Name="Month_Name" ColumnName="Month_Name" />
+          <ScalarProperty Name="Month_ID" ColumnName="Month_ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="pro_Get_Invoice_By_Group" FunctionName="SameSoftwareWebModel.Store.pro_Get_Invoice_By_Group">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="SameSoftwareWebModel.pro_Get_Invoice_By_Group_Result">
+          <ScalarProperty Name="Cust_Transaction_Detail_id" ColumnName="Cust_Transaction_Detail_id" />
+          <ScalarProperty Name="Cust_Tran_ID" ColumnName="Cust_Tran_ID" />
+          <ScalarProperty Name="Debit" ColumnName="Debit" />
+          <ScalarProperty Name="Credit" ColumnName="Credit" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="Trans_Date" ColumnName="Trans_Date" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="Route" ColumnName="Route" />
+          <ScalarProperty Name="Airline" ColumnName="Airline" />
+          <ScalarProperty Name="Dept_Date" ColumnName="Dept_Date" />
+          <ScalarProperty Name="Invoice_Group_Id" ColumnName="Invoice_Group_Id" />
+          <ScalarProperty Name="Tran_Type" ColumnName="Tran_Type" />
+          <ScalarProperty Name="Qty" ColumnName="Qty" />
+          <ScalarProperty Name="Unit_price" ColumnName="Unit_price" />
+          <ScalarProperty Name="Balance" ColumnName="Balance" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <EntitySetMapping Name="tblDialyTasks">
+      <EntityTypeMapping TypeName="SameSoftwareWebModel.tblDialyTask">
+        <MappingFragment StoreEntitySet="tblDialyTasks">
+          <ScalarProperty Name="Transportation_Mode" ColumnName="Transportation_Mode" />
+          <ScalarProperty Name="Transportation" ColumnName="Transportation" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="Last_Updated" ColumnName="Last_Updated" />
+          <ScalarProperty Name="Record_Date_Time" ColumnName="Record_Date_Time" />
+          <ScalarProperty Name="To_Time" ColumnName="To_Time" />
+          <ScalarProperty Name="From_Time" ColumnName="From_Time" />
+          <ScalarProperty Name="Task_Date" ColumnName="Task_Date" />
+          <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+          <ScalarProperty Name="Task_Decription" ColumnName="Task_Decription" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="Daily_Task_ID" ColumnName="Daily_Task_ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblCustomers">
+      <EntityTypeMapping TypeName="SameSoftwareWebModel.tblCustomer">
+        <MappingFragment StoreEntitySet="tblCustomers">
+          <ScalarProperty Name="Notes" ColumnName="Notes" />
+          <ScalarProperty Name="Maintainance" ColumnName="Maintainance" />
+          <ScalarProperty Name="Contract_Date" ColumnName="Contract_Date" />
+          <ScalarProperty Name="Contact_Numbers" ColumnName="Contact_Numbers" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="Cutomer_Type" ColumnName="Cutomer_Type" />
+          <ScalarProperty Name="Address" ColumnName="Address" />
+          <ScalarProperty Name="Customer_Name" ColumnName="Customer_Name" />
+          <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="View_All_Customers" FunctionName="SameSoftwareWebModel.Store.View_All_Customers">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="SameSoftwareWebModel.View_All_Customers_Result">
+          <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+          <ScalarProperty Name="Customer_Name" ColumnName="Customer_Name" />
+          <ScalarProperty Name="Address" ColumnName="Address" />
+          <ScalarProperty Name="Cutomer_Type" ColumnName="Cutomer_Type" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="Contact_Numbers" ColumnName="Contact_Numbers" />
+          <ScalarProperty Name="Contract_Date" ColumnName="Contract_Date" />
+          <ScalarProperty Name="Notes" ColumnName="Notes" />
+          <ScalarProperty Name="Maintainance" ColumnName="Maintainance" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="View_All_Customers_By_Name_Type_Status" FunctionName="SameSoftwareWebModel.Store.View_All_Customers_By_Name_Type_Status">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="SameSoftwareWebModel.View_All_Customers_By_Name_Type_Status_Result">
+          <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+          <ScalarProperty Name="Customer_Name" ColumnName="Customer_Name" />
+          <ScalarProperty Name="Address" ColumnName="Address" />
+          <ScalarProperty Name="Cutomer_Type" ColumnName="Cutomer_Type" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="Contact_Numbers" ColumnName="Contact_Numbers" />
+          <ScalarProperty Name="Contract_Date" ColumnName="Contract_Date" />
+          <ScalarProperty Name="Maintainance" ColumnName="Maintainance" />
+          <ScalarProperty Name="Notes" ColumnName="Notes" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="View_Customer_Maintainance" FunctionName="SameSoftwareWebModel.Store.View_Customer_Maintainance">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="SameSoftwareWebModel.View_Customer_Maintainance_Result">
+          <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+          <ScalarProperty Name="Customer_Name" ColumnName="Customer_Name" />
+          <ScalarProperty Name="Maintainance" ColumnName="Maintainance" />
+          <ScalarProperty Name="Cutomer_Type" ColumnName="Cutomer_Type" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="sp_get_customer_transactions_by_id_Date_Tran_Type" FunctionName="SameSoftwareWebModel.Store.sp_get_customer_transactions_by_id_Date_Tran_Type">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="SameSoftwareWebModel.sp_get_customer_transactions_by_id_Date_Tran_Type_Result">
+          <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+          <ScalarProperty Name="Customer_Name" ColumnName="Customer_Name" />
+          <ScalarProperty Name="Contact_Numbers" ColumnName="Contact_Numbers" />
+          <ScalarProperty Name="Address" ColumnName="Address" />
+          <ScalarProperty Name="Cust_Tran_ID" ColumnName="Cust_Tran_ID" />
+          <ScalarProperty Name="Cust_Transaction_Detail_id" ColumnName="Cust_Transaction_Detail_id" />
+          <ScalarProperty Name="Debit" ColumnName="Debit" />
+          <ScalarProperty Name="Credit" ColumnName="Credit" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="Trans_Date" ColumnName="Trans_Date" />
+          <ScalarProperty Name="Tran_Type" ColumnName="Tran_Type" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="FullName" ColumnName="FullName" />
+          <ScalarProperty Name="Cust_Tran_Type_ID" ColumnName="Cust_Tran_Type_ID" />
+          <ScalarProperty Name="Qty" ColumnName="Qty" />
+          <ScalarProperty Name="Unit_price" ColumnName="Unit_price" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="Invoice_No" ColumnName="Invoice_No" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="sp_get_vendor_transactions_by_id" FunctionName="SameSoftwareWebModel.Store.sp_get_vendor_transactions_by_id">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="SameSoftwareWebModel.sp_get_vendor_transactions_by_id_Result">
+          <ScalarProperty Name="Vendor_Tran_ID" ColumnName="Vendor_Tran_ID" />
+          <ScalarProperty Name="Vendor_Transaction_Detail_id" ColumnName="Vendor_Transaction_Detail_id" />
+          <ScalarProperty Name="Expr1" ColumnName="Expr1" />
+          <ScalarProperty Name="Debit" ColumnName="Debit" />
+          <ScalarProperty Name="Credit" ColumnName="Credit" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="Trans_Date" ColumnName="Trans_Date" />
+          <ScalarProperty Name="Vendor_Tran_Type_ID" ColumnName="Vendor_Tran_Type_ID" />
+          <ScalarProperty Name="Tran_Nbr" ColumnName="Tran_Nbr" />
+          <ScalarProperty Name="Tran_Type" ColumnName="Tran_Type" />
+          <ScalarProperty Name="FullName" ColumnName="FullName" />
+          <ScalarProperty Name="VendorID" ColumnName="VendorID" />
+          <ScalarProperty Name="Vendor_Name" ColumnName="Vendor_Name" />
+          <ScalarProperty Name="Address" ColumnName="Address" />
+          <ScalarProperty Name="Tel" ColumnName="Tel" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="sp_get_vendor_transactions_by_id_Date_Tran_Type" FunctionName="SameSoftwareWebModel.Store.sp_get_vendor_transactions_by_id_Date_Tran_Type">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="SameSoftwareWebModel.sp_get_vendor_transactions_by_id_Date_Tran_Type_Result">
+          <ScalarProperty Name="Vendor_Transaction_Detail_id" ColumnName="Vendor_Transaction_Detail_id" />
+          <ScalarProperty Name="Vendor_Tran_ID" ColumnName="Vendor_Tran_ID" />
+          <ScalarProperty Name="Debit" ColumnName="Debit" />
+          <ScalarProperty Name="Credit" ColumnName="Credit" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="Trans_Date" ColumnName="Trans_Date" />
+          <ScalarProperty Name="Vendor_Tran_Type_ID" ColumnName="Vendor_Tran_Type_ID" />
+          <ScalarProperty Name="Tran_Nbr" ColumnName="Tran_Nbr" />
+          <ScalarProperty Name="Tran_Type" ColumnName="Tran_Type" />
+          <ScalarProperty Name="FullName" ColumnName="FullName" />
+          <ScalarProperty Name="VendorID" ColumnName="VendorID" />
+          <ScalarProperty Name="Vendor_Name" ColumnName="Vendor_Name" />
+          <ScalarProperty Name="Address" ColumnName="Address" />
+          <ScalarProperty Name="Tel" ColumnName="Tel" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="Sp_Get_Vendor_with_Balance" FunctionName="SameSoftwareWebModel.Store.Sp_Get_Vendor_with_Balance">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="SameSoftwareWebModel.Sp_Get_Vendor_with_Balance_Result">
+          <ScalarProperty Name="BALANCE" ColumnName="BALANCE" />
+          <ScalarProperty Name="Vendor_Name" ColumnName="Vendor_Name" />
+          <ScalarProperty Name="Tel" ColumnName="Tel" />
+          <ScalarProperty Name="Address" ColumnName="Address" />
+          <ScalarProperty Name="VENDOR_TRAN_ID" ColumnName="VENDOR_TRAN_ID" />
+          <ScalarProperty Name="Vendor_ID" ColumnName="Vendor_ID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <EntitySetMapping Name="tblVendor_Transaction_Detail">
+      <EntityTypeMapping TypeName="SameSoftwareWebModel.tblVendor_Transaction_Detail">
+        <MappingFragment StoreEntitySet="tblVendor_Transaction_Detail">
+          <ScalarProperty Name="Balance" ColumnName="Balance" />
+          <ScalarProperty Name="Unit_price" ColumnName="Unit_price" />
+          <ScalarProperty Name="Qty" ColumnName="Qty" />
+          <ScalarProperty Name="Invoice_No" ColumnName="Invoice_No" />
+          <ScalarProperty Name="Inventory_Tran_ID" ColumnName="Inventory_Tran_ID" />
+          <ScalarProperty Name="Tran_Nbr" ColumnName="Tran_Nbr" />
+          <ScalarProperty Name="Vendor_Tran_Type_ID" ColumnName="Vendor_Tran_Type_ID" />
+          <ScalarProperty Name="Trans_Date" ColumnName="Trans_Date" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="Credit" ColumnName="Credit" />
+          <ScalarProperty Name="Debit" ColumnName="Debit" />
+          <ScalarProperty Name="Vendor_Tran_ID" ColumnName="Vendor_Tran_ID" />
+          <ScalarProperty Name="Vendor_Transaction_Detail_id" ColumnName="Vendor_Transaction_Detail_id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="pro_Get_Vendor_Invoice" FunctionName="SameSoftwareWebModel.Store.pro_Get_Vendor_Invoice">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="SameSoftwareWebModel.pro_Get_Vendor_Invoice_Result">
+          <ScalarProperty Name="Vendor_Transaction_Detail_id" ColumnName="Vendor_Transaction_Detail_id" />
+          <ScalarProperty Name="Vendor_Tran_ID" ColumnName="Vendor_Tran_ID" />
+          <ScalarProperty Name="Debit" ColumnName="Debit" />
+          <ScalarProperty Name="Credit" ColumnName="Credit" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="Trans_Date" ColumnName="Trans_Date" />
+          <ScalarProperty Name="Vendor_Tran_Type_ID" ColumnName="Vendor_Tran_Type_ID" />
+          <ScalarProperty Name="Tran_Nbr" ColumnName="Tran_Nbr" />
+          <ScalarProperty Name="Inventory_Tran_ID" ColumnName="Inventory_Tran_ID" />
+          <ScalarProperty Name="Tran_Type" ColumnName="Tran_Type" />
+          <ScalarProperty Name="Invoice_No" ColumnName="Invoice_No" />
+          <ScalarProperty Name="Qty" ColumnName="Qty" />
+          <ScalarProperty Name="Unit_price" ColumnName="Unit_price" />
+          <ScalarProperty Name="Balance" ColumnName="Balance" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+  </EntityContainerMapping>
+</Mapping>

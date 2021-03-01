@@ -1,0 +1,83 @@
+﻿@*@model SameSoftWeb.Models.tblConnection_Data
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+   
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Customer)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Customer)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Generated_Date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Generated_Date)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Pass_Code)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Pass_Code)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Database_Server)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Database_Server)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Database_User)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Database_User)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Database_Password)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Database_Password)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Database_Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Database_Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.tblUser.FullName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.tblUser.FullName)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Connection_ID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>*@

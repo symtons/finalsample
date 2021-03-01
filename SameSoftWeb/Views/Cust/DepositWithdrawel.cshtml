@@ -1,0 +1,73 @@
+﻿
+
+
+<script>
+    $(document).ready(function () {
+        $("#from").datepicker({
+            autoClose: true,
+            format: "yyyy/mm/dd"
+        })
+        $("#to").datepicker({
+            autoClose: true,
+            format: "yyyy/mm/dd"
+        })
+    })
+</script>
+
+@{
+    ViewBag.Title = "Customer Withdrawel";
+
+
+    Layout = "~/Views/Shared/_Layout2.cshtml";
+
+
+    Safari_Web_Application.Models.Safari_WebEntities db = new Safari_Web_Application.Models.Safari_WebEntities();
+
+
+
+    var cust = db.tblCustomers.Where(a => a.Status == "Active").Select(a => new
+    {
+        id = a.CustomerID,
+        name = a.Name
+    }).ToList();
+
+    ViewBag.customer = new SelectList(cust, "id", "name");
+
+
+    var cash = db.Sp_Get_Cash_Bank_Account().Select(a => new
+    {
+        name = a.ACCOUNT_NAME,
+        id = a.ACCOUNT_NUMBER
+    }).ToList();
+    ViewBag.cashacc = new SelectList(cash, "id", "name");
+
+}
+
+
+<hr />
+<form method="post" action="\Customers\AddCustomerWithdrawel">
+
+
+    <div class="row" style="width:40%;margin:auto;">
+        <h3>Add Customer Withdrawel</h3>
+
+        <div class="list-group-item">
+
+            Transaction Date
+            <input type="text" id="from" required="" class="form-control" name="trandate" value=""  />
+            Select Customer
+            @Html.DropDownList("customer", null, "Select  Customer", new { @class = "form-control", @required = "" })
+            Cash Account
+            @Html.DropDownList("cashacc", null, "Select Cash Account", new { @class = "form-control", @required = "" })
+            Amonut
+            <input type="text" class="form-control" name="amount" placeholder="Amount" required="" />
+
+             Description
+            <input type="text" class="form-control" name="desc" placeholder="Description"  />
+           
+            <br />
+            <input type="submit" value="Save" class="btn btn-primary" />
+        </div>
+    </div>
+</form>
+<hr />

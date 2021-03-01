@@ -1,0 +1,216 @@
+<script>
+    $(document).ready(function () {
+        $("#from").datepicker({
+            autoClose: true,
+            format: "yyyy/mm/dd"
+        })
+        $("#to").datepicker({
+            autoClose: true,
+            format: "yyyy/mm/dd"
+        })
+    })
+</script>
+@{
+    SameSoftWeb.Models.SameSoftwareWebEntities db = new SameSoftWeb.Models.SameSoftwareWebEntities();
+    DateTime from = DateTime.UtcNow.AddHours(3).Date.AddYears(-30);
+    DateTime to = DateTime.UtcNow.AddHours(3).Date;
+
+    if (ViewBag.from != null)
+    {
+        from = DateTime.Parse(Convert.ToString(ViewBag.from));
+        to = DateTime.Parse(Convert.ToString(ViewBag.to));
+    }
+}
+
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="content-body">
+    <!-- Basic Tables start -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title"><b>Add Transactions to Invoice </b></h3>
+                    <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                    <div class="heading-elements">
+                        <ul class="list-inline mb-0">
+                            <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                            <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
+                            <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                            <li><a data-action="close"><i class="ft-x"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card-content collapse show">
+                    <div class="card-body">
+                        <form method="get" action="/Accounting/VendorBalance">
+                            <div class="row" style="width:100%;margin:auto;">
+                                <div class="col-md-3">
+                                    From
+                                    @if (ViewBag.from != null)
+            {
+                                        <input type="text" name="from" id="from" class="form-control" value="@from.ToString("yyyy/MM/dd")" />
+                                    }
+                                    else
+                                    {
+                                        <input type="text" name="from" id="from" class="form-control" value="@DateTime.Now.ToString("yyyy/MM/dd")" />
+                                    }
+                                </div>
+                                <div class="col-md-3">
+                                    To
+                                    <input type="text" name="to" id="to" class="form-control" value="@to.ToString("yyyy/MM/dd")" />
+                                </div>
+
+                                <div class="col-md-2">
+                                    <br />
+                                    <input type="submit" class="btn btn-primary" value="View" />
+                                </div>
+                            </div>
+                        </form>
+
+                        @{
+                            ViewBag.Title = "Vendor Balances";
+
+
+                            string divname = "All";
+
+                            if (ViewBag.divid != null)
+                            {
+                                int dID = (int)ViewBag.divid;
+                                divname = db.Business_Division.Where(a => a.Business_Division_Id == dID).Select(a => a.Name).FirstOrDefault();
+                            }
+
+                            if (ViewBag.from != null)
+                            {
+                                from = (DateTime)ViewBag.from;
+                            }
+                            if (ViewBag.to != null)
+                            {
+                                from = (DateTime)ViewBag.from;
+                            }
+
+
+
+
+                            var items = db.Sp_Get_Vendor_with_Balance().Select(x => new
+                            {
+                                vendorid = x.Vendor_ID,
+                                vendorname = x.Vendor_Name,
+                                Phone = x.Tel,
+                                Contact = x.Address,
+                                balance = x.BALANCE
+
+                            }).ToList();
+
+                        }
+
+                        <style>
+                            td {
+                                padding: 4px;
+                                text-align: center;
+                            }
+
+                            th {
+                                padding: 4px;
+                                text-align: center;
+                            }
+                        </style>
+
+
+                        <div style="width:90%;padding:7px;border:1px #f6ecec;margin:auto;">
+                            <button class="btn btn-primary" onclick="PrintElem();">  <i class="fa fa-print"></i> Print    </button>
+                        </div>
+
+
+
+                        <div style="width:90%;padding:7px;border:1px #f6ecec;margin:auto;background-color:#F6FBFF;border:1px solid #a6fcfc" id="invoice">
+
+
+                            <table style="width:98%;padding:3px;">
+                                @if (ViewBag.from != null)
+                                {
+                                    <center> <h3> Vendor Balances - @divname </h3>   From <b>@from.ToShortDateString()</b> To <b> @to.ToShortDateString() </b>  </center>
+
+                                }
+                                <table class="tb table-bordered" style="width:98%;padding:3px;">
+                                    <thead>
+                                        <tr>
+                                            <th> VendorID </th>
+                                            <th> Vendor Name </th>
+                                            <th>Phone </th>
+                                            <th>Address</th>
+                                            <th>Balance</th>
+                                            <th colspan="2">...</th>
+                                        </tr>
+                                    </thead>
+                                    @{
+                                        double total = 0;
+                                    }
+                                    @foreach (var x in items)
+                                    {
+                                        total = total + (float)x.balance;
+
+
+
+                                        <text>
+                                            <tr>
+                                                <td>@x.vendorid</td>
+                                                <td>@x.vendorname</td>
+                                                <td>@x.Phone</td>
+                                                <td>@x.Contact</td>
+                                                <td>@x.balance</td>
+                                                <td><a href="\Accounting\VendorTrans\?id=@x.vendorid" class="fa fa-vk"> Pay </a> </td>
+                                                <td><a href="\Accounting\VendorStatement\?id=@x.vendorid" class="fa fa-vk"> View Statement </a> </td>
+                                            </tr>
+                                        </text>
+                                    }
+
+                                    <tr><td></td><td></td><td></td><td></td>Sub Total<td><b>$@Math.Round((decimal)total, 2)</b></td> <td></td><td></td></tr>
+                                </table>
+
+
+
+                        </div>
+
+
+                        <br /><br />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Basic Tables end -->
+</div>
+
+<script>
+    function PrintElem() {
+
+
+
+        var mywindow = window.open('', 'PRINT', 'height=400,width=600');
+
+
+        var st = '<style type="text/css">' +
+        '.tb th, .tb td {' +
+        'border:1px solid #ccc;padding:3px;border-collapse:collapse;text-align:center;' +
+        'padding;0.5em;' +
+        '}  .tb th{border-bottom:3px solid #ccc;} table{border-collapse:collapse;}' +
+        '</style>'
+
+        mywindow.document.write('<html><head>' + st + '<link ref="stylesheet" href="~\Content\bootstrap.min.css">  <title>' + '' + '</title>');
+        mywindow.document.write('</head><body >');
+
+        mywindow.document.write(document.getElementById("invoice").innerHTML);
+        mywindow.document.write('</body></html>');
+
+        mywindow.document.close(); // necessary for IE >= 10
+        mywindow.focus(); // necessary for IE >= 10*/
+
+        mywindow.print();
+        mywindow.close();
+
+        return true;
+    }
+</script>

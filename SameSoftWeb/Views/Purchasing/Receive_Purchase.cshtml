@@ -1,0 +1,218 @@
+
+@{
+    ViewBag.Title = "Receive_Purchase";
+}
+
+
+
+@{
+            int id = ViewBag.id;
+            Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+
+            SameSoftWeb.Models.SameSoftwareWebEntities db = new SameSoftWeb.Models.SameSoftwareWebEntities();
+
+            int? newid = db.tblPurchase_Order.Where(a => a.Purchase_ID == id && a.Status == "Open").Select(a => a.Purchase_ID).FirstOrDefault();
+            id = newid == null ? 0 : (int)newid;
+
+            var list = db.tblPurchase_Order_Details.Where(a => a.Purchase_ID == id).Select(a => new
+            {
+                id = a.Purchase_order_detail_id,
+                item = a.Item_id,
+                qty = a.Qty,
+                cost = a.Unit_Cost,
+                pid = a.Purchase_ID
+
+            }).ToList();
+
+
+
+
+}
+
+<div class="content-body">
+    <!-- Basic Tables start -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title"><b>Receive Purchase # (@ViewBag.id) </b></h3>
+                    <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                    <div class="heading-elements">
+                        <ul class="list-inline mb-0">
+                            <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                            <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
+                            <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                            <li><a data-action="close"><i class="ft-x"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card-content collapse show">
+                    <div class="card-body">
+                        <form method="post" action="/Purchasing/add_inventory">
+                            <hr />
+                            <div class="row">
+                                <div class="col-md-1" style="font-weight:bold;">Frieght</div>
+                                <div class="col-md-1"><input type="text" id="Freight" value="0" name="Freight" style="font-weight:bold;color:darkblue;" class="form-control" /></div>
+                                <div class="col-md-1" style="font-weight:bold;"> Tax </div>
+                                <div class="col-md-1"><input type="text" id="Tax" value="0" name="tax" style="font-weight:bold;color:mediumorchid" class="form-control" /></div>
+
+
+                                <div class="col-md-2" style="font-weight:bold;">Receive Date (Leave if Today)</div>
+                                <div class="col-md-3" style="font-weight:bold;"><input type="date" name="trandate" class="form-control" /> </div>
+                            </div>
+                            <hr />
+
+
+                            <table class="table table-bordered">
+                                <thead>
+                                <th> ID </th>
+                                <th>Item </th>
+                                <th>QTY Ordered</th>
+                                <th>QTY Received</th>
+                                <th>Unit Cost</th>
+                                @*<th>Total Cost</th>
+                                    <th>Freight</th>
+                                    <th>Tax</th>*@
+                                <th>Profit %</th>
+                                <th>Sales Price</th>
+                                @*<th>Lot No.</th>*@
+                                <th>
+                                    Barcode
+                                    @*<th>Manufacture Date</th>
+                                        <th>Expire Date</th></th>*@
+
+                                    </thead>
+                                    @foreach (var x in list)
+                                    {
+                                    <tr>
+                                        <td>  <input type="hidden" name="purchase_id" value="@x.pid" />        @x.id</td>
+
+                                        <td>
+                                            <input type="hidden" name="item_id" value="@x.item " />
+                                            <b>
+                                                @{
+                                                    var iid = x.item;
+                                                    Write(db.Items.Where(a => a.Item_Id == iid).Select(a => a.Name).FirstOrDefault());
+                                                    Write("-" + db.Items.Where(a => a.Item_Id == iid).Select(a => a.ReferenceNo).FirstOrDefault());
+                                                }
+
+                                            </b>
+                                        </td>
+                                        <td><input type="number" readonly="" value="@x.qty" id="Qty" class="form-control" require="" /></td>
+                                        <td><input type="number" name="qty" value="@x.qty" id="Qty" class="form-control" require="" /></td>
+
+
+                                        <td><input type="text" name="cost" value="@x.cost" class="form-control" id="cost_@x.item" required="" /></td>
+
+                                        @*<td><span id="Total_@x.id" style="font-weight:bold;color:purple"></span></td>
+                                            <td><span id="Frieght_@x.id" style="font-weight:bold;color:saddlebrown"></span></td>
+                                            <td><span id="Tax_@x.id" style="font-weight:bold;color:mediumblue"></span></td>*@
+
+                                        <td><input type="text" value="" id="PricePer_@x.item" class="form-control" onkeyup="percent(@x.item);" /></td>
+                                        <td><input type="text" name="price" value="" id="price_@x.item" required="" class="form-control" onkeyup="MinPrice(@x.item);" /></td>
+                                        <input type="hidden" name="batch" class="form-control" />
+                                        <td><input type="text" name="barcode" class="form-control" /></td>
+                                        <input type="hidden" name="manudate" class="form-control" />
+                                        <input type="hidden" name="expiredate" class="form-control" />
+
+
+                                    </tr>
+                                                    }
+                                </table>
+                                <hr />
+                                <div class="row">
+
+                                    <div class="col-md-5">
+                                        <br />
+                                        <input type="submit" value="add Inventorty" class="btn btn-success" onclick="return check();" onmc />
+                                    </div>
+                                </div>
+                            </form>
+
+
+
+
+                            <script>
+
+                                function percent(id)
+                                {
+
+
+
+                                    var cost=$("#cost_"+id).val();
+
+
+                                    var pri = $("#price_" + id).val(price);
+
+                                    var priceper=$("#PricePer_"+id).val();
+
+                                    var pricex=(priceper/100)*cost;
+
+
+
+                                    var price=Number(cost)+Number(pricex);
+
+
+
+                                    $("#price_"+id).val(price);
+
+
+                                }
+
+                                function MinPrice(id)
+                                {
+
+                                    var co = $("#cost_" + id).val();
+                                    var pr = $("#price_" + id).val(price);
+                                    if (pr < co) {
+                                        alert("Price Must be Graterthan Cost");
+                                        return true;
+                                    }
+                                    else {
+                                        return false;
+                                    }
+                                }
+
+                                function Calc(id)
+                                {
+
+                                    var f = $("#Freight").val();
+                                    var t = $("#Tax").val();
+
+                                    var qty = $("#Qty_" + id).val();
+                                    var cost = $("#Cost_" + id).val();
+
+
+                                    $("#Freight_" + id).html(f);
+
+
+
+
+                                }
+
+                                function check()
+                                {
+
+                                    var f = $("#Freight").val();
+                                    var t = $("#Tax").val();
+
+                                    if (isNaN(f) == true || isNaN(t) == true) {
+                                        alert("Frieght and Tax Must be Numbers ; Enter 0 For No Freight No Cost;")
+                                        return false
+                                    }
+                                    else {
+                                        return true;
+                                    }
+
+                                }
+
+
+                            </script>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Basic Tables end -->
+    </div>

@@ -1,0 +1,111 @@
+﻿
+@{
+    ViewBag.Title = "statement";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+    var db = new SameSoftWeb.Models.SameSoftwareWebEntities();
+
+    int id = (int)ViewBag.id;
+
+  var list=  db.TblCustomerTransactions.Where(a => a.Customer_ID == id).Select(a => new
+    {
+        a.Customer_ID,
+        a.Debit,
+        a.Credit,
+        a.Description,
+        a.Due_Date,
+        a.Status,
+        a.Transaction_Date,
+        a.UserID,
+        a.Transction_ID,
+        a.Transaction_type_id
+    });
+
+
+}
+<br />
+<button class="btn-sm btn-default" onclick="$('#pr').print()">Print</button>
+<div class="card" id="pr">
+
+
+    <center>
+        <h2>Customer Statement (@db.tblCustomers.Where(a => a.CustomerID == id).Select(a => a.Customer_Name).FirstOrDefault() )</h2>
+    </center>
+
+
+    <table class="table-hover table-bordered" style="width:100%;">
+        <thead class="btn-success">
+        <th>Trans.ID</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Tran. Date</th>
+        <th>Due Date</th>
+        <th>User</th>
+        <th>Status</th>
+        <th>Debit</th>
+        <th>Credit</th>
+        <th>Balance</th>
+        </thead>
+        @{
+            float totald = 0;
+            float totalc = 0;
+            float balance = 0;
+        }
+        @foreach (var x in list)
+        {
+            totald += (float)x.Debit;
+            totalc += (float)x.Credit;
+            <tr>
+                <td>
+                <a href="/Clients/DeleteTrans/@x.Transction_ID" onclick="return confirm('Sure to Delete This Transaction?');">
+                    <i class="fa fa-times-circle" style="color:red"></i>
+                </a>
+                
+                @x.Transction_ID</td>
+                <td>@db.tblCustomerTranactionTypes.Where(a => a.Transaction_type_id == x.Transaction_type_id).Select(a => a.Transaction_type).FirstOrDefault()</td>
+                <th>@x.Description</th>
+             @{try
+                 {
+
+
+                <td>@{ Write(DateTime.Parse(x.Transaction_Date.ToString()).ToString("dd/MM/yyyy"));}</td>
+                <td>@{ Write(DateTime.Parse(x.Due_Date.ToString()).ToString("dd/MM/yyyy"));}</td>
+                        }
+                        catch (Exception e) { }
+                    }
+
+                <td>@db.tblUsers.Where(a => a.UserID == x.UserID).Select(a => a.FullName).FirstOrDefault()</td>
+               <td>@x.Status</td>
+                 <td>@x.Debit</td>
+                <td>@x.Credit</td>
+                <td>@{Write((totald - totalc).ToString());}</td>
+
+            </tr>
+        }
+
+        @{
+            balance = totald - totalc;
+        }
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>@totald</td>
+            <td>@totalc</td>
+            <td><b>@balance</b></td>
+        </tr>
+    </table>
+
+
+</div>
+
+<style>
+    td,th {
+      
+        padding: 4px;
+    }
+</style>

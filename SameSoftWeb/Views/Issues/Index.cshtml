@@ -1,0 +1,392 @@
+﻿@if (Session["Role"].ToString() == "Customer")
+{
+    <b>For Authorized Access Only</b>
+    return;
+}
+
+
+    @*//@model IEnumerable<SameSoftWeb.Models.tblProblem>*@
+
+    @{
+        SameSoftWeb.Models.SameSoftwareWebEntities db = new SameSoftWeb.Models.SameSoftwareWebEntities();
+
+        ViewBag.Title = "Index";
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+        int appid = 0;
+        string type = ViewBag.type;
+
+        if (ViewBag.appid != null)
+        {
+            appid = (int)ViewBag.appid;
+        }
+
+
+        var types = db.IssueTypes.Select(a => new
+        {
+            id = a.IssueType1,
+            name = a.IssueType1
+        }).ToList();
+        var apps = db.tblApplications.Select(a => new
+        {
+            Id = a.Application_ID,
+            Name = a.Application_Name + "(" + a.Description + ")"
+        }).ToList();
+
+
+
+
+        var Pending = db.tblProblems.Where(a => a.Status == "Pending" || a.Status == "On Process").Select(a => new
+        {
+            a.Problem_ID,
+
+            a.tblApplication.Application_Name,
+            a.tblCustomer.Customer_Name,
+            a.Title,
+            a.Type,
+            a.ErrorDate,
+            a.Priority,
+            a.User,
+            a.Description,
+            a.Status,
+            a.Solution_Note,
+            a.Application_ID
+
+
+        }).Where(a => a.Application_ID == appid).OrderBy(a => a.Priority).ToList();
+
+        var solved = db.tblProblems.Where(a => a.Status == "Solved").Select(a => new
+        {
+            a.Problem_ID,
+
+            a.tblApplication.Application_Name,
+            a.tblCustomer.Customer_Name,
+            a.Title,
+            a.Type,
+            a.ErrorDate,
+            a.Priority,
+            a.User,
+            a.Description,
+            a.Status,
+            a.Solution_Note,
+            a.Application_ID
+
+
+
+        }).Where(a => a.Application_ID == appid).OrderBy(a=>a.Priority).ToList();
+
+
+    }
+
+    <div class="row">
+        <div class="col-md-4">
+            @*<h4>Issue List ( Pending : <b>@Pending.Count() </b>   &nbsp;|&nbsp; Solved: <b>@solved.Count()</b>)</h4>*@
+        </div>
+
+
+        <div class="col-md-3">
+            <br />
+            @Html.DropDownList("Application_ID", new SelectList(apps, "Id", "Name", appid), " Filter by Application ", new { @class = "form-control", @id = "app", @onchange = "return filter(3);" })
+        </div>
+
+        <div class="col-md-3">
+            <br />
+            @Html.DropDownList("Type", new SelectList(types, "id", "name", type), " Filter by  Type ", new { @class = "form-control", @id = "type", @onchange = "return filter(3);" })
+
+
+        </div>
+
+        <br />
+        <p>
+
+            <a href="/Issues/ReportIssue" class="btn btn-success">
+                Record New Issue
+            </a>
+
+
+        </p>
+    </div>
+
+<div style="font-size:8pt;font-weight:bold;">
+ <div class="">
+        <!-- Nav tabs -->
+        <ul id="tabs" class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active"><a href="#all" role="tab" data-toggle="tab"><b class="fa fa-warning" style="color:orangered;font-size:13pt;">&nbsp; Pending Issues (@Pending.Count())</b></a></li>
+            <li role="presentation"><a href="#online" role="tab" data-toggle="tab"><b class="fa fa-check-circle" style="color:green;font-size:13pt;">&nbsp; Solved Issues (@solved.Count())</b></a></li>
+         
+        </ul>
+
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade in active" id="all">@*PENDING ISSUES*@
+
+            <table class="table table-bordered table-striped">
+                <thead class="btn-warning">
+                <th>Issue #</th>
+                <th>Type</th>
+                <th>Application</th>
+                <th>Customer</th>
+                <th>User</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Solution_Note</th>
+                <th>ErrorDate</th>
+                <th>Status</th>
+                <th>Priority</th>
+                <th></th>
+                <th></th>
+                </thead>
+
+                @foreach (var item in Pending)
+                {
+                    <tr><td>@item.Problem_ID</td>
+
+                        <td>
+                            @if (item.Type == "Problem")
+                { <b class="fa fa-exclamation-circle" style="color:red;">&nbsp; Error</b>
+                            }
+                            else
+                            {
+                                <b class="fa fa-apple" style="color:green;">&nbsp;New Feature</b>
+                            }
+
+                        </td>
+                        <td>
+                            @item.Application_Name
+                        </td>
+                        <td>
+                            @item.Customer_Name
+                        </td>
+                        <td>
+                            @item.User
+
+                        </td>
+                        <td>
+                            @item.Title
+                        </td>
+                        <td>
+                            @item.Description
+                        </td>
+                        <td>
+                            @item.Solution_Note
+                        </td>
+                        <td>
+                            @item.ErrorDate
+                        </td>
+                        <td>
+                            @if (item.Status != "Pending")
+                {
+                                <b class="fa fa-check-circle" style="color:green;font-size:13pt;"></b>
+                            }
+                            else
+                            {
+                                <b class="fa fa-warning" style="color:orangered;"></b>
+                            }
+
+                            @Html.DisplayFor(modelItem => item.Status)
+                        </td>
+                <td>
+                    @item.Priority
+                </td>
+
+                        <td>
+                            <a href="/Issues/Edit?id=@item.Problem_ID" class="btn btn-success">
+                                Edit
+                            </a>
+                        </td>
+                        <td>
+                            <a href="/Issues/Details?id=@item.Problem_ID" class="btn btn-primary">
+                                View
+                                 &nbsp; &nbsp;&nbsp; <a href="/Issues/Done?id=@item.Problem_ID&appid=@item.Application_ID"><i class="fa fa-check-circle"></i></a>
+
+                            </a>
+                        </td>
+                    </tr>
+                }
+
+            </table>
+            @*PENDING ISSUES*@</div>
+
+
+
+
+
+            <div role="tabpanel" class="tab-pane fade" id="online">@*PENDING ISSUES*@
+
+            <table class="table table-bordered table-striped">
+                <thead class="btn-success">
+                <th>Issue #</th>
+                <th>Type</th>
+                <th>Application</th>
+                <th>Customer</th>
+                <th>User</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Solution_Note</th>
+                <th>ErrorDate</th>
+                <th>Status</th>
+                <th>Priority</th>
+                <th></th>
+                <th></th>
+                </thead>
+
+                @foreach (var item in solved)
+                {
+                    <tr>
+                        <td>@item.Problem_ID</td>
+
+                        <td>
+                            @if (item.Type == "Problem")
+                { <b class="fa fa-exclamation-circle" style="color:red;">&nbsp; Error</b>
+                            }
+                            else
+                            {
+                                <b class="fa fa-apple" style="color:green;">&nbsp;New Feature</b>
+                            }
+
+                        </td>
+                        <td>
+                            @item.Application_Name
+                        </td>
+                        <td>
+                            @item.Customer_Name
+                        </td>
+                        <td>
+                            @item.User
+
+                        </td>
+                        <td>
+                            @item.Title
+                        </td>
+                        <td>
+                            @item.Description
+                        </td>
+                        <td>
+                            @item.Solution_Note
+                        </td>
+                        <td>
+                            @item.ErrorDate
+                        </td>
+                        <td>
+                            @if (item.Status != "Pending")
+                {
+                                <b class="fa fa-check-circle" style="color:green;font-size:13pt;"></b>
+                            }
+                            else
+                            {
+                                <b class="fa fa-warning" style="color:orangered;"></b>
+                            }
+
+                            @Html.DisplayFor(modelItem => item.Status)
+                        </td>
+                        <td>
+                            @item.Priority
+                        </td>
+                        <td>
+                            <a href="/Issues/Edit?id=@item.Problem_ID" class="btn btn-success">
+                                Edit
+                            </a>
+                        </td>
+                        <td>
+                            <a href="/Issues/Details?id=@item.Problem_ID" class="btn btn-primary">
+                       View     </a>
+
+                          
+                            &nbsp; &nbsp;&nbsp; <a href="/Issues/UnDone?id=@item.Problem_ID&appid=@item.Application_ID"><i class="fa fa-exclamation-circle"></i></a>
+
+                        </td>
+                    </tr>
+                }
+
+            </table>
+            @*PENDING ISSUES*@</div>
+      
+        </div>
+
+    </div>
+
+
+
+
+
+   
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <hr />
+
+    <br /> <br /><br />
+
+
+
+    <script>
+
+        function filter(id) {
+            type = $("#type").val();
+
+            var dialog = bootbox.dialog({
+                message: '<center><p> <i class="fa fa-refresh   fa-spin fa-3x fa-fw" style="color:#00BFF0"></i><br> Please Wait..</center>',
+                closeButton: false,
+                animate: true,
+
+                className: "mnc",
+                size: 'small'
+            });
+
+
+
+            for (var i = 0; i < 1; i++) {
+                setTimeout(function () {
+
+
+                    id = $("#app").val();
+                    window.location.href = "/Issues/Index?appid=" + id + "&type=" + type;
+
+                }, (i + i + 1) * 1000);
+            }
+        }
+
+
+
+    </script>

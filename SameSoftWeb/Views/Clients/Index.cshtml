@@ -1,0 +1,189 @@
+﻿@if (Session["Role"].ToString() == "Customer")
+{
+    <b>For Authorized Access Only</b>
+    return;
+}
+@*@model IEnumerable<SameSoftWeb.Models.tblCustomer>*@
+
+@{
+    ViewBag.Title = "Customers";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+    SameSoftWeb.Models.SameSoftwareWebEntities db = new SameSoftWeb.Models.SameSoftwareWebEntities();
+    string Type = "";
+    if (ViewBag.type != null) { Type = (string)ViewBag.type; }
+    string Name = "";
+    if (ViewBag.name != null) { Name = (string)ViewBag.name; }
+    string Status = "";
+    if (ViewBag.status != null) { Status = (string)ViewBag.status; }
+
+    var list = db.View_All_Customers_By_Name_Type_Status(Name, Type.Trim(), Status).Select(a => new
+    {
+        a.Address,
+        a.Contact_Numbers,
+        a.Contract_Date,
+        a.CustomerID,
+        a.Customer_Name,
+        a.Cutomer_Type,
+        a.Maintainance,
+        a.Notes,
+        a.Status,
+
+    }).OrderBy(a => a.Customer_Name).ToList();
+
+    var cust_type = db.tblCustomerTypes.Select(a => new
+    {
+        name = a.Customer_Type,
+        id = a.Customer_Type
+    }).ToList();
+
+
+    float? total = 0;
+}
+
+
+<div class="content-body">
+    <!-- Basic Tables start -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title"><b>Same Soft Client List</b></h3>
+                    <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                    <div class="heading-elements">
+                        <ul class="list-inline mb-0">
+                            <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                            <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
+                            <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                            <li><a data-action="close"><i class="ft-x"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card-content collapse show">
+                    <div class="card-body">
+
+                        <div class="row card" style="padding:10px;">
+
+                            <div style="display:inline">
+
+                                Total Clients ( <b>@ViewBag.cnt</b> )
+                                &nbsp; &nbsp; &nbsp;  &nbsp;
+
+                                @Html.ActionLink("Create New Customer", "Create", null, new { @class = "btn btn-success" })
+
+                                &nbsp; &nbsp; &nbsp;
+
+                                <a href="/CustomerTypes" class="btn btn-primary">Manage Customer Types</a>
+                                &nbsp; &nbsp; &nbsp;
+
+
+                                <a href="/CustomerTranactionTypes" class="btn btn-primary">Customer Transaction Types</a>
+
+                            </div>
+                            <br />
+                            <hr />
+                            <br />
+                            <form method="post" action="\Clients\Index">
+                                <div class="row">
+
+
+                                    <div class="col-md-2">
+                                        Search to  Customer Name
+
+                                    </div>
+                                    <div class="col-md-2">
+                                        <input type="text" name="Name" value="@Name" class="form-control" />
+
+                                    </div>
+                                    <div class="col-md-2">
+                                        @Html.DropDownList("Type", new SelectList(cust_type, "id", "name", Type), "Select Cust Type", new { @class = "form-control" })
+                                    </div>
+                                    <div class="col-md-2">
+
+
+                                        <select name="Status" class="form-control">
+                                            @if (Status == "")
+                                            {
+                                                <option value="">Select Status</option>
+                                                <option value="Active">Active</option>
+                                                <option value="InActive">InActive</option>
+                                            }
+                                            @if (Status != "")
+                                            {
+                                         
+                                                <option value="@Status">@Status</option>
+                                                <option value="">Select Status</option>
+                                                <option value="Active">Active</option>
+                                                <option value="InActive">InActive</option>
+                                            }
+                                        </select>
+
+                                    </div>
+                                    <div class="col-md-2">
+
+                                        <input type="submit" class="btn btn-success" value="View" />
+                                    </div>
+
+                                </div>
+                            </form>
+                        </div>
+                        <div class="card">
+                            <table class="table-bordered" style="font-size:11pt;width:100%;margin:auto;">
+                                <tr class="btn-success">
+                                    <th>No.</th>
+                                    <th>Customer Name</th>
+                                    <th>Cutomer Type</th>
+                                    <th>Contact Name/Numbers</th>
+                                    <th>Address</th>
+                                    <th>Mantainance Rate</th>
+                                    <th>Status</th>
+                                    <th>...</th>
+                                </tr>
+
+                           
+                                @foreach (var x in list)
+                                {
+                                    total = total + x.Maintainance;
+                                    <tr>
+                                        <td>@x.CustomerID</td>
+                                        <td>@x.Customer_Name</td>
+                                        <td>@x.Cutomer_Type</td>
+                                        <td>@x.Contact_Numbers</td>
+                                        <td>@x.Address</td>
+                                        <td>@x.Maintainance</td>
+                                        <td>@x.Status</td>
+                                        <td>
+                                            @Html.ActionLink("Edit", "Edit", new { id = x.CustomerID }) |
+                                            @Html.ActionLink("Details", "Details", new { id = x.CustomerID }) |
+                                            @Html.ActionLink("Delete", "Delete", new { id=x.CustomerID })
+                                        </td>
+                                    </tr>
+                                }
+                                <tr>
+                                    <td>Total Record <b>  (@list.Count()) </b></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>Total : <b>@total</b></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            </table>
+                       
+
+                        </div>
+                        <style>
+                            th, td {
+                                padding: 4px;
+                            }
+                        </style>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Basic Tables end -->
+</div>

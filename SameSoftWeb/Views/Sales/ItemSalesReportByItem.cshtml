@@ -1,0 +1,277 @@
+
+@{  Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "Item Sales Report";
+}
+<script>
+    $(document).ready(function () {
+        $("#from").datepicker({
+            autoClose: true,
+            format: "yyyy/mm/dd"
+        })
+        $("#to").datepicker({
+            autoClose: true,
+            format: "yyyy/mm/dd"
+        })
+    })
+</script>
+@{
+
+    SameSoftWeb.Models.SameSoftwareWebEntities db = new SameSoftWeb.Models.SameSoftwareWebEntities();
+
+    string Currency = db.tblSettings.Where(a => a.Description == "Currency").Select(a => a.Value).FirstOrDefault();
+
+
+    DateTime from = DateTime.UtcNow.AddHours(3).Date;
+    DateTime to = DateTime.UtcNow.AddHours(3).Date;
+    int divid = 0;
+    int itemid = 0;
+
+    if (ViewBag.from != null && ViewBag.divid != null)
+    {
+        from = ViewBag.from;
+        to = ViewBag.to;
+        divid = ViewBag.divid;
+
+    }
+
+
+
+    if (ViewBag.itemid != null)
+    {
+        itemid = ViewBag.itemid;
+    }
+
+
+    var list = db.View_Item_Sales().Where(a => a.Tran_Date >= from && a.Tran_Date <= to && a.Business_Division_Id == divid && (a.Item_Id == itemid || itemid == 0)).Select(a => new
+    {
+        a.Inventory_Tran_ID,
+        a.Inventory_type_id,
+        a.Tran_Date,
+        a.Status,
+        a.Item_Id,
+        a.Name,
+        a.Branch_Name,
+        a.Business_Division_Id,
+        a.Inventory_Type,
+        a.UserID,
+        a.Inventory_Tran_Detail_ID,
+        a.Invoice_No,
+        a.Qty_In,
+        a.Qty_Out,
+        a.Sales_price,
+        a.Cost,
+        a.Price
+
+
+    }).ToList();
+
+
+    var items = db.Items.Select(x => new
+    {
+        ID = x.Item_Id,
+        Name = x.Name
+    }).ToList();
+
+
+
+
+    var ar = db.tblChart_Of_Accounts.Where(a => a.Account_Class_Id == 5 && a.Cash_Or_Bank == "E").ToList();
+    ViewBag.expense = new SelectList(ar, "Account_Number", "Account_Name");
+
+
+
+
+    var cashaccount = db.tblChart_Of_Accounts.Where(a => a.Account_Class_Id == 1 && a.Cash_Or_Bank == "C").ToList();
+    ViewBag.cash = new SelectList(cashaccount, "Account_Number", "Account_Name");
+
+}
+
+
+
+
+
+
+
+<div class="content-body">
+    <!-- Basic Tables start -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title"><b>Sales Report</b></h3>
+                    <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                    <div class="heading-elements">
+                        <ul class="list-inline mb-0">
+                            <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                            <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
+                            <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                            <li><a data-action="close"><i class="ft-x"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card-content collapse show">
+                    <div class="card-body">
+
+                        <form method="get" action="\Sales\ItemSalesReportByItem">
+
+                            <div class="row">
+                                <div class="col-md-1">
+                                    Date
+                                </div>
+                                <div class="col-md-2">
+                                    <input type="date" name="from" value="@from" class="form-control" required="" />
+                                </div>
+                                <div class="col-md-2">
+                                    <input type="date" name="to" class="form-control" value="@to" required="" />
+                                </div>
+
+                                <input type="hidden" name="divid" id="userid" value="1" />
+                                <div class="col-md-3">
+                                    @Html.DropDownList("items", new SelectList(items, "ID", "Name"), "Select Item", new { @class = "form-control", @style = "width:250px;font-weight:bold;" })
+                                </div>
+                                <div class="col-md-1">
+                                    <input type="submit" class="btn btn-primary" />
+                                </div>
+                                <div class="col-md-1">
+                                    <button class="btn btn-primary" onclick="PrintElem();">  <i class="fa fa-print"></i> Print    </button>
+                                </div>
+
+                            </div>
+
+
+
+                        </form>
+
+                        <hr />
+
+
+
+                        <div id="invoice">
+
+                            <h3>Sales Report by item</h3>
+
+
+
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                <th>Invoice ID</th>
+                                <th>Item Name</th>
+                                <th>Date</th>
+                                <th>Qty </th>
+                                <th>Cost</th>
+                                <th>Total </th>
+                                <th>Sales User</th>
+                                <th>Status</th>
+                                @*<th>Cancel</th>*@
+
+
+                                </thead>
+                                @{
+                                    float qty = 0;
+                                    double? price = 0;
+                                    double? cost = 0;
+                                }
+                                @foreach (var x in list)
+                                {
+                                    qty += x.Qty_Out;
+                                    price += x.Price;
+                                    cost += x.Cost;
+                                    <tr>
+                                        <td>
+                                            @x.Invoice_No
+                                        </td>
+                                        <td>
+                                            @x.Name
+
+                                        <td>
+                                            @x.Tran_Date
+                                        </td>
+                                        <td>
+
+                                            @x.Qty_Out
+                                        </td>
+                                        <td>@x.Cost</td>
+                                        <td>
+                                            @x.Price
+                                        </td>
+
+                                        <td>
+                                            @{
+                                                var id3 = @x.UserID;
+                                                Write(db.tblUsers.Where(a => a.UserID == id3).Select(a => a.FullName).FirstOrDefault());
+                                            }
+                                        </td>
+
+
+
+                                        <td>
+                                            @x.Status
+                                        </td>
+
+
+                                    </tr>
+
+
+
+                                                }
+
+
+
+
+
+
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td> <b>@qty Kg</b></td>
+                                    <td><b>@Currency @cost</b></td>
+                                    <td><b>@Currency @price</b></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+
+                            </table>
+                        </div>
+
+                        <hr />
+
+
+
+                        <script>
+                            function PrintElem() {
+
+
+
+                                var mywindow = window.open('', 'PRINT', 'height=400,width=600');
+
+
+                                var st = '<style type="text/css">table{width:100%;}' +
+                                ' th, td {' +
+                                'border:1px solid #ccc;padding:3px;border-collapse:collapse;text-align:center;' +
+                                'padding;0.5em;' +
+                                '}  .tb th{border-bottom:3px solid #ccc;} table{border-collapse:collapse;}' +
+                                '</style>'
+
+                                mywindow.document.write('<html><head>' + st + '<link ref="stylesheet" href="~\Content\bootstrap.min.css">  <title>' + '' + '</title>');
+                                mywindow.document.write('</head><body >');
+
+                                mywindow.document.write(document.getElementById("invoice").innerHTML);
+                                mywindow.document.write('</body></html>');
+
+                                mywindow.document.close(); // necessary for IE >= 10
+                                mywindow.focus(); // necessary for IE >= 10*/
+
+                                mywindow.print();
+                                mywindow.close();
+
+                                return true;
+                            }
+                        </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Basic Tables end -->
+</div>

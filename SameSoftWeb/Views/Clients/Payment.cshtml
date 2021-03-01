@@ -1,0 +1,159 @@
+﻿
+@{
+    ViewBag.Title = "Payment";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+    var db = new SameSoftWeb.Models.SameSoftwareWebEntities();
+
+    var projects = db.tblProjects.Select(a => new
+    {
+        name = a.Project_Title,
+        id = a.Project_ID
+    }).ToList();
+
+    var customers = db.tblCustomers.Select(a => new
+    {
+        name = a.Customer_Name,
+        id = a.CustomerID
+    }).ToList();
+}
+
+                    <!-- Bread crumb and right sidebar toggle -->
+                    <!-- ============================================================== -->
+                    <div class="row page-titles">
+                        <div class="col-md-6 col-8 align-self-center">
+                            <h3 class="text-themecolor">Client Payment</h3>
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="javascript:void(0)">Clients</a></li>
+                                <li class="breadcrumb-item active">Payment</li>
+                            </ol>
+                        </div>
+
+                    </div>
+                    <!-- ============================================================== -->
+                    <!-- End Bread crumb and right sidebar toggle -->
+
+
+                    <form method="post" action="/Clients/Payment">
+
+
+
+                        <div class="row" style="width:60%;margin:auto;background-color:#fff;padding:6px;border-top:3px solid #10a6e8; padding-top:10px; border-radius:4px;">
+
+                            <div class="col-md-6">
+
+                                <div class="form-group">
+                                    <label class="col-md-12">Customer</label>
+                                    <div class="col-md-12">
+                                        @Html.DropDownList("customer_id", new SelectList(customers, "id", "name"), "Select Customer", new { @id = "cust", @class = "form-control form-control-line", @required = "", @onchange = "check();" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-12">Amount Paid</label>
+                                    <div class="col-md-12">
+                                        <input type="text" value="" required="" placeholder=" $0.00" name="amount" class="form-control form-control-line">
+
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-md-12">Description</label>
+                                    <div class="col-md-12">
+                                        <input type="text" value="" required="" placeholder="Payment Type .." name="desc" class="form-control form-control-line">
+
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+                            <div class="col-md-6">
+
+
+                                <div class="form-group" id="">
+                                    <label class="col-md-12">Transction to Pay</label>
+                                    <div class="col-md-12">
+                                        <select name="tran_id" id="ops" class="form-control" required=""></select>
+
+                                    </div>
+                                </div>
+
+
+
+
+                                <div class="form-group">
+                                    <label class="col-md-12">Payment Date</label>
+                                    <div class="col-md-12">
+                                        <input type="date" value="" required="" placeholder="..." name="trandate" class="form-control form-control-line">
+                                    </div>
+                                </div>
+
+
+
+                                <div class="form-group">
+                                    <div class="col-sm-12">
+                                        <button class="btn btn-success" id="save" disabled="">Complete Payment</button>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+
+
+
+
+
+                    </form>
+
+
+
+
+                    <script>
+
+                        function check() {
+                            var id = $("#cust").val();
+
+                            if (id > 0) {
+
+                                var options = "<option value='0'>Select Transaction to Pay</option>";
+                                try {
+                                    $.ajax({
+                                        url: '/Clients/getTrans',
+                                        type: 'GET',
+                                        data: { id: id },
+                                        success: function (item) {
+
+                                            $.each(item, function (index, item) {
+
+                                                options = options + "<option value='" + item.ID + "'>" + item.Text + "</option>";
+
+                                            });
+
+
+                                            $("#ops").html(options);
+                                        },
+                                        error: function (error) {
+                                            alert(error.responseText);
+                                        }
+                                    });
+                                }
+                                catch (e) { alert(e); }
+
+
+
+
+
+
+                                $("#save").removeAttr("disabled");
+
+
+                            }
+                            else {
+                                $("#save").attr("disabled", "");
+                                $("#ops").html("");
+
+                            }
+                        }
+
+                    </script>

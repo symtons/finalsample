@@ -1,0 +1,335 @@
+﻿
+<script>
+    $(document).ready(function () {
+        $("#from").datepicker({
+            autoClose: true,
+            format: "yyyy/mm/dd"
+        })
+        $("#to").datepicker({
+            autoClose: true,
+            format: "yyyy/mm/dd"
+        })
+    })
+</script>
+
+@{
+    ViewBag.Title = "Expense Report";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    SameSoftWeb.Models.SameSoftwareWebEntities db = new SameSoftWeb.Models.SameSoftwareWebEntities();
+
+
+
+    var users = db.tblUsers.Select(a => new
+    {
+        id = a.UserID,
+        name = a.FullName
+
+    }).Distinct().ToList();
+
+    var dropstatus = db.tblExpenses.Select(a => new
+    {
+        id = a.Status,
+        name = a.Status
+
+    }).Distinct().ToList();
+
+
+    var types = db.tblExpenseTypes.Select(a => new
+    {
+        id = a.Expense_Type_ID,
+        name = a.Expense_Type
+
+    }).Distinct().ToList();
+
+    DateTime from = DateTime.UtcNow.AddHours(3).Date;
+    DateTime to = DateTime.UtcNow.AddHours(3).Date;
+
+    int id = 0;
+    if (ViewBag.id != null)
+    {
+        id = ViewBag.id;
+    }
+
+    int type = 0;
+    string typename = "";
+    if (ViewBag.type != null)
+    {
+        type = (int)ViewBag.type;
+        typename = db.tblExpenseTypes.Where(a => a.Expense_Type_ID == type).Select(a => a.Expense_Type).FirstOrDefault();
+
+    }
+
+
+    if (ViewBag.from != null)
+    {
+        from = DateTime.Parse(Convert.ToString(ViewBag.from));
+        to = DateTime.Parse(Convert.ToString(ViewBag.to));
+    }
+
+    var list = db.tblExpenses.OrderBy(a => a.Expense_Date).Where(a => System.Data.Entity.DbFunctions.TruncateTime(a.Expense_Date) >= from 
+    && System.Data.Entity.DbFunctions.TruncateTime(a.Expense_Date) <= to 
+    && (a.UserID == id || (id == 0))
+    && (a.Expense_Type_ID == type || (type == 0))
+      && a.Status == "Posted").Select(a => new
+      {
+          a.Expense_ID,
+          a.Expense_Date,
+          a.Dr,a.Cr,
+          a.Note,
+
+          a.Expense_Type_ID,
+          a.Status,
+          a.Payment_Method
+
+         ,
+          a.UserID
+      }).ToList();
+
+
+
+    if (ViewBag.vdate != null)
+    {
+    }
+
+
+
+
+}
+<div class="content-body">
+    <!-- Basic Tables start -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title"><b>Expense Report </b></h3>
+                    <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                    <div class="heading-elements">
+                        <ul class="list-inline mb-0">
+                            <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                            <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
+                            <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                            <li><a data-action="close"><i class="ft-x"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card-content collapse show">
+                    <div class="card-body">
+
+                        <form method="post" action="/Report/Expenses">
+                            <div class="row">
+
+                                <div class="col-md-2">
+                               
+                                </div>
+
+                                <div class="col-md-2">    <input type="text" name="from" id="from" class="form-control" style="display:inline;" value="@from.ToString("yyyy/MM/dd")" /></div>
+                                <div class="col-md-2">     <input type="text" name="to" id="to" required="" class="form-control" style="display:inline;" value="@to.ToString("yyyy/MM/dd")" /> </div>
+
+
+                                <div class="col-md-2">
+                                    @Html.DropDownList("type", new SelectList(types, "id", "name"), "Filter by Type", new { @class = "form-control" })
+                                </div>
+
+                                <div class="col-md-2">
+                                    @Html.DropDownList("id", new SelectList(users, "id", "name"), "Select User", new { @class = "form-control" })
+                                </div>
+
+                                <div class="col-md-1">
+                                    <input type="submit" value="View" class="btn btn-primary" />
+                                </div>
+                                <button class="btn btn-primary" onclick="PrintElem();">  <i class="fa fa-print"></i> Print    </button>
+                            </div>
+                        </form>
+
+
+
+
+                        @{
+                            if (list.Count < 1)
+                            {
+                                @Html.Raw(ViewBag.msg)
+                                return;
+                            }
+
+                        }
+
+                        <br /><br />
+                        <div  id="print">
+
+                            <center>
+                                <img src="~/img/logo.png" height="100" width="200" />
+                                <br />
+                                <h3>Expense report</h3>
+                                From @from.Date.ToString("dd/MM/yyyy")   to  @to.Date.ToString("dd/MM/yyyy")
+
+                                <b>
+
+
+
+                                    @if (ViewBag.type != null)
+            {<br />
+                                    <object>Expense Type:</object>
+                                    <b> @typename </b>
+                                    }
+
+
+                                    @if (id != 0)
+            {<br />
+                                    <object>User :</object>
+                                    <b> @db.tblUsers.Where(a=>a.UserID==id).Select(a=>a.FullName).FirstOrDefault()</b>
+                                    }
+                                </b>
+
+                            </center>
+
+                            <table class="table table-bordered">
+                                <thead>
+                                <th>Expense #.</th>
+                                <th>Expense Type.</th>
+                                <th>Expense Date.</th>
+
+                                <th>Note</th>
+
+                                <th>User</th>
+                                <th>Payment</th>
+                                <th>Dr</th>
+                                <th>Cr</th>
+                           
+                                </thead>
+
+
+                                @{
+
+                                    float Dr = 0;
+                                    float Cr = 0;
+                                    float Balance = 0;
+                                    float Balance2 = 0;
+
+                                }
+                                @foreach (var x in list)
+                                {
+
+
+
+                                    Dr += (float)x.Dr;
+                                    Cr += (float)x.Cr;
+                                    Balance = (float)x.Dr - (float)x.Cr;
+                                    Balance2 = Dr - Cr;
+
+
+
+
+                                    <tr>
+                                        <td>
+                                            @x.Expense_ID
+                                        </td>
+
+
+                                        <td>
+                                            @{Write(db.tblExpenseTypes.Where(a => a.Expense_Type_ID == x.Expense_Type_ID).Select(a => a.Expense_Type).FirstOrDefault());
+                                            }
+                                        </td>
+
+                                        <td>
+                                            @x.Expense_Date.ToShortDateString()
+
+                                        </td>
+
+
+
+
+
+                                        <td>
+                                            @x.Note
+                                        </td>
+                                        <td>@{Write(db.tblUsers.Where(a => a.UserID == x.UserID).Select(a => a.FullName).FirstOrDefault());} </td>
+                                        <td style="text-align:center">
+                                            @x.Payment_Method
+                                        </td>
+                                        <td style="text-align:center">
+                                            @x.Dr
+                                        </td>
+                                        <td style="text-align:center">
+                                            @x.Cr
+                                        </td>
+                                    
+                                      
+                                    </tr>
+                                            }
+
+                                <tr style="font-weight:bold;">
+
+                                  
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td style="text-align:center"><b>$ @Dr </b></td>
+                                    <td style="text-align:center"><b>$ @Cr </b></td>
+                                    <td style="text-align:center"><b>Balance: $ @Balance2 </b></td>
+
+                                   
+
+
+                                </tr>
+
+                            </table>
+
+                            <br />
+                            Total Record <b> @list.Count </b>
+
+
+
+
+
+
+
+
+
+
+
+
+
+                            <script>
+                                function PrintElem() {
+
+
+
+                                    var mywindow = window.open('', 'PRINT', 'height=600,width=900');
+
+
+                                    var st = '<style type="text/css">table{width:100%;}' +
+                                    ' th, td {' +
+                                    'border:1px solid #ccc;padding:3px;border-collapse:collapse;text-align:center;font-size:9pt;' +
+                                    'padding;0.5em;' +
+                                    '}   table{border-collapse:collapse;}' +
+                                    '</style>'
+
+                                    mywindow.document.write('<html><head>' + st + '<link ref="stylesheet" href="~\Content\bootstrap.min.css">  <title>' + '' + '</title>');
+                                    mywindow.document.write('</head><body >');
+
+                                    mywindow.document.write(document.getElementById("print").innerHTML);
+                                    mywindow.document.write('</body></html>');
+
+                                    mywindow.document.close(); // necessary for IE >= 10
+                                    mywindow.focus(); // necessary for IE >= 10*/
+
+                                    mywindow.print();
+                                    mywindow.close();
+
+                                    return true;
+                                }
+
+
+
+
+                            </script>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Basic Tables end -->
+    </div>

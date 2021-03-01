@@ -1,0 +1,180 @@
+﻿
+@{
+    ViewBag.Title = "Expense Types";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+    SameSoftWeb.Models.SameSoftwareWebEntities db = new SameSoftWeb.Models.SameSoftwareWebEntities();
+    var list = db.tblExpenseTypes.Select(a => new
+    {
+
+        a.Expense_Type_ID,
+        a.Expense_Type,
+        a.Account_Number
+    });
+
+    var acc = db.tblChart_Of_Accounts.Where(a => a.Account_Class_Id == 5).Select(a => new
+    {
+        id = a.Account_Number,
+        name = a.Account_Name
+    });
+
+
+}
+
+<div class="content-body">
+    <!-- Basic Tables start -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title"><b>Manage Expense Types</b></h3>
+                    <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                    <div class="heading-elements">
+                        <ul class="list-inline mb-0">
+                            <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                            <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
+                            <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                            <li><a data-action="close"><i class="ft-x"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card-content collapse show">
+                    <div class="card-body">
+
+
+                        @if (ViewBag.msg != null)
+                        {
+                            <h4 style="color:blue"><i class="fa fa-envlope"></i> @ViewBag.msg</h4>
+                        }
+                        <div class="row">
+
+
+
+                            <hr />
+                            <div class="col-md-4">
+                                <form method="post" action="/Accounting/AddExpenseType">
+
+                                    <div class="list-group">
+
+                                        <a href="#" class="list-group-item" style="background-color:#4e66b5;color:white;"><b><i class="fa fa-plus"></i>  Add  New Type </b> </a>
+
+                                        <span class="list-group-item">
+                                            Expense Type
+                                            <input type="text" name="type" placeholder="Expense Type" class="form-control" required="" />
+
+                                            Main Expense Account
+                                            @Html.DropDownList("acc", new SelectList(acc, "id", "name"), "Select Main Account", new { @class = "form-control", @required = "" })
+                                            <br />
+
+                                            <input type="submit" value="create" class="btn btn-primary" />
+
+
+
+
+                                        </span>
+
+
+
+                                    </div>
+                                </form>
+
+
+                            </div>
+                            <div class="col-md-8">
+                                <table class="table table-bordered">
+
+                                    <thead>
+                                    <th>ID</th>
+                                    <th>Expense Type</th>
+                                    <th>Main Account Number</th>
+                                    <th>...</th>
+                                    <th>...</th>
+                                    </thead>
+
+                                    @foreach (var x in list)
+                                    {
+                                        <div id="update_@x.Expense_Type_ID" style="display:none;">
+                                            <form method="post" action="/Accounting/UpdateExpenseType" name="form_@x.Expense_Type_ID">
+                                                <input type="hidden" name="id" value="@x.Expense_Type_ID" />
+
+                                                <input type="text" name="type" class="form-control" value="@x.Expense_Type" />
+                                                <br />
+                                                <input type="submit" onclick="subtmit(@x.Expense_Type_ID);" class="btn btn-success" value="Update" />
+                                            </form>
+                                        </div>
+
+
+
+
+                                        <tr>
+
+                                            <td>@x.Expense_Type_ID</td>
+
+                                            <td>@x.Expense_Type</td>
+
+                                            <td>@{ Write(db.tblChart_Of_Accounts.Where(a => a.Account_Number == x.Account_Number).Select(a => a.Account_Name).FirstOrDefault());}</td>
+
+
+                                            <td><a href="#" onclick="update(@x.Expense_Type_ID);" class="btn btn-success"> Update </a></td>
+
+                                            <td><a href="/Accounting/DeleteExpenseType/?id=@x.Expense_Type_ID" class="btn btn-danger"> Delete </a></td>
+
+                                        </tr>
+
+                                                }
+
+
+
+                                </table>
+
+                            </div>
+
+
+
+
+
+
+
+
+                        </div>
+
+
+                    </div>
+
+
+                    <script>
+
+                        function update(id) {
+
+
+                            var data = $("#update_" + id).html();
+
+                            var dl = bootbox.dialog({
+                                title: 'Update Expense Type',
+                                message: data
+
+                            });
+
+
+                        }
+
+
+
+                        function subtmit(id) {
+
+
+
+                            document.forms["form_" + id].submit();
+
+
+                        }
+
+                    </script>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Basic Tables end -->
+</div>

@@ -1,0 +1,54 @@
+﻿
+@{ ViewBag.Title = "Login";
+                Layout = "~/Views/Shared/_Layout.cshtml"; }
+
+<section id="subheader" data-bgimage="url(~/Content2/images/background/5.png) bottom">
+    <div class="center-y relative text-center" data-scroll-speed="4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 offset-md-2">
+                    <form action='blank.php' class="row" id='form_subscribe' method="post" name="myForm">
+                        <div class="col-md-12 text-center">
+                            <h1>User Login</h1>
+                            <p>Awsome Page Teaser Here</p>
+                        </div>
+                        <div class="clearfix"></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="no-top" data-bgimage="url(~/Content2/images/background/3.png) top">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                 @using (Html.BeginForm("mylogin", "users", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+        {
+@Html.AntiForgeryToken()
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                                <b style="color:red">
+                                    @if (Request.QueryString["msg"] != null)
+                                    {
+                    <text> @Request.QueryString["msg"] </text>}
+                                </b>
+                                                <hr />
+             <b>User Name</b>
+                <input type="text" name="username" class="form-control" id="userf" />
+                <b>Password</b>
+                <input type="password" name="password" class="form-control" id="passf" />
+
+                        <input type="checkbox" /> <i>Remeber me</i> <br>
+                        <div id="lgdiv" style="text-align:left;">
+                            <input type="submit" class="btn btn-custom color-2" value="login" id="btnloginnow" onclick="loginnow();" />
+                            <div id="abc"></div>
+                        </div>
+
+                        <hr />
+         }
+            </div>
+        </div>
+    </div>
+</section>
+

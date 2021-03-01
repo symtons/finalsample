@@ -1,0 +1,105 @@
+﻿@if (Session["Role"].ToString() == "Customer")
+{
+    <b>For Authorized Access Only</b>
+    return;
+}
+@model SameSoftWeb.Models.tblUser
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="content-body">
+    <!-- Basic Tables start -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title"><b>Details</b></h3>
+                    <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                    <div class="heading-elements">
+                        <ul class="list-inline mb-0">
+                            <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                            <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
+                            <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                            <li><a data-action="close"><i class="ft-x"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card-content collapse show">
+                    <div class="card-body">
+
+                        <div>
+                            <h4>tblUser</h4>
+                            <hr />
+                            <dl class="dl-horizontal">
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.FullName)
+                                </dt>
+
+                                <dd>
+                                    @Html.DisplayFor(model => model.FullName)
+                                </dd>
+
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.Customer_ID)
+                                </dt>
+
+                                <dd>
+                                    @Html.DisplayFor(model => model.Customer_ID)
+                                </dd>
+
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.Role)
+                                </dt>
+
+                                <dd>
+                                    @Html.DisplayFor(model => model.Role)
+                                </dd>
+
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.UserName)
+                                </dt>
+
+                                <dd>
+                                    @Html.DisplayFor(model => model.UserName)
+                                </dd>
+
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.Password)
+                                </dt>
+
+                                <dd>
+                                    @Html.DisplayFor(model => model.Password)
+                                </dd>
+
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.Email)
+                                </dt>
+
+                                <dd>
+                                    @Html.DisplayFor(model => model.Email)
+                                </dd>
+
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.Status)
+                                </dt>
+
+                                <dd>
+                                    @Html.DisplayFor(model => model.Status)
+                                </dd>
+
+                            </dl>
+                        </div>
+                        <p>
+                            @Html.ActionLink("Edit", "Edit", new { id = Model.UserID }) |
+                            @Html.ActionLink("Back to List", "Index")
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Basic Tables end -->
+</div>

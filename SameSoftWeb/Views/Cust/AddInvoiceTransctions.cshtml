@@ -1,0 +1,321 @@
+﻿
+
+@{
+    ViewBag.Title = "Add Invoice Transactions";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    SameSoftWeb.Models.SameSoftwareWebEntities db = new SameSoftWeb.Models.SameSoftwareWebEntities();
+
+
+
+    DateTime from = DateTime.UtcNow.AddHours(3).Date;
+    DateTime to = DateTime.UtcNow.AddHours(3).Date;
+    int customer_id = 0;
+    int invoice_id = 0;
+
+    if (ViewBag.customer != null)
+    {
+        customer_id = (int)ViewBag.customer;
+        invoice_id = (int)ViewBag.invoice_id;
+    }
+
+
+
+
+
+    int tran_dt_id = 0;
+    try
+    {
+        tran_dt_id = db.tblCustomer_Transaction.Where(a => a.CustomerID == customer_id).Select(a => a.Cust_Tran_ID).Max();
+    }
+    catch (Exception ex) { }
+
+
+    if (ViewBag.selected_cust_tran_id != null)
+    {
+        tran_dt_id = (int)ViewBag.selected_cust_tran_id;
+    }
+
+    var trans = db.tblCustomer_Transaction.Where(a => a.CustomerID == customer_id).Select(a => a.Cust_Tran_ID).ToList();
+
+
+    var bk = db.tblCustomer_Transaction_Detail.Where(a => a.Invoice_Group_Id == null || a.Invoice_Group_Id == invoice_id).Select(a => new
+    {
+
+        a.Invoice_Group_Id,
+        a.Cust_Transaction_Detail_id,
+        a.Cust_Tran_ID,
+        a.Dept_Date,
+        a.Cust_Tran_Type_ID,
+        a.UserID,
+        a.Qty,
+        a.Airline,
+        a.Debit,
+        a.Credit,
+        a.Status,
+        a.Description,
+           a.Invoice_No  ,
+        a.Trans_Date
+
+    }).Where(a => a.Cust_Transaction_Detail_id > 0 && trans.Contains(a.Cust_Tran_ID) && a.Cust_Tran_ID == tran_dt_id).OrderBy(a => a.Cust_Transaction_Detail_id).ToList();
+
+
+    string cust_name = db.tblCustomers.Where(a => a.CustomerID == customer_id).Select(a => a.Customer_Name).FirstOrDefault();
+
+
+
+    var cust_trans = db.tblCustomer_Transaction.Where(a => a.CustomerID == customer_id).Select(a => new
+    {
+        name = "Transaction Group #" + a.Cust_Tran_ID + " (" + a.Status + ")",
+        id = a.Cust_Tran_ID
+    });
+
+
+
+
+}
+
+
+
+
+<div class="content-body">
+    <!-- Basic Tables start -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title"><b>Add Transactions to Invoice </b></h3>
+                    <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                    <div class="heading-elements">
+                        <ul class="list-inline mb-0">
+                            <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                            <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
+                            <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                            <li><a data-action="close"><i class="ft-x"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card-content collapse show">
+                    <div class="card-body">
+
+                        <div style="width:70%;margin:auto;">
+
+
+                            <h2>@cust_name Invoices</h2>
+                            <h3>Add Transactions to Invoice #@invoice_id</h3>
+
+
+
+
+                            <form method="get" action="\Cust\AddInvoiceTransctions">
+                                <div class="row">
+                                    <div class="col-md-5">
+                                        @Html.DropDownList("selected_cust_tran_id", new SelectList(cust_trans, "id", "name", tran_dt_id), null, new { @class = "form-control" })
+                                    </div>
+                                    <input type="hidden" name="customer" value="@customer_id" />
+                                    <input type="hidden" name="invoice_id" value="@invoice_id" />
+                                    <div class="col-md-2">
+                                        <input type="submit" value="View" class="btn btn-success" />
+                                    </div>
+                                </div>
+                            </form>
+
+                        </div>
+
+                        <br />
+
+
+
+
+
+                        @if (Request.QueryString["msg"] != null)
+                        {
+                            <h4 style="color:blue">@Request.QueryString["msg"]</h4>
+                        }
+
+
+                        @{
+                            if (bk.Count < 1)
+                            {
+                                <text>  No Booking Found </text>
+
+                                return;
+                            }
+                        }
+
+                        <form method="post" action="\Cust\addInvoiceTrans" >
+                            <input type="hidden" name="invoice_id" value="@invoice_id" />
+
+
+
+                            <table class="table table-bordered">
+
+
+                                <tr><th><br />Total List @bk.Count   |   No. of Selected Transactions   <span style="color:blue;font-weight:bold;font-sizex:13pt;" id="cnt">0</span></th>
+                                @*<th>Description<input type="text" class="form-control" name="desc"  required="" />  </th>*@
+                                 <th><br /><input type="submit" value="Add to Invoice #@invoice_id" class="btn btn-primary" onclick="return validate();" /></th></tr>
+
+
+
+
+
+                            </table>
+
+
+                            <table class="table table-bordered">
+
+                                <tr class="btn-info">
+                                    <th>Trans_No</th>
+                                    <th>Transaction Date</th>
+                                    <th>Type</th>
+                                    <th>Description</th>
+                                    <th>QTY</th>
+                                    <th>Debit</th>
+                                    <th>Credit</th>
+                                    <th>User</th>
+                                    <th>Invoice No.</th>
+                                    <th><input type="checkbox" name='checkedAll' id='checkedAll' onchange="selectall();" /></th>
+                                </tr>
+
+
+                                @foreach (var x in bk)
+                                {
+
+
+                                    int tranid = x.Cust_Tran_Type_ID;
+
+
+                                    var type = db.tblCustomer_Tran_Type.Where(a => a.Cust_Tran_Type_ID == tranid).Select(a => a.Tran_Type).FirstOrDefault();
+
+                                    
+                                        <tr>
+                                        <td>@x.Cust_Transaction_Detail_id </td>
+
+                                        <td>
+                                            @{Write(DateTime.Parse(x.Trans_Date.ToString()).ToString("dd/MM/yyyy"));
+                                            }
+                                        </td>
+                                        <td>@type </td>
+                                        <td>@x.Description </td>
+                                        <td><input type="text" class="form-control" name="qty" value="@x.Qty" style="width:60px"/></td>
+                                        <td>@x.Debit</td>
+                                        <td>@x.Credit</td>
+                                        <td>@{ Write(db.tblUsers.Where(a => a.UserID == x.UserID).Select(a => a.FullName).FirstOrDefault());    }</td>
+
+                                        <td><b> @{ Write(db.tblCustomerInvoiceGroups.Where(a => a.Invoice_Group_Id == x.Invoice_Group_Id).Select(a => a.Invoice_Number).FirstOrDefault());} </b></td>
+
+                                        <td>
+
+                                            @if (x.Invoice_Group_Id > 0)
+                                            {
+                                                <i class="fa fa-check" style="color:green"></i>
+                                            }
+                                            else
+                                            {
+                                                <input type="checkbox" name="selectedtrans" class='checkSingle' onchange="calc();" id="@x.Cust_Transaction_Detail_id" value="@x.Cust_Transaction_Detail_id" />
+                                            }
+
+                                        </td>
+
+                                    </tr>
+
+
+                                            }
+                            </table>
+
+                            <hr />
+
+
+                        </form>
+
+
+
+                        </table>
+
+
+
+                        <script type="text/javascript">
+
+
+                            function selectall() {
+
+                                if ($("#checkedAll").is(':checked')) {
+
+                                    $(".checkSingle").each(function () {
+                                        this.checked = true;
+                                    });
+                                }
+                                else {
+                                    $(".checkSingle").each(function () {
+                                        this.checked = false;
+                                    });
+                                }
+
+
+                                calc();
+
+                            }
+
+
+
+
+                            function calc() {
+                                try {
+
+
+                                    var totalbase = 0;
+                                    var i = 0;
+
+                                    $(".checkSingle").each(function () {
+                                        if (this.checked) {
+                                            var hidenfare = '#fare_' + this.id;
+                                            i += 1;
+
+                                            var vl = $(hidenfare).val();
+
+                                            totalbase = totalbase + Number(vl);
+
+
+                                        }
+
+
+
+                                    });
+
+
+                                    $("#totalfare").html(totalbase);
+                                    $("#cnt").html(i);
+
+                                }
+                                catch (e) {
+                                    alert(e)
+                                }
+                            }
+
+                            function validate() {
+
+                                var i = 0;
+
+                                $(".checkSingle").each(function () {
+                                    if (this.checked) {
+                                        i += 1;
+                                    }
+                                });
+
+                                if (i == 0) {
+                                    bootbox.alert("<b>Please Select Transactions to add to the Invoice</b> ");
+                                    return false;
+                                }
+
+                                return confirm("Sure to Add Selected Transctions");
+                            }
+
+
+
+                        </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Basic Tables end -->
+</div>

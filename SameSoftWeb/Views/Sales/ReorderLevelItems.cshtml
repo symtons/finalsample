@@ -1,0 +1,192 @@
+
+@{
+    ViewBag.Title = "Re-Order Level Items";
+
+    SameSoftWeb.Models.SameSoftwareWebEntities db = new SameSoftWeb.Models.SameSoftwareWebEntities();
+
+
+    int d = 0;
+    var list = db.sp_get_Below_reorder_level_items(d).Select(a => new
+    {
+        item_id = a.Item_Id,
+        item = a.Item,
+        qty = a.QTY,
+        barcode = a.Bar_Code,
+        desc = a.Description,
+        divname = a.Business_div_Name,
+        a.manufact_name,
+        a.manufact_country,
+        a.Measurement_Code,
+        a.Measurement_name,
+        a.ReferenceNo,
+        a.Re_Order_Leval
+
+    }).ToList();
+
+
+    if (ViewBag.divid != null)
+    {
+
+        int divid = (int)ViewBag.divid;
+
+        Write(divid);
+
+        list = db.sp_get_Below_reorder_level_items(divid).Select(a => new
+        {
+            item_id = a.Item_Id,
+            item = a.Item,
+            qty = a.QTY,
+            barcode = a.Bar_Code,
+            desc = a.Description,
+            divname = a.Business_div_Name,
+            a.manufact_name,
+            a.manufact_country,
+            a.Measurement_Code,
+            a.Measurement_name,
+            a.ReferenceNo,
+            a.Re_Order_Leval
+
+
+        }).ToList();
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+}
+
+
+<h2>Re-Order Level Items</h2>
+
+
+
+<form method="post" action="\Sales\ReorderLevelItems">
+
+    <div class="row">
+        <div class="col-md-3">
+
+        </div>
+
+
+        <div class="col-md-3">
+            @{
+
+
+                if ((int)Session["RoleID"] == 3)
+                {
+                    <input type="hidden" name="divid" id="userid" value="@1" />
+                }
+                else {
+                    var divid = db.Business_Division.Select(x => new
+                    {
+                        name = x.Name,
+                        id = x.Business_Division_Id,
+                    }).ToList();
+                    ViewBag.divid = new SelectList(divid, "id", "name", "");
+                    @Html.DropDownList("divid", null, "Select Business Division", new { @class = "form-control", onchange = "", @style = "width:250px;display:inline;", @id = "exps" })
+                }
+            }
+        </div>
+        <div class="col-md-3">
+            <input type="submit" class="btn btn-primary" />
+        </div>
+        <div class="col-md-5">
+            <button class="btn btn-primary" onclick="PrintElem();">  <i class="fa fa-print"></i> Print    </button>
+        </div>
+    </div>
+
+
+
+</form>
+
+<hr />
+@if (ViewBag.divid != null)
+{
+    <div id="printarea">
+
+        <h3> Re-Order Level Items</h3>
+
+        <hr />
+
+        <text>
+            <table class="table table-bordered">
+                <thead>
+                <th>Item_No</th>
+                <th>Item Description</th>
+                <th>Refrence.</th>
+                <th>Manufacturer</th>
+                <th>Country</th>
+                <th>Measurement</th>
+                <th>QTY Available</th>
+                <th>Re-order Level</th>
+                <th>Branch Name</th>
+                </thead>
+
+
+                @foreach (var a in list)
+                {
+
+                    <tr>
+                        <td>@a.item_id</td>
+                        <td>@a.item</td>
+                        <td>@a.ReferenceNo</td>
+                        <td>@a.manufact_name</td>
+                        <td>@a.manufact_country</td>
+                        <td>@a.Measurement_name (@a.Measurement_Code)</td>
+                        <td>@a.qty</td>
+                        <td>@a.Re_Order_Leval</td>
+                        <td>@a.divname</td>
+
+                    </tr>
+
+                }
+
+
+            </table>
+
+
+        </text>
+
+    </div>
+
+
+    <script>
+        function PrintElem() {
+
+
+
+            var mywindow = window.open('', 'PRINT', 'height=600,width=1600');
+
+
+            var st = '<style type="text/css">' +
+            'th, td {' +
+            'border:1px solid #ccc;padding:3px;border-collapse:collapse;text-align:center;' +
+            'padding;0.5em;' +
+            '} th{border-bottom:3px solid #ccc;} table{border-collapse:collapse;}' +
+            '</style>'
+
+            mywindow.document.write('<html><head>' + st + '<link ref="stylesheet" href="~\Content\bootstrap.min.css">  <title>' + '' + '</title>');
+            mywindow.document.write('</head><body style="background-image:url(/img/Letterhead.png); background-size:100% 100%;">');
+
+            mywindow.document.write(document.getElementById("printarea").innerHTML);
+            mywindow.document.write('</body></html>');
+
+            mywindow.document.close(); // necessary for IE >= 10
+            mywindow.focus(); // necessary for IE >= 10*/
+
+            mywindow.print();
+            mywindow.close();
+
+            return true;
+        }
+    </script>
+
+}

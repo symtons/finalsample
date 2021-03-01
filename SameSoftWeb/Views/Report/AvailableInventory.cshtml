@@ -1,0 +1,383 @@
+
+
+
+
+@{
+    ViewBag.Title = "Available Inventory";
+
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    SameSoftWeb.Models.SameSoftwareWebEntities db = new SameSoftWeb.Models.SameSoftwareWebEntities();
+
+
+
+    DateTime to = DateTime.UtcNow.AddHours(3);
+
+    if (ViewBag.to != null)
+    {
+        to = (DateTime)ViewBag.to;
+    }
+
+
+    int divid = 0;
+
+    if (ViewBag.divid != null)
+    {
+
+        divid = ViewBag.divid;
+
+    }
+
+
+    var list = db.sp_get_qty_available_by_division_date_Details(divid, to).Select(a => new
+    {
+
+        item_id = a.Item_Id,
+        item_name = a.Item_Name,
+        catg = a.Category,
+        qtyin = a.QTYIN,
+        qtyout = a.QTY_Out,
+        qtyavailable = a.Available_Qty,
+        total_cost = a.Total_Cost,
+        total_sales = a.Total_Sales_Value,
+        profit = a.Profit,
+        lot = a.Batch
+    }).OrderBy(a => a.item_id).ToList();
+
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+<div class="content-body">
+    <!-- Basic Tables start -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title"><b>Available Inventory</b></h3>
+                    <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                    <div class="heading-elements">
+                        <ul class="list-inline mb-0">
+                            <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                            <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
+                            <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                            <li><a data-action="close"><i class="ft-x"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card-content collapse show">
+                    <div class="card-body">
+
+
+                        <form method="get" action="\Report\AvailableInventory">
+
+                            <div class="row">
+                                <div class="col-md-1">
+                                    Date
+                                </div>
+
+                                <div class="col-md-3">
+                                    <input type="date" name="to" class="form-control" />
+                                </div>
+
+                                @*@{
+
+
+                                        if (1 != null)
+                                        {
+                                            <input type="hidden" name="divid" id="userid" value="@1" />
+                                        }
+                                        else {
+
+                                            var dividlist = db.Business_Division.Select(x => new
+                                            {
+                                                name = x.Name,
+                                                id = x.Business_Division_Id,
+                                            }).ToList();
+                                            ViewBag.divid = new SelectList(dividlist, "id", "name", "");
+                                            <div class="col-md-3">
+                                                @Html.DropDownList("divid", null, "Select Business Division", new { @class = "form-control", onchange = "", @style = "width:250px;display:inline;", @id = "exps", @required = "" })
+                                            </div>
+                                        }
+                                    }*@
+
+                                <div class="col-md-1">
+                                    <input type="submit" class="btn btn-primary" />
+                                </div>
+                                <div class="col-md-1">
+                                    <button class="btn btn-primary" onclick="PrintElem();">  <i class="fa fa-print"></i> Print    </button>
+                                </div>
+                            </div>
+
+
+
+                        </form>
+
+                        <hr />
+
+
+                        @if (list == null)
+                        {
+                            <center><br /><br /><hr /> <h3> No Data</h3></center>
+
+                            return;
+                        }
+
+                        <br /><br />
+                        <div  id="invoice">
+
+                            <center>
+                                <h3>
+
+                                    @*@{
+                                            Write(db.Business_Division.Where(a => a.Business_Division_Id == divid).Select(a => a.Name).FirstOrDefault());
+                                        }*@
+                                    <br />
+
+                                </h3>
+                                <h4>    Available Inventory</h4>
+                                <h4 style="color:blueviolet">  As of  @to.ToString("dd/MM/yyyy")</h4>
+                            </center>
+
+
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                <th>No.</th>
+                                <th>item #</th>
+                                <th>item_Name</th>
+                                @*<th>Lot No.</th>
+                                    <th>Category</th>*@
+                                <th>Qty In</th>
+                                <th>Qty Sold</th>
+                                <th>Available Qty</th>
+                                @*<th>Unit Cost</th>
+                                    <th>Total Cost</th>
+                                    <th>Sales Value</th>
+                                    <th>Estimated Profit</th>*@
+
+
+                                </thead>
+
+                                @{
+
+                                    float subtotalcost = 0;
+                                    float totalsales = 0;
+                                    float totalprofit = 0;
+                                    float net = 0;
+                                    int i = 1;
+                                    int itemid = 0;
+                                    bool doubleicate = false;
+
+
+                                    float qin = 0;
+                                    float qout = 0;
+                                    float c = 0;
+                                    float s = 0;
+                                    float p = 0;
+                                    float qty = 0;
+                                    float Totalqtyav = 0;
+
+                                }
+
+                                @foreach (var a in list)
+            {
+                subtotalcost += (float)a.total_cost;
+                totalsales += (float)a.total_sales;
+                totalprofit += (float)a.profit;
+
+                Totalqtyav = Totalqtyav + (float)a.qtyavailable;
+
+
+
+
+
+
+                if (doubleicate == true && a.item_id != itemid && 1 == 2)
+                {
+                    doubleicate = false;
+                                        <tr style="background-color:azure;">
+                                            @*<td>--</td>
+                                                <td>--</td>*@
+                                            <td>--</td>
+                                            <td>--</td>
+                                            <td>--</td>
+                                            <td>@qout</td>
+                                            <td>@qty</td>
+                                            @*<td>--</td>
+                                                <td>@c</td>
+                                                <td>@s</td>
+                                                <td>@p</td>*@
+                                        </tr>
+                                        qin = 0;
+                                        qout = 0;
+                                        c = 0;
+                                        s = 0;
+                                        p = 0;
+                                        qty = 0;
+                                    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                    <tr>
+                                        @*@if (a.item_id == itemid)*@
+                                        @if (1 == 2)
+                {
+                    doubleicate = true;
+
+                    qin += (float)a.qtyin;
+
+                    qout += (float)a.qtyout;
+                    c += (float)a.total_cost;
+                    s += (float)a.total_sales;
+                    p += (float)a.profit;
+                    qty += (float)a.qtyavailable;
+                                            <td>--</td>
+                                            <td>--</td>
+                                            <td>--</td>
+
+                                        }
+                                        else
+                                        {
+                                            <td> @i</td>
+                                            i += 1;
+                                            <td>@a.item_id </td>
+                                            <td>@a.item_name</td>
+                                        }
+
+
+
+                                        @*<td>@a.lot</td>
+                                            <td>@a.catg</td>*@
+                                        <td>@a.qtyin</td>
+                                        <td>@a.qtyout</td>
+                                        <td>@a.qtyavailable</td>
+                                        @*<td>
+                                                @{
+                                                    var iid = a.item_id;
+                                                    Write(db.Items.Where(l => l.Item_Id == iid).Select(l => l.Unit_Cost).FirstOrDefault());
+                                                }
+                                            </td>
+
+                                            <td>@a.total_cost</td>
+                                            <td>@a.total_sales</td>
+                                            <td>@a.profit</td>*@
+
+
+
+
+                                    </tr>
+
+                                    itemid = a.item_id;
+
+                                }
+
+                                @{
+                                    if (list.Count == 0)
+                                    {
+                                        return;
+                                    }
+                                }
+
+
+                                <tr>
+                                    @*<td></td>
+                                        <td></td>*@
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td><b>@Totalqtyav</b></td>
+                                    @*<td style="text-align:right;">
+                                            Sub Total
+                                        </td>
+                                        <td>
+                                            <b>  @subtotalcost</b>
+                                        </td>
+                                        <td>
+                                            <b>   @totalsales </b>
+                                        </td>
+                                        <td>
+                                            <b> @totalprofit</b>
+                                        </td>*@
+
+
+                                </tr>
+
+                            </table>
+                        </div>
+
+                        <hr />
+
+
+
+
+
+
+
+
+
+
+
+
+                        <script>
+                            function PrintElem() {
+
+
+
+                                var mywindow = window.open('', 'PRINT', 'height=400,width=600');
+
+
+                                var st = '<style type="text/css">table{width:100%;}' +
+                                ' th, td {' +
+                                'border:1px solid #ccc;padding:3px;border-collapse:collapse;text-align:center;' +
+                                'padding;0.5em;' +
+                                '}  .tb th{border-bottom:3px solid #ccc;} table{border-collapse:collapse;}' +
+                                '</style>'
+
+                                mywindow.document.write('<html><head>' + st + '<link ref="stylesheet" href="~\Content\bootstrap.min.css">  <title>' + '' + '</title>');
+                                mywindow.document.write('</head><body >');
+
+                                mywindow.document.write(document.getElementById("invoice").innerHTML);
+                                mywindow.document.write('</body></html>');
+
+                                mywindow.document.close(); // necessary for IE >= 10
+                                mywindow.focus(); // necessary for IE >= 10*/
+
+                                mywindow.print();
+                                mywindow.close();
+
+                                return true;
+                            }
+                        </script>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Basic Tables end -->
+</div>

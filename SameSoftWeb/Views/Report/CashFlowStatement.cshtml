@@ -1,0 +1,295 @@
+﻿
+<script>
+    $(document).ready(function () {
+        $("#from").datepicker({
+            autoClose: true,
+            format: "yyyy/mm/dd"
+        })
+        $("#to").datepicker({
+            autoClose: true,
+            format: "yyyy/mm/dd"
+        })
+    })
+</script>
+
+@{
+    ViewBag.Title = "Cashflow Statement";
+
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    SameSoftWeb.Models.SameSoftwareWebEntities db = new SameSoftWeb.Models.SameSoftwareWebEntities();
+
+
+
+    var cashhacc = db.tblChart_Of_Accounts.Where(a => a.Cash_Or_Bank == "C" || a.Cash_Or_Bank == "B").Select(a => new
+    {
+        id = a.Account_Number,
+        name = a.Account_Name
+
+    }).ToList();
+
+    //var dropstatus = db.tblCashier_Transactions.Select(a => new
+    //{
+    //    id = a.Status,
+    //    name = a.Status
+
+    //}).Distinct().ToList();
+
+
+    DateTime from = DateTime.UtcNow.AddHours(3).Date;
+    DateTime to = DateTime.UtcNow.AddHours(3).Date;
+
+    int acc = 0;
+    if (ViewBag.acc != null)
+    {
+        acc = (int)ViewBag.acc;
+    }
+
+
+
+    if (ViewBag.from != null)
+    {
+        from = DateTime.Parse(Convert.ToString(ViewBag.from));
+        to = DateTime.Parse(Convert.ToString(ViewBag.to));
+    }
+
+    var list = db.Sp_Get_Cash_Flow_Details_by_Date(from, to, acc).Select(a => new
+    {
+        a.TRAN_TYPE,
+        a.DESCRIPTION,
+        a.DEBIT,
+        a.CREDIT,
+
+        a.JOURNAL_DATE,
+        a.ACCOUNT_NAME
+
+
+    }).ToList();
+
+
+
+    if (ViewBag.vdate != null)
+    {
+    }
+
+
+
+
+}
+<div class="content-body">
+    <!-- Basic Tables start -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title"><b>CashFlow Statement</b></h3>
+                    <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                    <div class="heading-elements">
+                        <ul class="list-inline mb-0">
+                            <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                            <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
+                            <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                            <li><a data-action="close"><i class="ft-x"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card-content collapse show">
+                    <div class="card-body">
+
+                        <form method="get" action="/Report/CashFlowStatement">
+
+                            <div class="row">
+                                <div class="col-md-2">
+                               
+                                </div>
+
+                                <div class="col-md-2">    <input type="text" name="from" id="from" class="form-control" style="display:inline;" value="@from.ToString("yyyy/MM/dd")" /></div>
+                                <div class="col-md-2">     <input type="text" name="to" id="to" required="" class="form-control" style="display:inline;" value="@to.ToString("yyyy/MM/dd")" /> </div>
+
+
+                                <div class="col-md-2">
+                                    @Html.DropDownList("acc", new SelectList(cashhacc, "id", "name"), "Filter by Account", new { @class = "form-control" })
+                                </div>
+
+
+                                <div class="col-md-1">
+                                    <input type="submit" value="View" class="btn btn-primary" />
+                                </div>
+                                <button class="btn btn-primary" onclick="PrintElem();">  <i class="fa fa-print"></i> Print    </button>
+
+                            </div>
+                        </form>
+
+
+
+                        @{
+                            if (list.Count < 1)
+                            {
+                                @Html.Raw(ViewBag.msg)
+                                return;
+                            }
+
+                        }
+
+                        <br /><br />
+                        <div  id="print">
+
+                            <center>
+                                <img src="~/img/logo.png" height="100" width="200" />
+                                <br />
+
+                                <br />
+                                <h3>CashFlow Statement</h3>
+                                From @from.Date.ToString("dd/MM/yyyy")   to  @to.Date.ToString("dd/MM/yyyy")
+
+                                <b>
+
+
+
+                                    @if (ViewBag.accname != null)
+            {<br />
+                                    <object>Account:</object>
+                                    <b> @ViewBag.accname </b>
+                                    }
+
+                                </b>
+
+                            </center>
+
+                            <table class="table table-bordered">
+
+                                <tr class="">
+                                    <th> Journal Date</th>
+                                    <th> Transaction Type.</th>
+                                    <th> Description</th>
+                                    <th> Debit</th>
+                                    <th> Credit</th>
+                                    <th>Account</th>
+
+                                </tr>
+
+
+                                @{
+
+                                    float totaldebit = 0;
+
+                                    float totalCredit = 0;
+                                    float balance = 0;
+                                }
+                                @foreach (var x in list)
+                                {
+
+
+
+                                    totaldebit += (float)x.DEBIT;
+                                    totalCredit += (float)x.CREDIT;
+
+
+
+
+                                    <tr>
+
+
+                                        <td>
+                                            @{ Write(DateTime.Parse(x.JOURNAL_DATE.ToString()).ToString("dd/MMM/yyyy"));
+                                            }
+                                        </td>
+
+                                        <td>
+                                            @x.TRAN_TYPE
+                                        </td>
+
+                                        <td>
+                                            @x.DESCRIPTION
+                                        </td>
+
+                                        <td>
+                                            @x.DEBIT
+                                        </td>
+
+                                        <td>
+                                            @x.CREDIT
+                                        </td>
+
+
+
+                                        <td>
+                                            @x.ACCOUNT_NAME
+                                        </td>
+                                    </tr>
+                                                }
+
+                                <tr style="font-weight:bold;">
+
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    @{
+                                        balance = totaldebit - totalCredit;
+                                    }
+
+                                    <td>@totaldebit</td>
+                                    <td>@totalCredit</td>
+                                    <td>@balance</td>
+
+
+                                </tr>
+
+                            </table>
+
+                            <br />
+                            Total Record <b> @list.Count </b>
+
+
+
+
+
+
+
+
+
+
+
+
+
+                            <script>
+                                function PrintElem() {
+
+
+
+                                    var mywindow = window.open('', 'PRINT', 'height=600,width=900');
+
+
+                                    var st = '<style type="text/css">table{width:100%;}' +
+                                    ' th, td {' +
+                                    'border:1px solid #ccc;padding:3px;border-collapse:collapse;text-align:center;font-size:9pt;' +
+                                    'padding;0.5em;' +
+                                    '}   table{border-collapse:collapse;}' +
+                                    '</style>'
+
+                                    mywindow.document.write('<html><head>' + st + '<link ref="stylesheet" href="~\Content\bootstrap.min.css">  <title>' + '' + '</title>');
+                                    mywindow.document.write('</head><body >');
+
+                                    mywindow.document.write(document.getElementById("print").innerHTML);
+                                    mywindow.document.write('</body></html>');
+
+                                    mywindow.document.close(); // necessary for IE >= 10
+                                    mywindow.focus(); // necessary for IE >= 10*/
+
+                                    mywindow.print();
+                                    mywindow.close();
+
+                                    return true;
+                                }
+
+
+
+
+                            </script>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Basic Tables end -->
+    </div>

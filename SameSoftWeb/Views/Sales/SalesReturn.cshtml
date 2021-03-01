@@ -1,0 +1,102 @@
+
+@{  Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "Sales Return";
+}
+
+<h2>Sales Return</h2>
+
+
+
+@{
+    int divid = (int)1;
+    int id = (int)ViewBag.id;
+
+    SameSoftWeb.Models.SameSoftwareWebEntities db = new SameSoftWeb.Models.SameSoftwareWebEntities();
+
+
+    var items = db.tblInventory_Transaction_Details.Where(a => a.Inventory_Tran_ID == id).Select(x => new
+    {
+        id=x.Inventory_Tran_Detail_ID,
+        Item_id = x.Item_Id,
+        qty=x.Qty_Out,
+        price=x.Sales_price,
+        cost=x.Unit_Price
+
+
+    }).ToList();
+
+
+
+}
+
+
+<form method="get" action="\Sales\DoSalesReturn">
+    <table class="table table-bordered">
+
+        <thead>
+        <th>Trans_ID</th>
+        <th>Item No.</th>
+        <th>Item</th>
+        <th>Qty Sold</th>
+        <th>Qty Returned</th>
+        <th>New Qty</th></thead>
+        @foreach (var x in items)
+        {
+            <tr>
+                <td><input type="hidden" value="@x.id" name="tranid" /> @x.id</td>
+                <td><input type="hidden" value="@x.Item_id" name="item_id" /> @x.Item_id</td>
+                <td><b>@{
+                    var iid = x.Item_id;
+                    Write(db.Items.Where(a => a.Item_Id == iid).Select(a => a.Name).FirstOrDefault());
+                     Write(" - "+db.Items.Where(a => a.Item_Id == iid).Select(a => a.ReferenceNo).FirstOrDefault());
+                }</b></td>
+                <td><b><input type="hidden"  value="@x.qty" id="oldqty"/> @x.qty </b></td>
+
+                <td><input type="number" name="qtyreturned" id="qtyreturned" value="0" class="form-control" style="width:150px;font-weight:bold" /></td>
+                <td><input type="text" readonly="" name="newqty" id="newqty" value="@x.qty" class="form-control" style="width:150px;font-weight:bold"  /></td>
+ </tr>
+        }
+
+
+  
+
+
+    </table>
+    <br />
+    <input type="submit" value="Confirm Sales Return" class="btn btn-success" />
+
+</form>
+
+
+
+
+
+
+
+
+
+
+<script>
+
+  
+
+    $("#qtyreturned").keyup(function () {
+
+        var oldqty =Number( $("#oldqty").val());
+        $("#newqty").val(oldqty);
+
+        var ret =Number($("#qtyreturned").val());
+
+        if (ret > oldqty) {
+            $("#qtyreturned").val("");
+
+        }
+        else {
+            $("#newqty").val(oldqty - ret);
+        }
+      
+
+    });
+
+</script>
+  

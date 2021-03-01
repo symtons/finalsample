@@ -1,0 +1,212 @@
+
+@{
+    ViewBag.Title = "Sales Quotation";
+
+    SameSoftWeb.Models.SameSoftwareWebEntities db = new SameSoftWeb.Models.SameSoftwareWebEntities();
+    if (ViewBag.id == null)
+    {
+        Response.Redirect("~/Home/Dashboard");
+    }
+    int id = (int)ViewBag.id;
+
+
+
+    var items = db.sp_Get_Sales_Quotation_by_ID(id).Select(x => new
+    {
+        Item_id = x.Item_Id,
+        item_name = x.Item_Name,
+        discount = x.Discount,
+        total = x.Total,
+        qty = x.Qty,
+        price = x.Price,
+
+        id = x.quotation_id,
+        customer = x.Customer_Name,
+        cust_phone = x.Customer_Phone,
+        tran_Date = x.Tran_Date,
+        tran_nbr = x.Tran_Nbr,
+        divname = x.DivName,
+        net = x.Net,
+        Mobile = x.DivMobile,
+        landline = x.LandLine,
+        email = x.Email,
+        address = x.Address,
+        pict = x.ProfilePic,
+        User = x.Login_Name,
+        batch = x.Expr1,
+        manu = x.Manufacture_Date,
+        expire = x.Expire_Date,
+        Measurement_code = x.Code,
+        measurement = x.Description
+
+
+
+    }).ToList();
+
+
+
+    string Currency = db.tblSettings.Where(a => a.Description == "Currency").Select(a => a.Value).FirstOrDefault();
+
+
+
+}
+
+<style>
+    td {
+        padding: 4px;
+        text-align: center;
+    }
+
+    th {
+        padding: 4px;
+        text-align: center;
+    }
+</style>
+<div style="width:90%;padding:7px;border:1px #f6ecec;margin:auto;">
+    <div class="row">
+        <div class="col-md-5">
+            <button class="btn btn-primary" onclick="PrintElem();">  <i class="fa fa-print"></i> Print Quotation    </button>
+        </div>
+
+        <div class="col-md-6">
+
+            @*<div class="input-group" style="width:265px;">
+                <input type="email" class="form-control" placeholder="Send@email.com">
+                <span class="input-group-btn">
+                    <button class="btn btn-primary" type="button">Send!</button>
+                </span>
+            </div>*@
+        </div>
+
+    </div>
+</div>
+
+<div style="padding:7px;border:1px #f6ecec;margin:auto;background-color:#fff;border:1px solid grey;background-image:url('/img/Letterhead.png'); background-size:100% 100%;height:100%;width: 90%;" id="invoice">
+    <br /><br />
+
+    <center style="font-size:13pt;font-weight:unset;">
+        <br /><br /><br /><br />
+        <span style="border-bottom:0px solid #62acfc;padding-bottom:13px;">
+            @*<img src="@items[0].pict" style="width:40px;height:40px;" /><hk style="display:inline;font-size:16pt;font-weight:bold;"> HOPE LABORATORY SUPPLIES LTD.</hk> <br />
+            *@ 
+        </span>
+        @*<div style="width:99%;padding:3px;border:0px solid grey;border-radius:4px;">
+
+                   @items[0].email  <br />
+                   @items[0].Mobile  <br />
+                   @items[0].landline  <br />
+
+            </div>*@
+        <h2>Quotation</h2><br />
+
+
+
+    </center>
+    <div style="width:97.5%;padding:3px;border:2px solid black;border-radius:4px;">
+
+
+        <table style="width:100%;">
+
+            <tr><td>Quotation No.  </td> <td> <b>Q00<text></text>@items[0].id</b> </td>    <td> <span style="border:0px solid orange;padding:2px"> <b></b></span></td></tr>
+
+            <tr><td>Customer.</td>      <td><b> @{var str = (items[0].customer != null) ? items[0].customer : "N/A"; Write(str);}</td> <td>Invoice Date.</td> <td><b>@items[0].tran_Date.ToShortDateString()</b></td>    </tr>
+            <tr> <td>Recorded by</td> <td><b>@items[0].User</b></td></tr>
+
+
+
+        </table>
+    </div>
+
+
+    <table class="tb" border="0" style="width:99%;padding:3px;">
+        <thead style="border:2px solid black;border-bottom:2px solid black;">
+        <th> Item Description</th>
+        <th> Ref. No. </th>
+        <th> Quantity </th>
+        <th>UoM </th>
+        @*<th>Lot No. </th>
+        <th>Expire Date </th>*@
+        <th>Price </th>
+        <th>Total Amount</th> </thead>
+
+        @foreach (var x in items)
+        {
+            <text>
+                <tr>
+                    <td>@x.item_name</td>
+                    <td>
+
+                        @{
+                            var iid = x.Item_id;
+                            Write(db.Items.Where(a => a.Item_Id == iid).Select(a => a.ReferenceNo).FirstOrDefault());
+                        }
+
+
+                    </td>
+                    <td>@x.qty</td>
+                    <td>@x.measurement (@x.Measurement_code )</td>
+                    @*<td>@x.batch</td>
+                    <td>@x.expire</td>*@
+                    <td>@x.price</td>
+                    <td>@{ Write(x.price * x.qty); }</td>
+
+
+                </tr>
+            </text>
+                        }
+        <tr> <td></td>  <td></td> <td></td> <td></td> @*<td></td><td></td>*@ <td style="color:#1e076f;font-weight:bold;"> Sub Total </td> <td style="color:#1e076f"><b>@Currency @items[0].total  </b></td></tr>
+        <tr> <td></td>  <td></td><td></td><td></td>@*<td></td>  <td></td>*@  <td style="color:#1e076f;font-weight:bold;">Discount </td>  <td style="color:#1e076f"><b>@Currency @items[0].discount  </b></td></tr>
+        <tr> <td></td>  <td></td><td></td> <td></td> @*<td></td> <td></td>*@   <td style="color:#1e076f;font-weight:bold;"> Net </td> <td style="color:#1e076f"><b style="border-bottom:1px double blue;">@Currency @items[0].net  </b></td></tr>
+    </table>
+
+
+    <br />
+
+    <div class="row">
+
+        <div class="col-md-6" style="float:left;">
+            Prepared by ____________________________
+        </div>
+     
+        <br /><br />
+        <br /><br />
+        <br /><br />
+    </div>
+
+
+</div>
+
+
+
+
+
+<script>
+    function PrintElem() {
+
+
+
+        var mywindow = window.open('', 'PRINT', 'height=600,width=1600');
+
+
+        var st='<style type="text/css">' +
+        '.tb th, .tb td {' +
+        'border:1px solid #ccc;padding:3px;border-collapse:collapse;text-align:center;' +
+        'padding;0.5em;' +
+        '}  .tb th{border-bottom:3px solid #000;} table{border-collapse:collapse;}' +
+        '</style>'
+
+        mywindow.document.write('<html><head>'+st+'<link ref="stylesheet" href="~\Content\bootstrap.min.css">  <title>' + '' + '</title>');
+        mywindow.document.write('</head><body style="background-image:url(/img/Letterhead.png); background-size:100% 100%;">');
+
+        mywindow.document.write(document.getElementById("invoice").innerHTML);
+        mywindow.document.write('</body></html>');
+
+        mywindow.document.close(); // necessary for IE >= 10
+        mywindow.focus(); // necessary for IE >= 10*/
+
+        mywindow.print();
+        mywindow.close();
+
+        return true;
+    }
+</script>

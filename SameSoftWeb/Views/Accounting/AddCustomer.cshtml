@@ -1,0 +1,103 @@
+﻿
+@{
+    ViewBag.Title = "AddCustomer";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+    SameSoftWeb.Models.SameSoftwareWebEntities db = new SameSoftWeb.Models.SameSoftwareWebEntities();
+
+    string name = "";
+    name = ViewBag.name;
+
+    var cust = db.Search_Customer_By_Name(name).Select(a => new
+    {
+        id = a.CustomerID,
+        name = a.Customer_Name,
+        phone = a.Contact_Numbers
+
+    }).ToList();
+
+
+
+
+
+}
+
+
+<div class="content-body">
+    <!-- Basic Tables start -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title"><b>Add New Customer</b></h3>
+                    <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                    <div class="heading-elements">
+                        <ul class="list-inline mb-0">
+                            <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                            <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
+                            <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                            <li><a data-action="close"><i class="ft-x"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card-content collapse show">
+                    <div class="card-body">
+
+
+
+                        <div class="row" style="width:40%;margin:auto;">
+                            <form method="post" action="\Clients\Index">
+
+                                <div class="list-group-item">
+                                
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+                                    <input type="submit" value="Add New Customer" class="btn btn-primary" />
+                                </div>
+                            </form>
+                            <br /><br />
+                            <h3>Search Customer</h3>
+                            <form method="post" action="\Accounting\AddCustomer">
+                                <div class="list-group-item">
+                                    Customer Name
+                                    <input type="text" name="name" required="" class="form-control" placeholder="Customer Name" />
+                                    <br /><br />
+                                    <input type="submit" value="Search Cutomer" class="btn btn-primary" />
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>Cust ID</th>
+                                                <th>Cust Name</th>
+                                                <th>Cust Phone</th>
+                                                <th>View</th>
+                                            </tr>
+                                        </thead>
+                                        @foreach (var x in cust)
+                                        {
+                                            <tr>
+                                                <td>@x.id</td>
+                                                <td>@x.name</td>
+                                                <td>@x.phone</td>
+                                                <td><a href="\Accounting\CreateCustomerInvoice\?id=@x.id&name=@x.name" class="fa fa-vk"> View </a> </td>
+                                            </tr>
+                                        }
+
+                                    </table>
+                                </div>
+                            </form>
+
+
+                        </div>
+
+                        <hr />
+
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Basic Tables end -->
+</div>

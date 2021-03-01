@@ -1,0 +1,161 @@
+﻿@model IEnumerable<SameSoftWeb.Models.tblConnection_Data>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="content-body">
+    <!-- Basic Tables start -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title"><b>Connection List</b></h3>
+                    <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                    <div class="heading-elements">
+                        <ul class="list-inline mb-0">
+                            <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                            <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
+                            <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                            <li><a data-action="close"><i class="ft-x"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card-content collapse show">
+                    <div class="card-body">
+                        <!--Start Sercice Details Area -->
+                        <section class="service_details_area section_padding">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-md-9 col-lg-9 col-sm-12 col-xs-12">
+                                        <div class="service_details_page_content">
+                                         
+                                            <p>
+                                                @Html.ActionLink("Create New Connection", "Create", null, new { @class = "btn btn-primary" })
+                                            </p>
+                                            <table class="table table-bordered">
+                                                <tr>
+                                                    <th> Connection ID</th>
+
+                                                    <th>
+                                                        @Html.DisplayNameFor(model => model.Customer)
+                                                    </th>
+                                                    <th>
+                                                        @Html.DisplayNameFor(model => model.Generated_Date)
+                                                    </th>
+                                                    <th>
+                                                        @Html.DisplayNameFor(model => model.Pass_Code)
+                                                    </th>
+                                                    <th>
+                                                        @Html.DisplayNameFor(model => model.Database_Server)
+                                                    </th>
+                                                    <th>
+                                                        @Html.DisplayNameFor(model => model.Database_User)
+                                                    </th>
+                                                    @*<th>
+                                                            @Html.DisplayNameFor(model => model.Database_Password)
+                                                        </th>*@
+                                                    <th>
+                                                        @Html.DisplayNameFor(model => model.Database_Name)
+                                                    </th>
+                                                    <th>
+                                                        @Html.DisplayNameFor(model => model.tblUser.FullName)
+                                                    </th>
+                                                    <th>
+                                                        Expire Date
+                                                    </th>
+
+                                                    <th></th>
+                                                </tr>
+
+                                                @foreach (var item in Model)
+                                                {
+                                                    <tr>
+                                                        <td>@Html.DisplayFor(modelItem => item.Connection_ID)</td>
+                                                        <td>
+                                                            @Html.DisplayFor(modelItem => item.Customer)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(modelItem => item.Generated_Date)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(modelItem => item.Pass_Code)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(modelItem => item.Database_Server)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(modelItem => item.Database_User)
+                                                        </td>
+                                                        @*<td>
+                                                                @Html.DisplayFor(modelItem => item.Database_Password)
+                                                            </td>*@
+                                                        <td>
+                                                            @Html.DisplayFor(modelItem => item.Database_Name)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(modelItem => item.tblUser.FullName)
+                                                        </td>
+                                                        <td>
+                                                            @{
+                                                                DateTime e = item.Expire_Date;
+
+                                                                int exp = DateTime.Compare(DateTime.UtcNow.AddHours(3), e);
+
+                                                            }
+
+                                                            @if (exp > -1)
+                                                            {
+                                                                <span style="color:red;font-weight:bold;">
+                                                                    @e.ToShortDateString()
+                                                                    &nbsp;<a href="#" onclick="update(@item.Connection_ID)"> <i class="fa fa-edit"></i> Change </a>
+                                                                </span>
+                                                            }
+                                                            else
+                                                            {
+                                                                <span style="color:darkgreen;font-weight:bold;">
+                                                                    @e.ToShortDateString()
+                                                                    &nbsp;<a href="#" onclick="update(@item.Connection_ID)"> <i class="fa fa-edit"></i> Change </a>
+                                                                </span>
+                                                            }
+                                                        </td>
+                                                        <td>
+                                                            @Html.ActionLink("Edit", "Edit", new { id = item.Connection_ID }) |
+
+                                                        </td>
+                                                    </tr>
+                                                                }
+
+                                            </table>
+
+
+
+
+
+                                            <script>
+                                                function update(id) {
+                                                    var days = prompt("Enter Number of Days to Extend (use - to reverse )");
+
+                                                    window.location.href = "/Connections/Update_Expire/?id=" + id + "&days=" + days;
+
+                                                }
+
+                                            </script>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Basic Tables end -->
+</div>

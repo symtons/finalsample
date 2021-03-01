@@ -1,0 +1,192 @@
+
+@{
+    ViewBag.Title = "ExpiredItems";
+
+    SameSoftWeb.Models.SameSoftwareWebEntities db = new SameSoftWeb.Models.SameSoftwareWebEntities();
+
+
+    DateTime d = DateTime.Now.Date;
+    var list = db.sp_get_Expired_items(d, 1).Select(a => new
+    {
+        item_id = a.Item_Id,
+        item = a.Item,
+        qty = a.QTY,
+        cost = a.Cost,
+        totalcost = a.TotalCost,
+        price = a.Sales_price,
+        totalsales = a.TotalSales,
+        batch = a.Batch,
+        expire = a.Expire_Date
+    }).ToList();
+
+
+    if (ViewBag.date != null)
+    {
+
+        int divid = (int)ViewBag.divid;
+        DateTime date = ViewBag.date;
+
+        list = db.sp_get_Expired_items(date, divid).Select(a => new
+        {
+            item_id = a.Item_Id,
+            item = a.Item,
+            qty = a.QTY,
+            cost = a.Cost,
+            totalcost = a.TotalCost,
+            price = a.Sales_price,
+            totalsales = a.TotalSales,
+            batch = a.Batch,
+            expire = a.Expire_Date
+        }).ToList();
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+}
+
+
+
+
+
+
+
+
+    <h2>Expired Items</h2>
+
+
+
+    <form method="post" action="\Sales\ExpiredItems">
+
+        <div class="row">
+            <div class="col-md-2">
+                Select Date
+            </div>
+            <div class="col-md-3">
+                <input type="date" name="date" class="form-control" required="" />
+            </div>
+
+            <div class="col-md-3">
+
+
+
+
+                @{
+
+
+                    if ((int)Session["RoleID"] == 3)
+                    {
+                        <input type="hidden" name="divid" id="userid" value="@1" />
+                    }
+                    else {
+                        var divid = db.Business_Division.Select(x => new
+                        {
+                            name = x.Name,
+                            id = x.Business_Division_Id,
+                        }).ToList();
+                        ViewBag.divid = new SelectList(divid, "id", "name", "");
+                        @Html.DropDownList("divid", null, "Select Business Division", new { @class = "form-control", onchange = "", @style = "width:250px;display:inline;", @id = "exps" })
+                    }
+                }
+            </div>
+            <div class="col-md-1">
+                <input type="submit" class="btn btn-primary" />
+            </div>
+            <div class="col-md-1">
+                <button class="btn btn-primary" onclick="PrintElem();">  <i class="fa fa-print"></i> Print    </button>
+            </div>
+
+        </div>
+
+
+
+    </form>
+
+    <hr />
+    @if (ViewBag.date != null)
+    {
+        <div id="printarea">
+
+            <h3> Items Expire before @ViewBag.date</h3>
+
+            <hr />
+
+            <text>
+                <table class="table table-bordered">
+                    <thead>
+                    <th>Item_No</th>
+                    <th>Item Description</th>
+                    <th>Lot No.</th>
+                    <th>Quantity</th>
+                    <th>Cost</th>
+                    <th>Sales Price</th>
+                    <th>Total Cost</th>
+                    <th>Total Sales Value</th>
+                    <th>Expire Date</th>
+                    </thead>
+
+
+                    @foreach (var a in list)
+                {
+
+                        <tr>
+                            <td>@a.item_id</td>
+                            <td>@a.item</td>
+                            <td>@a.batch</td>
+                            <td>@a.qty</td>
+                            <td>@a.price</td>
+                            <td>@a.cost</td>
+                            <td>@a.totalcost</td>
+                            <td>@a.totalsales</td>
+                            <td>@a.expire</td>
+                        </tr>
+
+                    }
+
+
+                </table>
+            </text>
+
+
+
+        </div>
+    }
+
+    <script>
+        function PrintElem() {
+
+
+
+            var mywindow = window.open('', 'PRINT', 'height=600,width=1600');
+
+
+            var st = '<style type="text/css">' +
+            'th, td {' +
+            'border:1px solid #ccc;padding:3px;border-collapse:collapse;text-align:center;' +
+            'padding;0.5em;' +
+            '} th{border-bottom:3px solid #ccc;} table{border-collapse:collapse;}' +
+            '</style>'
+
+            mywindow.document.write('<html><head>' + st + '<link ref="stylesheet" href="~\Content\bootstrap.min.css">  <title>' + '' + '</title>');
+            mywindow.document.write('</head><body style="background-image:url(/img/Letterhead.png); background-size:100% 100%;">');
+
+            mywindow.document.write(document.getElementById("printarea").innerHTML);
+            mywindow.document.write('</body></html>');
+
+            mywindow.document.close(); // necessary for IE >= 10
+            mywindow.focus(); // necessary for IE >= 10*/
+
+            mywindow.print();
+            mywindow.close();
+
+            return true;
+        }
+    </script>

@@ -1,0 +1,68 @@
+﻿
+@{
+    ViewBag.Title = "PostCharges";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    var db = new SameSoftWeb.Models.SameSoftwareWebEntities();
+
+    var customers = db.tblCustomers.Select(a => new
+    {
+        a.CustomerID,
+        a.Customer_Name
+    }).ToList();
+
+    var trantypes = db.tblCustomerTranactionTypes.Select(a => new
+    {
+        a.Transaction_type_id,
+        a.Transaction_type
+    }).ToList();
+
+}
+
+                    <br /><br />
+                    <div class="card" style="padding:10px;">
+                        <h3>Post Charges    <a href="/Clients/MultiPostCharges" class="btn btn-primary" style="float:right;">Multi-Post Charges</a></h3>
+                    </div>
+
+                    <div class="card" style="padding:60px;padding-left:160px;padding-right:160px;">
+                        <form method="post" action="/Clients/PostTrans" class="xform-horizontal xform-material">
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    Customer
+                                    <select name="customer_id" class="form-control">
+                                        @foreach (var x in customers)
+            {
+                                            <option value="@x.CustomerID">@x.Customer_Name</option>
+                                        }
+                                    </select>
+
+
+                                    Transaction Type
+                                    <select name="tran_id" class="form-control">
+                                        @foreach (var x in trantypes)
+            {
+                                            <option value="@x.Transaction_type_id">@x.Transaction_type</option>
+                                        }
+                                    </select>
+
+                                    Amount
+                                    <input type="text" class="form-control" name="amount" />
+
+                                </div>
+                                <div class="col-md-6">
+                                    Description
+                                    <input type="text" class="form-control" name="desc" />
+
+                                    Due Date (Collection Date)
+                                    <input type="date" class="form-control" name="duedate" />
+
+                                    Tran Date
+                                    <input type="date" class="form-control" name="trandate" />
+
+                                    <hr />
+                                    <input type="submit" class="btn btn-primary" value="Post Charges" />
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+

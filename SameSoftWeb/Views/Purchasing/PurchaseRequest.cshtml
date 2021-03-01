@@ -1,0 +1,160 @@
+
+
+
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "PurchaseRequest";
+}
+
+@{
+
+    SameSoftWeb.Models.SameSoftwareWebEntities db = new SameSoftWeb.Models.SameSoftwareWebEntities();
+    int divid = 1;
+    var items = db.Items.Where(a => a.Business_Division_Id == divid).Select(x => new
+    {
+        Item_id = x.Item_Id,
+        Name = x.Name,
+    }).ToList();
+
+
+    ViewBag.Item_id = new SelectList(items, "Item_id", "Name", "");
+
+
+    var ven = db.tblVendors.ToList();
+    ViewBag.vendors = ven;
+
+}
+<div class="content-body">
+    <!-- Basic Tables start -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title"><b>Purchase Request</b></h3>
+                    <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                    <div class="heading-elements">
+                        <ul class="list-inline mb-0">
+                            <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                            <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
+                            <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                            <li><a data-action="close"><i class="ft-x"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card-content collapse show">
+                    <div class="card-body">
+
+                        <div id="itemsaple" style="display:none;">
+                            @Html.DropDownList("Item_id", null, "Select Item", new { @class = "form-control", onchange = "", @style = "width:250px;display:inline;", @id = "DepositTo" })
+                        </div>
+                        
+                        <form method="post" action="/Purchasing/add_purchase_request">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    Vendor @Html.DropDownList("Vendor_id", new SelectList(ViewBag.vendors, "Vendor_id", "Vendor_Name"), "Select Vendor", new { @class = "form-control" })
+                                </div>
+                                <div class="col-md-3">
+                                    Note <input type="text" class="form-control" name="note" value="" />
+                                </div>
+
+                                <div class="col-md-3">
+                                    Date <input type="date" class="form-control" name="trandate" value="" />
+                                </div>
+
+
+                            </div>
+
+
+                            <hr />
+
+
+
+                            <div class="field_wrapper">
+                                <div class="row">
+                                    <div class="col-md-5">
+                                        <a href="javascript:void(0);" onclick="add()" class="btn btn-success"><i class="fa fa-plus"></i> Add New Item</a>
+                                    </div>
+                                    <div class="col-md-2"></div>
+                                    <div class="col-md-5">
+
+                                        <button href="javascript:void(0);" type="submit" onclick="return comp()" class="btn btn-primary"><i class="fa fa-check"></i> Complete</button>
+                                    </div>
+                                </div>
+
+
+                                <hr />
+                                <table class="table table-bordered" style="width:auto;">
+
+
+                                    <thead>
+                                    <th style="padding:4px;width:255px">Item</th>
+                                    <th style="padding:4px; width:160px;">Quantity</th>
+                                    <th style="padding:4px; width:160px;">Cost</th>
+
+                                    </thead>
+
+
+
+                                </table>
+                            </div>
+
+
+
+
+                        </form>
+
+
+                        <script type="text/javascript">
+
+
+                            $(document).ready(function () {
+
+                            });
+
+
+                            function add() {
+                                var addButton = $('.add_button');
+                                var wrapper = $('.field_wrapper');
+                                var fieldHTML = '<tr><td style="padding:4px;">' + $("#itemsaple").html() + '</td>';
+
+                                fieldHTML = fieldHTML + '<td style="padding:4px;" ><input type="text"  style="width:150px;"  name="qty[]" class="form-control" value=""/></td>';
+                                fieldHTML = fieldHTML + '<td style="padding:4px;"><input type="text"  style="width:150px;" name="unit_cost[]" class="form-control" value=""/></td>';
+
+
+                                //fieldHTML = fieldHTML + '<td><a href="javascript:void(0);"  onclick="add()" class="btn btn-success">Add</a></td>';
+                                fieldHTML = fieldHTML + '<td style="padding:4px;"><a href="javascript:void(0);"  id="remove_button" class="btn btn-danger"> X </a></td></tr>';
+                                $(wrapper).append(fieldHTML);
+                            }
+
+
+                            function comp() {
+                                return confirm("Sure to Submit Purchase Request?");
+                            }
+
+
+                            function remove($obj) {
+                                this.style.color = '#ff0000';
+
+                                //e.preventDefault();
+                                //alert(element);
+                                //  $(element).remove();
+                                //$(element).parent('div').remove();
+
+                            }
+
+                            $(function () {
+
+                                $(".field_wrapper").on('click', '#remove_button', function (e) {
+
+                                    e.preventDefault();
+                                    $(this).closest('tr').remove();
+                                });
+                            });
+                        </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Basic Tables end -->
+</div>
